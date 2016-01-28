@@ -1,0 +1,23 @@
+# Ignore everything
+*
+
+######## But not these files... #########
+!.gitignore
+
+# Plugin specific
+!src/preprocessors/Profinet
+!src/preprocessors/Profinet/*
+!src/preprocessors/spp_profinet.c
+!src/preprocessors/spp_profinet.h
+!src/preprocessors/dbg.h
+
+!src/preprocessors/Makefile.am
+
+!src/plugbase.c
+
+!src/preprocids.h
+
+!src/detect.c
+
+# ...even if they are in subdirectories
+!*/
