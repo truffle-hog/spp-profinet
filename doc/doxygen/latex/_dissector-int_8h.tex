@@ -1,40 +1,20 @@
-\hypertarget{_dissector-int_8h}{}\section{src/\+Profinet/\+Dissector-\/int.h File Reference}
-\label{_dissector-int_8h}\index{src/\+Profinet/\+Dissector-\/int.\+h@{src/\+Profinet/\+Dissector-\/int.\+h}}
+\hypertarget{_dissector-int_8h}{\section{src/\-Profinet/\-Dissector-\/int.h File Reference}
+\label{_dissector-int_8h}\index{src/\-Profinet/\-Dissector-\/int.\-h@{src/\-Profinet/\-Dissector-\/int.\-h}}
+}
 \subsection*{Data Structures}
 \begin{DoxyCompactItemize}
 \item 
-struct \hyperlink{struct_dissector__ops}{Dissector\+\_\+ops}
+struct \hyperlink{struct_dissector__ops}{Dissector\-\_\-ops}
 \item 
 struct \hyperlink{struct_dissector}{Dissector}
 \end{DoxyCompactItemize}
 \subsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
-\hypertarget{_dissector-int_8h_a1f86fa64cdcde33d837d1e252b187ef9}{}struct \hyperlink{struct_dissector}{Dissector} {\bfseries Dissector\+\_\+new} (const struct \hyperlink{struct_dissector__ops}{Dissector\+\_\+ops} $\ast$\hyperlink{_dissector-int_8h_aa1af82d23bc82742dafc141b0f4d5229}{ops})\label{_dissector-int_8h_a1f86fa64cdcde33d837d1e252b187ef9}
+\hypertarget{_dissector-int_8h_af20c51477bd3b35a08e9558f011367ae}{\hyperlink{struct_dissector}{Dissector\-\_\-t} $\ast$ {\bfseries Dissector\-\_\-new} (const struct \hyperlink{struct_dissector__ops}{Dissector\-\_\-ops} $\ast$ops)}\label{_dissector-int_8h_af20c51477bd3b35a08e9558f011367ae}
 
-\end{DoxyCompactItemize}
-\subsection*{Variables}
-\begin{DoxyCompactItemize}
-\item 
-bool \hyperlink{_dissector-int_8h_aedeffc7d23da25d52b9a50045189fe2b}{initialized}
-\item 
-const struct \hyperlink{struct_dissector__ops}{Dissector\+\_\+ops} $\ast$ \hyperlink{_dissector-int_8h_aa1af82d23bc82742dafc141b0f4d5229}{ops}
-\item 
-\hyperlink{struct_dissector}{Dissector\+\_\+t} $\ast$ \hyperlink{_dissector-int_8h_a2f297b2d3abad7c440c176d51e011f38}{calling}
 \end{DoxyCompactItemize}
 
 
 \subsection{Detailed Description}
 This Header discribes the internal structure of the \hyperlink{struct_dissector}{Dissector} type. It defines the basic interface for operations. 
-
-\subsection{Variable Documentation}
-\hypertarget{_dissector-int_8h_a2f297b2d3abad7c440c176d51e011f38}{}\index{Dissector-\/int.\+h@{Dissector-\/int.\+h}!calling@{calling}}
-\index{calling@{calling}!Dissector-\/int.\+h@{Dissector-\/int.\+h}}
-\subsubsection[{calling}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Dissector\+\_\+t}$\ast$ calling}\label{_dissector-int_8h_a2f297b2d3abad7c440c176d51e011f38}
-the dissector this dissector has been called from \hypertarget{_dissector-int_8h_aedeffc7d23da25d52b9a50045189fe2b}{}\index{Dissector-\/int.\+h@{Dissector-\/int.\+h}!initialized@{initialized}}
-\index{initialized@{initialized}!Dissector-\/int.\+h@{Dissector-\/int.\+h}}
-\subsubsection[{initialized}]{\setlength{\rightskip}{0pt plus 5cm}bool initialized}\label{_dissector-int_8h_aedeffc7d23da25d52b9a50045189fe2b}
-whether this dissector was initialized \hypertarget{_dissector-int_8h_aa1af82d23bc82742dafc141b0f4d5229}{}\index{Dissector-\/int.\+h@{Dissector-\/int.\+h}!ops@{ops}}
-\index{ops@{ops}!Dissector-\/int.\+h@{Dissector-\/int.\+h}}
-\subsubsection[{ops}]{\setlength{\rightskip}{0pt plus 5cm}const struct {\bf Dissector\+\_\+ops}$\ast$ ops}\label{_dissector-int_8h_aa1af82d23bc82742dafc141b0f4d5229}
-the dissectors operations 

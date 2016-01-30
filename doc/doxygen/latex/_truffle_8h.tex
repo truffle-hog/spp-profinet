@@ -1,34 +1,40 @@
-\hypertarget{_truffle_8h}{}\section{src/\+Profinet/\+Truffle.h File Reference}
-\label{_truffle_8h}\index{src/\+Profinet/\+Truffle.\+h@{src/\+Profinet/\+Truffle.\+h}}
+\hypertarget{_truffle_8h}{\section{src/\-Profinet/\-Truffle.h File Reference}
+\label{_truffle_8h}\index{src/\-Profinet/\-Truffle.\-h@{src/\-Profinet/\-Truffle.\-h}}
+}
+
+
+The interface for truffles.  
+
+
 \subsection*{Typedefs}
 \begin{DoxyCompactItemize}
 \item 
-\hypertarget{_truffle_8h_a79890fe362d7a787c2d598a233ad4be6}{}typedef struct Truffle {\bfseries Truffle\+\_\+t}\label{_truffle_8h_a79890fe362d7a787c2d598a233ad4be6}
+\hypertarget{_truffle_8h_a79890fe362d7a787c2d598a233ad4be6}{typedef struct Truffle {\bfseries Truffle\-\_\-t}}\label{_truffle_8h_a79890fe362d7a787c2d598a233ad4be6}
 
 \end{DoxyCompactItemize}
 \subsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
-Truffle\+\_\+t $\ast$ \hyperlink{_truffle_8h_ac292627f07882df5cbb5ba3c91822726}{Truffle\+\_\+new} ()
+Truffle\-\_\-t $\ast$ \hyperlink{_truffle_8h_ac292627f07882df5cbb5ba3c91822726}{Truffle\-\_\-new} ()
 \item 
-Entry\+\_\+t $\ast$ \hyperlink{_truffle_8h_a48244365ba41f22fa7f340601d09679a}{Truffle\+\_\+get} (Truffle\+\_\+t $\ast$this, char $\ast$key)
+\hyperlink{struct_entry}{Entry\-\_\-t} $\ast$ \hyperlink{_truffle_8h_a48244365ba41f22fa7f340601d09679a}{Truffle\-\_\-get} (Truffle\-\_\-t $\ast$this, char $\ast$key)
 \item 
-Entry\+\_\+t $\ast$ \hyperlink{_truffle_8h_a813d0bf00751e83a48dcd80021079ced}{Truffle\+\_\+put} (Truffle\+\_\+t $\ast$this, char $\ast$key, Entry\+\_\+t entry)
+\hyperlink{struct_entry}{Entry\-\_\-t} $\ast$ \hyperlink{_truffle_8h_a813d0bf00751e83a48dcd80021079ced}{Truffle\-\_\-put} (Truffle\-\_\-t $\ast$this, char $\ast$key, \hyperlink{struct_entry}{Entry\-\_\-t} entry)
 \end{DoxyCompactItemize}
 
 
 \subsection{Detailed Description}
-Truffle header file 
+The interface for truffles. Truffle header file 
 
 \subsection{Function Documentation}
-\hypertarget{_truffle_8h_a48244365ba41f22fa7f340601d09679a}{}\index{Truffle.\+h@{Truffle.\+h}!Truffle\+\_\+get@{Truffle\+\_\+get}}
-\index{Truffle\+\_\+get@{Truffle\+\_\+get}!Truffle.\+h@{Truffle.\+h}}
-\subsubsection[{Truffle\+\_\+get(\+Truffle\+\_\+t $\ast$this, char $\ast$key)}]{\setlength{\rightskip}{0pt plus 5cm}Entry\+\_\+t$\ast$ Truffle\+\_\+get (
+\hypertarget{_truffle_8h_a48244365ba41f22fa7f340601d09679a}{\index{Truffle.\-h@{Truffle.\-h}!Truffle\-\_\-get@{Truffle\-\_\-get}}
+\index{Truffle\-\_\-get@{Truffle\-\_\-get}!Truffle.h@{Truffle.\-h}}
+\subsubsection[{Truffle\-\_\-get}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Entry\-\_\-t}$\ast$ Truffle\-\_\-get (
 \begin{DoxyParamCaption}
-\item[{Truffle\+\_\+t $\ast$}]{this, }
+\item[{Truffle\-\_\-t $\ast$}]{this, }
 \item[{char $\ast$}]{key}
 \end{DoxyParamCaption}
-)}\label{_truffle_8h_a48244365ba41f22fa7f340601d09679a}
+)}}\label{_truffle_8h_a48244365ba41f22fa7f340601d09679a}
 Returns the entry that is mapped to the given key in this truffle.
 
 
@@ -38,22 +44,22 @@ Returns the entry that is mapped to the given key in this truffle.
 {\em key} & the key to be looking for \\
 \hline
 \end{DoxyParams}
-\hypertarget{_truffle_8h_ac292627f07882df5cbb5ba3c91822726}{}\index{Truffle.\+h@{Truffle.\+h}!Truffle\+\_\+new@{Truffle\+\_\+new}}
-\index{Truffle\+\_\+new@{Truffle\+\_\+new}!Truffle.\+h@{Truffle.\+h}}
-\subsubsection[{Truffle\+\_\+new()}]{\setlength{\rightskip}{0pt plus 5cm}Truffle\+\_\+t$\ast$ Truffle\+\_\+new (
+\hypertarget{_truffle_8h_ac292627f07882df5cbb5ba3c91822726}{\index{Truffle.\-h@{Truffle.\-h}!Truffle\-\_\-new@{Truffle\-\_\-new}}
+\index{Truffle\-\_\-new@{Truffle\-\_\-new}!Truffle.h@{Truffle.\-h}}
+\subsubsection[{Truffle\-\_\-new}]{\setlength{\rightskip}{0pt plus 5cm}Truffle\-\_\-t$\ast$ Truffle\-\_\-new (
 \begin{DoxyParamCaption}
 {}
 \end{DoxyParamCaption}
-)}\label{_truffle_8h_ac292627f07882df5cbb5ba3c91822726}
-Creates a new truffle that can be filled with data from the package. \hypertarget{_truffle_8h_a813d0bf00751e83a48dcd80021079ced}{}\index{Truffle.\+h@{Truffle.\+h}!Truffle\+\_\+put@{Truffle\+\_\+put}}
-\index{Truffle\+\_\+put@{Truffle\+\_\+put}!Truffle.\+h@{Truffle.\+h}}
-\subsubsection[{Truffle\+\_\+put(\+Truffle\+\_\+t $\ast$this, char $\ast$key, Entry\+\_\+t entry)}]{\setlength{\rightskip}{0pt plus 5cm}Entry\+\_\+t$\ast$ Truffle\+\_\+put (
+)}}\label{_truffle_8h_ac292627f07882df5cbb5ba3c91822726}
+Creates a new truffle that can be filled with data from the package. \hypertarget{_truffle_8h_a813d0bf00751e83a48dcd80021079ced}{\index{Truffle.\-h@{Truffle.\-h}!Truffle\-\_\-put@{Truffle\-\_\-put}}
+\index{Truffle\-\_\-put@{Truffle\-\_\-put}!Truffle.h@{Truffle.\-h}}
+\subsubsection[{Truffle\-\_\-put}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Entry\-\_\-t}$\ast$ Truffle\-\_\-put (
 \begin{DoxyParamCaption}
-\item[{Truffle\+\_\+t $\ast$}]{this, }
+\item[{Truffle\-\_\-t $\ast$}]{this, }
 \item[{char $\ast$}]{key, }
-\item[{Entry\+\_\+t}]{entry}
+\item[{{\bf Entry\-\_\-t}}]{entry}
 \end{DoxyParamCaption}
-)}\label{_truffle_8h_a813d0bf00751e83a48dcd80021079ced}
+)}}\label{_truffle_8h_a813d0bf00751e83a48dcd80021079ced}
 Inserts the given entry into the truffle mapped to the key.
 
 

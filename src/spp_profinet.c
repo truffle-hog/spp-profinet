@@ -48,9 +48,9 @@ void SetupProfiNet()
 }
 
 /**
-* Initializes the dissectors for the profinet protocols.
-*
-*/
+ * Initializes the dissectors for the profinet protocols.
+ *
+ */
 void DissectorInit()
 {
   tlRegister = DissectorRegister_new();

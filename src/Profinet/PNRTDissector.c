@@ -13,11 +13,7 @@ static const struct Dissector_ops PNRTDissector_ops = {
   PNRT_free,
   NULL,
   NULL,
-  NULL,
-  NULL,
-  NULL,
-  NULL,
-  PNRT_dissect,
+  PNRT_dissect
 };
 
 
@@ -29,5 +25,5 @@ PNRTDissector_new() {
 
   dissector = Dissector_new(&PNRTDissector_ops);
 
-
+  return dissector;
 }

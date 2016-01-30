@@ -1,14 +1,20 @@
+/**
+ * @file
+ *
+ * @brief This Header discribes the internal structure of the Dissector type, it defines
+ * the basic interface for operations.
+ */
 
 #ifndef __DISSECTOR_INT_H__
 #define __DISSECTOR_INT_H__
 
-/** @file Dissector-int.h
- *
- * This Header discribes the internal structure of the Dissector type. It defines
- * the basic interface for operations.
- */
+
 struct Dissector;
 
+/**
+ * @brief The operations that can be called by a Dissector.
+ *
+ */
 struct Dissector_ops {
 
   /**
@@ -17,7 +23,19 @@ struct Dissector_ops {
   * @return the number of sub-dissectors in this dissector
   */
   size_t Dissector_size;
+
+  /**
+  * @brief Returns the lower bound this subdissector is being called upon.
+  *
+  * @return the lower bound this subdissector is being called upon
+  */
   unit64_t Dissector_lower;
+
+  /**
+  * @brief Returns the upper bound this subdissector is being called upon.
+  *
+  * @return the upper bound this subdissector is being called upon
+  */
   uint64_t Dissector_upper;
   /**
   * @brief Returns the number of subdissectors in this dissector.
@@ -36,10 +54,42 @@ struct Dissector_ops {
   *         otherwise the existing Dissector will be overwritten and returned.
   */
   Dissector_t * (*Dissector_registerSub)(Dissector_t *this, Dissector_t *subDissector, Interval interval);
+
+  /**
+  * @brief Returns the sub dissector that is register for the given unsigned long.
+  *
+  * @param this the dissector calling Dissector_getSub
+  * @param data the value for looking up in the dissector register
+  *
+  * @return the registered sub dissector if any, NULL otherwise
+  */
   Dissector_t * (*Dissector_getSub)(Dissector_t *this, uint64_t data);
+
+  /**
+  * @brief Dissects the package the given buffer is pointing to.
+  *
+  * @param this the calling Dissector
+  * @param buf the buffer pointing to the package data currently being processed
+  * @param tree the tree strcture to save the package data in
+  *
+  * @return 0 if the dissection was successful wihtout any failures,
+  *         -1 if it was a faulty package. The fault flag will be set in the
+  *         ProtocolTree accordingly
+  */
   int (*Dissector_dissect)(Dissector_t *this, Buffer_t *buf, ProtocolTree_t *tree);
 };
 
+/**
+ * @brief Used to dissect certain data ranges within a package.
+ *
+ * Dissector are used to dissect certain ranges of data in a network package,
+ * while having the possibility to link to further dissectors when the dissection
+ * of the desired range is complete. Further Dissectors are linked by using an
+ * internal DissectorRegister.
+ *
+ * -> It is possible to link several Dissectors together building a tree of dissectors
+ * and subdissectors that call each other when their dissection part is completed.
+ */
 struct Dissector {
 
   /** Whether this dissector was initialized. **/
