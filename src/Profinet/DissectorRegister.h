@@ -13,8 +13,11 @@ typedef struct DissectorRegister DissectorRegister_t;
 
 
 /**
-* Creates a new DissectorRegister with the given operations. This Function is the
-* interface constructor for every DissectorRegister implementation.
+* @brief Creates a new DissectorRegister with the given operations.
+*
+* This Function is the interface constructor for every DissectorRegister
+* implementation. By calling this function a new dissector register will be
+* stored in heap memory and initialized correctly.
 *
 * @param ops the pointer to the operations used for this DissectorRegister
 * @return a pointer to the created DissectorRegister
@@ -23,7 +26,7 @@ DissectorRegister_t * DissectorRegister_new(const struct DissectorRegister_ops *
 
 
 /**
-* Frees the given DissectorRegister.
+* @brief Frees the given DissectorRegister.
 */
 void DissectorRegister_free(DissectorRegister_t *this);
 
