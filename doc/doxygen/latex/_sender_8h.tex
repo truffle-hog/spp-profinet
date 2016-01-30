@@ -1,0 +1,69 @@
+\hypertarget{_sender_8h}{}\section{src/\+Profinet/\+Sender.h File Reference}
+\label{_sender_8h}\index{src/\+Profinet/\+Sender.\+h@{src/\+Profinet/\+Sender.\+h}}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{_sender_8h_a3081f8ad21b9b146712d92384e573b8a}{}typedef struct Sender {\bfseries Sender\+\_\+t}\label{_sender_8h_a3081f8ad21b9b146712d92384e573b8a}
+
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+Sender\+\_\+t $\ast$ \hyperlink{_sender_8h_a8fd47a704efa4b163bce4835be401bd9}{Sender\+\_\+new} (const struct sender\+\_\+ops $\ast$\hyperlink{_dissector-int_8h_aa1af82d23bc82742dafc141b0f4d5229}{ops})
+\item 
+void \hyperlink{_sender_8h_a28c6b2a9dd5dc202be552c4c8c1c3269}{Sender\+\_\+free} (Sender\+\_\+t $\ast$dissector)
+\item 
+int \hyperlink{_sender_8h_a7c84568d236ef5d64415a9ca9fb559b3}{Sender\+\_\+send} (Sender\+\_\+t $\ast$this, Truffle\+\_\+t $\ast$truffle)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+The basic Sender abstraction. Every implementation of a Sender will use and implement the operations described in this interface. A Sender is used to send truffles to a certain port, socket, or messagequeue, depending on the implemented send operation.
+
+-\/$>$ It is possible to link several Dissectors together building a tree of dissectors and subdissectors that call each other when their dissection part is completed. 
+
+\subsection{Function Documentation}
+\hypertarget{_sender_8h_a28c6b2a9dd5dc202be552c4c8c1c3269}{}\index{Sender.\+h@{Sender.\+h}!Sender\+\_\+free@{Sender\+\_\+free}}
+\index{Sender\+\_\+free@{Sender\+\_\+free}!Sender.\+h@{Sender.\+h}}
+\subsubsection[{Sender\+\_\+free(\+Sender\+\_\+t $\ast$dissector)}]{\setlength{\rightskip}{0pt plus 5cm}void Sender\+\_\+free (
+\begin{DoxyParamCaption}
+\item[{Sender\+\_\+t $\ast$}]{dissector}
+\end{DoxyParamCaption}
+)}\label{_sender_8h_a28c6b2a9dd5dc202be552c4c8c1c3269}
+Frees the given dissector. \hypertarget{_sender_8h_a8fd47a704efa4b163bce4835be401bd9}{}\index{Sender.\+h@{Sender.\+h}!Sender\+\_\+new@{Sender\+\_\+new}}
+\index{Sender\+\_\+new@{Sender\+\_\+new}!Sender.\+h@{Sender.\+h}}
+\subsubsection[{Sender\+\_\+new(const struct sender\+\_\+ops $\ast$ops)}]{\setlength{\rightskip}{0pt plus 5cm}Sender\+\_\+t$\ast$ Sender\+\_\+new (
+\begin{DoxyParamCaption}
+\item[{const struct sender\+\_\+ops $\ast$}]{ops}
+\end{DoxyParamCaption}
+)}\label{_sender_8h_a8fd47a704efa4b163bce4835be401bd9}
+Creates a new \hyperlink{struct_dissector}{Dissector} with the given operations. This Function is the interface constructor for every \hyperlink{struct_dissector}{Dissector} implementation.
+
+
+\begin{DoxyParams}{Parameters}
+{\em ops} & the pointer to the operations used for this dissector \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+a pointer to the created dissector 
+\end{DoxyReturn}
+\hypertarget{_sender_8h_a7c84568d236ef5d64415a9ca9fb559b3}{}\index{Sender.\+h@{Sender.\+h}!Sender\+\_\+send@{Sender\+\_\+send}}
+\index{Sender\+\_\+send@{Sender\+\_\+send}!Sender.\+h@{Sender.\+h}}
+\subsubsection[{Sender\+\_\+send(\+Sender\+\_\+t $\ast$this, Truffle\+\_\+t $\ast$truffle)}]{\setlength{\rightskip}{0pt plus 5cm}int Sender\+\_\+send (
+\begin{DoxyParamCaption}
+\item[{Sender\+\_\+t $\ast$}]{this, }
+\item[{Truffle\+\_\+t $\ast$}]{truffle}
+\end{DoxyParamCaption}
+)}\label{_sender_8h_a7c84568d236ef5d64415a9ca9fb559b3}
+Sends the given truffle to the specified ipc
+
+
+\begin{DoxyParams}{Parameters}
+{\em this} & the calling sender \\
+\hline
+{\em truffle} & the truffle to be send\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 if the sending was successful, -\/1 if no client is detected for receiving, or on other errors. 
+\end{DoxyReturn}
