@@ -1,0 +1,3 @@
+
+#ifndef __DISSECTOR_REGISTER_INT_H__
+#define __DISSECTOR_REGISTER_INT_H__
