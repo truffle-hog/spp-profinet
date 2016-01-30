@@ -3,14 +3,8 @@
 #define __DISSECTOR_INT_H__
 
 /**
-* The Base Dissector abstraction. Every implementation of a Dissector will use
-* and implement the operations described in this interface.
-* Dissector are used to dissect certain ranges of data in a network package,
-* while having the possibility to link to further dissectors when the dissection
-* of the desired range is complete.
-*
-* -> It is possible to link several Dissectors together building a tree of dissectors
-* and subdissectors that call each other when their dissection part is completed.
+* This Header discribes the internal structure of the Dissector type. It defines
+* the basic interface for operations.
 */
 struct Dissector;
 
