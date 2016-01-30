@@ -57,14 +57,8 @@ void DissectorInit()
 {
   tlRegister = DissectorRegister_new();
   Dissector_t *pnrtDissector = PNRTDissector_new();
-  Interval_t pnrtInterval;
-  pnrtInterval.lower = 0x8892;
-  pnrtInterval.upper = 0x8892;
-
-  tlRegister->ops->DissectorRegister_insert(tlRegister, etherInterval, prntDissector);
-
-
-
+  
+  tlRegister->ops->DissectorRegister_insert(tlRegister, prntDissector);
 
 }
 
@@ -82,7 +76,7 @@ void DissectorInit()
 static void ProfiNetInit(struct _SnortConfig * sc, char *args)
 {
 
-  Sender_t *sender = UnixSocketSender_new();
+  sender = UnixSocketSender_new();
 
   DissectorInit();
 }
@@ -115,8 +109,7 @@ static void DetectProfiNetPackets(Packet *p, void *context)
 
   ProtocolTree_free(tree);
 
-
-
+  sender->ops->Sender_send(sender, truffle);
 }
 
 /*

@@ -17,6 +17,8 @@ struct Dissector;
 struct Dissector_ops {
 
   size_t Dissector_size;
+  unit64_t lower;
+  uint64_t upper;
   void (*Dissector_free)(Dissector_t *dissector);
   Dissector_t * (*Dissector_registerSub)(Dissector_t *this, Dissector_t *subDissector, Interval interval);
   Dissector_t * (*Dissector_getSub_64)(Dissector_t *this, uint64_t data);
