@@ -20,6 +20,8 @@ typedef struct Dissector Dissector_t;
 * @brief Creates a new Dissector with the given operations.
 *
 * This Function is the interface constructor for every Dissector implementation.
+* Calling this function will initialize the dissector correctly and fill the needed
+* data within the Dissector structure.
 *
 * @param ops the pointer to the operations used for this dissector
 * @return a pointer to the created dissector
@@ -40,7 +42,7 @@ void Dissector_free(Dissector_t *dissector);
 * @param subDissector the dissector to be registered as sub
 *
 * @return NULL if there was no other dissector registered for the given interval
-*         otherwise the existing Dissector will be overwritten and returned.
+*         otherwise the Dissector will be overwritten and returned.
 */
 Dissector_t * Dissector_registerSub(Dissector_t *this,
                            Dissector_t *subDissector);
@@ -56,7 +58,7 @@ Dissector_t * Dissector_registerSub(Dissector_t *this,
 Dissector_t * Dissector_getSub(Dissector_t *this, uint64_t data);
 
 /**
-* Dissects the package the given buffer is pointing to.
+* @brief Dissects the package the given buffer is pointing to.
 *
 * @param this the calling Dissector
 * @param buf the buffer pointing to the package data currently being processed

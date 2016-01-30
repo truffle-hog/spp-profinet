@@ -2,10 +2,8 @@
 * The basic Sender abstraction. Every implementation of a Sender will use
 * and implement the operations described in this interface.
 * A Sender is used to send truffles to a certain port, socket, or messagequeue,
-* depending on the implemented send operation.
+* depending on the implementation.
 *
-* -> It is possible to link several Dissectors together building a tree of dissectors
-* and subdissectors that call each other when their dissection part is completed.
 */
 struct Sender;
 typedef struct Sender Sender_t;
@@ -16,7 +14,7 @@ typedef struct Sender Sender_t;
 * interface constructor for every Dissector implementation.
 *
 * @param ops the pointer to the operations used for this dissector
-* \return a pointer to the created dissector
+* @return a pointer to the created dissector
 */
 Sender_t * Sender_new(const struct sender_ops *ops);
 
@@ -32,6 +30,6 @@ void Sender_free(Sender_t *dissector);
 * @param this the calling sender
 * @param truffle the truffle to be send
 *
-* \return 0 if the sending was successful, -1 if no client is detected for receiving, or on other errors.
+* @return 0 if the sending was successful, -1 if no client is detected for receiving, or on other errors.
 */
 int Sender_send(Sender_t *this, Truffle_t *truffle);

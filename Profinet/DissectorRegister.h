@@ -13,8 +13,11 @@ typedef struct DissectorRegister DissectorRegister_t;
 
 
 /**
-* Creates a new DissectorRegister with the given operations. This Function is the
-* interface constructor for every DissectorRegister implementation.
+* @brief Creates a new DissectorRegister with the given operations.
+*
+* This Function is the interface constructor for every DissectorRegister
+* implementation. By calling this function a new dissector register will be
+* stored in heap memory and initialized correctly.
 *
 * @param ops the pointer to the operations used for this DissectorRegister
 * @return a pointer to the created DissectorRegister
@@ -23,28 +26,29 @@ DissectorRegister_t * DissectorRegister_new(const struct DissectorRegister_ops *
 
 
 /**
-* Frees the given DissectorRegister.
+* @brief Frees the given DissectorRegister.
 */
 void DissectorRegister_free(DissectorRegister_t *this);
 
 
 /**
-* @brief Inserts a new Dissector.
+* @brief Inserts a new Dissector as subdissector.
 *
-* The new dissector will be inserted into the DissectorRegister by obtaining its
-* lower and upper identifier bounds and mapping it accordingly.
+* The function will lookup the lower and upper values of the dissector to be
+* registered and inserts it into the dissector register accordingly.
 *
 * @param this the calling register
+* @param the interval the given dissector will be mapped to
 * @param dissector the dissector to be inserted
 *
-* @return NULL if there is no previous dissector registered within its interval,
+* @return NULL if there is no previous dissector registered within the given interval,
 *         otherwise overwrites the old dissector and returns it
 */
 Dissector_t * DissectorRegister_insert(DissectorRegister_t *this,
                            Dissector_t *dissector);
 
 /**
-* @brief Returns the sub DissectorRegister that is registered for the given unsigned long.
+* @brief Returns the sub DissectorRegister that is register for the given unsigned long.
 *
 * @param this the DissectorRegister calling
 * @param data the value for looking up in the DissectorRegister
