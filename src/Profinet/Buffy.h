@@ -1,4 +1,10 @@
-
+/** @file Buffy.h
+ *
+ *  Snort Preprocessor Plugin Header
+ *
+ *  This file gets included in plugbase.h when it is integrated into the rest
+ *  of the program.
+ */
 
 // uint8_t Buffy_get_uint8_t(Buffy_t *buffy, const int offset);
 //
@@ -47,7 +53,7 @@
  * functions are equivalent, except for the type of the return value.  Note
  * that the parameter encoding (where supplied) is meaningless and ignored */
 
-/**
+/** \headerfile Buffy.h "Buffy.h"
 * Get 1 - 8 bits returned in a uint8.
 *
 * @param buffy the calling buffer

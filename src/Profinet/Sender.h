@@ -1,4 +1,4 @@
-/**
+/** @file Sender.h
 * The basic Sender abstraction. Every implementation of a Sender will use
 * and implement the operations described in this interface.
 * A Sender is used to send truffles to a certain port, socket, or messagequeue,

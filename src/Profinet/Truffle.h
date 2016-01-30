@@ -1,6 +1,10 @@
 #ifndef __TRUFFLE_H__
 #define __TRUFFLE_H__
 
+/** @file Truffle.h
+ *
+ *  Truffle header file
+ */
 
 struct Truffle;
 typedef struct Truffle Truffle_t;

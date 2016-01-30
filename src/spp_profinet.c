@@ -1,8 +1,8 @@
-/* $Id$ */
-/* Snort Preprocessor Plugin Source File ProfiNet */
-
-/* spp_profinet
+/**
+ * @file spp_profinet.c
  *
+ * $Id$
+ * Snort Preprocessor Plugin Source File ProfiNet
  * Purpose:
  *
  * Preprocessors perform some function *once* for *each* packet.  This is
@@ -60,7 +60,7 @@ void DissectorInit()
 
 }
 
-/*
+/**
  * Calls the argument parsing function, performs final setup on data
  * structs, links the preproc function into the function list.
  *
@@ -76,14 +76,14 @@ static void ProfiNetInit(struct _SnortConfig * sc, char *args)
   DissectorInit();
 }
 
-/*
+/**
  *  Perform the preprocessor's intended function.  This can be
  *  simple (statistics collection) or complex (IP defragmentation)
  *  as you like.  Try not to destroy the performance of the whole
  *  system by trying to do too much....
  *
- * @param p pointer to the current packet data struct
- * @param context the settings contex of the preprocessor
+ * \param p pointer to the current packet data struct
+ * \param context the settings contex of the preprocessor
  */
 static void DetectProfiNetPackets(Packet *p, void *context)
 {
@@ -103,14 +103,14 @@ static void DetectProfiNetPackets(Packet *p, void *context)
   sender->ops->Sender_send(sender, truffle);
 }
 
-/*
+/**
  * This function gets called when Snort is exiting, if there's
  * any cleanup that needs to be performed (e.g. closing files)
  * it should be done here.
  *
- * @param signal the code of the signal that was issued to Snort
+ * \param signal the code of the signal that was issued to Snort
  *
- * @param data any arguments or data structs linked to this
+ * \param data any arguments or data structs linked to this
  *             functioin when it was registered, may be
  *             needed to properly exit
  */

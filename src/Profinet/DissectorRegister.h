@@ -2,12 +2,13 @@
 #ifndef __DISSECTOR_REGISTER_H__
 #define __DISSECTOR_REGISTER_H__
 
-/**
-* The dissector register is used to register dissectors to intervals. Thereby making
-* it possible to dissect a package while using certain data ranges for calling a next
-* dissector that is mapped to the given data.
-*
-*/
+/** @file DissectorRegister.h
+ *
+ * The dissector register is used to register dissectors to intervals. Thereby making
+ * it possible to dissect a package while using certain data ranges for calling a next
+ * dissector that is mapped to the given data.
+ *
+ */
 struct DissectorRegister;
 typedef struct DissectorRegister DissectorRegister_t;
 
