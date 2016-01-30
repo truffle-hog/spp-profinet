@@ -18,11 +18,14 @@ typedef struct Dissector Dissector_t;
 
 
 /**
-* Creates a new Dissector with the given operations. This Function is the
-* interface constructor for every Dissector implementation.
+* @brief Creates a new Dissector with the given operations.
+*
+* This Function is the interface constructor for every Dissector implementation.
+* Calling this function will initialize the dissector correctly and fill the needed
+* data within the Dissector structure.
 *
 * @param ops the pointer to the operations used for this dissector
-* \return a pointer to the created dissector
+* @return a pointer to the created dissector
 */
 Dissector_t * Dissector_new(const struct dissector_ops *ops);
 
@@ -34,35 +37,35 @@ void Dissector_free(Dissector_t *dissector);
 
 
 /**
-* Registers a given sub dissector on this dissector.
+* @brief Registers a given sub dissector on this dissector.
 *
 * @param this the dissector to register the subDissector on
 * @param subDissector the dissector to be registered as sub
 *
-* \return NULL if there was no other dissector registered for the given interval
-*         otherwise the Dissector will be overwritten and returned.
+* @return NULL if there was no other dissector registered for the given interval
+*         otherwise the existing Dissector will be overwritten and returned.
 */
 Dissector_t * Dissector_registerSub(Dissector_t *this,
                            Dissector_t *subDissector);
 
 /**
-* Returns the sub dissector that is register for the given unsigned long.
+* @brief Returns the sub dissector that is register for the given unsigned long.
 *
 * @param this the dissector calling Dissector_getSub
 * @param data the value for looking up in the dissector register
 *
-* \return the registered sub dissector if any, NULL otherwise
+* @return the registered sub dissector if any, NULL otherwise
 */
 Dissector_t * Dissector_getSub(Dissector_t *this, uint64_t data);
 
 /**
-* Dissects the package the given buffer is pointing to.
+* @brief Dissects the package the given buffer is pointing to.
 *
 * @param this the calling Dissector
 * @param buf the buffer pointing to the package data currently being processed
 * @param tree the tree strcture to save the package data in
 *
-* \return 0 if the dissection was successful wihtout any failures,
+* @return 0 if the dissection was successful wihtout any failures,
 *         -1 if it was a faulty package. The fault flag will be set in the
 *         ProtocolTree accordingly
 */

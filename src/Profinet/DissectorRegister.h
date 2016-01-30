@@ -14,41 +14,46 @@ typedef struct DissectorRegister DissectorRegister_t;
 
 
 /**
-* Creates a new DissectorRegister with the given operations. This Function is the
-* interface constructor for every DissectorRegister implementation.
+* @brief Creates a new DissectorRegister with the given operations.
+*
+* This Function is the interface constructor for every DissectorRegister
+* implementation. By calling this function a new dissector register will be
+* stored in heap memory and initialized correctly.
 *
 * @param ops the pointer to the operations used for this DissectorRegister
-* \return a pointer to the created DissectorRegister
+* @return a pointer to the created DissectorRegister
 */
 DissectorRegister_t * DissectorRegister_new(const struct DissectorRegister_ops *ops);
 
 
 /**
-* Frees the given DissectorRegister.
+* @brief Frees the given DissectorRegister.
 */
 void DissectorRegister_free(DissectorRegister_t *this);
 
 
 /**
-* Inserts a new Dissector for the given interval. If a dissector is allready mapped
+* @brief Inserts a new Dissector.
+*
+* The new dissector will be inserted into the DissectorRegister by obtaining its
+* lower and upper identifier bounds and mapping it accordingly.
 *
 * @param this the calling register
-* @param the interval the given dissector will be mapped to
 * @param dissector the dissector to be inserted
 *
-* \return NULL if there is no previous dissector registered within the given interval,
+* @return NULL if there is no previous dissector registered within its interval,
 *         otherwise overwrites the old dissector and returns it
 */
 Dissector_t * DissectorRegister_insert(DissectorRegister_t *this,
-                           DissectorRegister_t *dissector);
+                           Dissector_t *dissector);
 
 /**
-* Returns the sub DissectorRegister that is register for the given unsigned long.
+* @brief Returns the sub DissectorRegister that is registered for the given unsigned long.
 *
 * @param this the DissectorRegister calling
 * @param data the value for looking up in the DissectorRegister
 *
-* \return the registered Dissector if any, NULL otherwise
+* @return the registered Dissector if any, NULL otherwise
 */
 Dissector_t * DissectorRegister_get(DissectorRegister_t *this, uint64_t data);
 

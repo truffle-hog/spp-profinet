@@ -12,8 +12,8 @@ struct Dissector;
 struct Dissector_ops {
 
   size_t Dissector_size;
-  unit64_t lower;
-  uint64_t upper;
+  unit64_t Dissector_lower;
+  uint64_t Dissector_upper;
   void (*Dissector_free)(Dissector_t *dissector);
   Dissector_t * (*Dissector_registerSub)(Dissector_t *this, Dissector_t *subDissector, Interval interval);
   Dissector_t * (*Dissector_getSub_64)(Dissector_t *this, uint64_t data);
@@ -26,14 +26,14 @@ struct Dissector_ops {
 
 struct Dissector {
 
-  /** whether this dissector was initialized **/
+  /** Whether this dissector was initialized. **/
   bool initialized;
 
-  /** the dissectors operations **/
+  /** The dissectors operations. **/
   const struct Dissector_ops *ops;
-  /** the dissector this dissector has been called from **/
+  /** The dissector this dissector has been called from. **/
   Dissector_t * calling;
-}
+};
 
 Dissector_t *Dissector_new(const struct Dissector_ops *ops);
 
