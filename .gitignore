@@ -34,7 +34,7 @@
 # Debug files
 *.dSYM/
 
-/html/
-/latex/
+/doc/doxygen/html/
+/doc/doxygen/latex/
 
 CMakeLists.txt
