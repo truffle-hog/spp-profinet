@@ -1,6 +1,12 @@
+/**
+* @file
+* @brief The interface for dissector registers.
+*/
 
 #ifndef __DISSECTOR_REGISTER_H__
 #define __DISSECTOR_REGISTER_H__
+
+#include "Dissector.h"
 
 /**
 * The dissector register is used to register dissectors to intervals. Thereby making

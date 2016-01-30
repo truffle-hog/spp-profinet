@@ -1,3 +1,8 @@
+/**
+* @file
+* @brief The interface for truffles.
+*/
+
 #ifndef __TRUFFLE_H__
 #define __TRUFFLE_H__
 

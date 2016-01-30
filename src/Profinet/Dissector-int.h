@@ -10,16 +10,32 @@ struct Dissector;
 
 struct Dissector_ops {
 
+  /**
+  * @brief Returns the number of subdissectors in this dissector.
+  *
+  * @return the number of sub-dissectors in this dissector
+  */
   size_t Dissector_size;
   unit64_t Dissector_lower;
   uint64_t Dissector_upper;
+  /**
+  * @brief Returns the number of subdissectors in this dissector.
+  *
+  * @return the number of sub-dissectors in this dissector
+  */
   void (*Dissector_free)(Dissector_t *dissector);
+
+  /**
+  * @brief Registers a given sub dissector on this dissector.
+  *
+  * @param this the dissector to register the subDissector on
+  * @param subDissector the dissector to be registered as sub
+  *
+  * @return NULL if there was no other dissector registered for the given interval
+  *         otherwise the existing Dissector will be overwritten and returned.
+  */
   Dissector_t * (*Dissector_registerSub)(Dissector_t *this, Dissector_t *subDissector, Interval interval);
-  Dissector_t * (*Dissector_getSub_64)(Dissector_t *this, uint64_t data);
-  Dissector_t * (*Dissector_getSub_32)(Dissector_t *this, uint32_t data);
-  Dissector_t * (*Dissector_getSub_16)(Dissector_t *this, uint16_t data);
-  Dissector_t * (*Dissector_getSub_8)(Dissector_t *this, uint8_t data);
-  Dissector_t * (*Dissector_getSub)(Dissector_t *this, void *data, int len);
+  Dissector_t * (*Dissector_getSub)(Dissector_t *this, uint64_t data);
   int (*Dissector_dissect)(Dissector_t *this, Buffer_t *buf, ProtocolTree_t *tree);
 };
 
@@ -31,7 +47,7 @@ struct Dissector {
   /** The dissectors operations. **/
   const struct Dissector_ops *ops;
   /** The dissector this dissector has been called from. **/
-  Dissector_t * calling;
+  Dissector_t *calling;
 };
 
 Dissector_t *Dissector_new(const struct Dissector_ops *ops);

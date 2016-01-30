@@ -1,3 +1,10 @@
+/**
+* @file
+* @brief The interface for Buffy.
+*/
+
+#ifndef __BUFFY_H__
+#define __BUFFY_H__
 
 /**
 * @brief Creates a new buffer from the given snort package.
@@ -61,3 +68,5 @@ uint32_t Buffy_get_bits32(Buffy_t *this, unsigned int bit_offset,
 */
 uint64_t Buffy_get_bits64(Buffy_t *this, unsigned int bit_offset,
     const int no_of_bits, const unsigned int encoding);
+
+#endif

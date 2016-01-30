@@ -1,3 +1,7 @@
+/**
+* @file
+* @brief The interface for dissectors
+*/
 
 #ifndef __DISSECTOR_H__
 #define __DISSECTOR_H__
