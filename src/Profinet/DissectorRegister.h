@@ -1,6 +1,10 @@
 /**
 * @file
 * @brief The interface for dissector registers.
+*
+* The dissector register is used to register dissectors to intervals. Thereby making
+* it possible to dissect a package while using certain data ranges for calling a next
+* dissector that is mapped to the given data.
 */
 
 #ifndef __DISSECTOR_REGISTER_H__
@@ -8,12 +12,6 @@
 
 #include "Dissector.h"
 
-/**
-* The dissector register is used to register dissectors to intervals. Thereby making
-* it possible to dissect a package while using certain data ranges for calling a next
-* dissector that is mapped to the given data.
-*
-*/
 struct DissectorRegister;
 typedef struct DissectorRegister DissectorRegister_t;
 

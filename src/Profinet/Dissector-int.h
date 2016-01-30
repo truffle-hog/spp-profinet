@@ -2,10 +2,11 @@
 #ifndef __DISSECTOR_INT_H__
 #define __DISSECTOR_INT_H__
 
-/**
-* This Header discribes the internal structure of the Dissector type. It defines
-* the basic interface for operations.
-*/
+/** @file Dissector-int.h
+ *
+ * This Header discribes the internal structure of the Dissector type. It defines
+ * the basic interface for operations.
+ */
 struct Dissector;
 
 struct Dissector_ops {

@@ -1,3 +1,6 @@
+# IDE files
+.idea
+
 # Object files
 *.o
 *.ko
@@ -33,3 +36,5 @@
 
 /html/
 /latex/
+
+CMakeLists.txt

@@ -1,0 +1,116 @@
+\hypertarget{_buffy_8h}{}\section{src/\+Profinet/\+Buffy.h File Reference}
+\label{_buffy_8h}\index{src/\+Profinet/\+Buffy.\+h@{src/\+Profinet/\+Buffy.\+h}}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+uint8\+\_\+t \hyperlink{_buffy_8h_ade00c0797aedaa513fd554a4e59839ca}{Buffy\+\_\+get\+\_\+bits8} (Buffy\+\_\+t $\ast$buffy, unsigned int bit\+\_\+offset, const int no\+\_\+of\+\_\+bits)
+\item 
+uint16\+\_\+t \hyperlink{_buffy_8h_a80f964e13bcb69d08acd8cfa3dfb31a5}{Buffy\+\_\+get\+\_\+bits16} (Buffy\+\_\+t $\ast$buffy, unsigned int bit\+\_\+offset, const int no\+\_\+of\+\_\+bits, const unsigned int encoding)
+\item 
+uint32\+\_\+t \hyperlink{_buffy_8h_a211b787080332cc7832a5913f4fdd1c5}{Buffy\+\_\+get\+\_\+bits32} (Buffy\+\_\+t $\ast$buffy, unsigned int bit\+\_\+offset, const int no\+\_\+of\+\_\+bits, const unsigned int encoding)
+\item 
+uint64\+\_\+t \hyperlink{_buffy_8h_a92035119238aa737383dd8666dac13bb}{Buffy\+\_\+get\+\_\+bits64} (Buffy\+\_\+t $\ast$buffy, unsigned int bit\+\_\+offset, const int no\+\_\+of\+\_\+bits, const unsigned int encoding)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Snort Preprocessor Plugin Header
+
+This file gets included in plugbase.\+h when it is integrated into the rest of the program. 
+
+\subsection{Function Documentation}
+\hypertarget{_buffy_8h_a80f964e13bcb69d08acd8cfa3dfb31a5}{}\index{Buffy.\+h@{Buffy.\+h}!Buffy\+\_\+get\+\_\+bits16@{Buffy\+\_\+get\+\_\+bits16}}
+\index{Buffy\+\_\+get\+\_\+bits16@{Buffy\+\_\+get\+\_\+bits16}!Buffy.\+h@{Buffy.\+h}}
+\subsubsection[{Buffy\+\_\+get\+\_\+bits16(\+Buffy\+\_\+t $\ast$buffy, unsigned int bit\+\_\+offset, const int no\+\_\+of\+\_\+bits, const unsigned int encoding)}]{\setlength{\rightskip}{0pt plus 5cm}uint16\+\_\+t Buffy\+\_\+get\+\_\+bits16 (
+\begin{DoxyParamCaption}
+\item[{Buffy\+\_\+t $\ast$}]{buffy, }
+\item[{unsigned int}]{bit\+\_\+offset, }
+\item[{const int}]{no\+\_\+of\+\_\+bits, }
+\item[{const unsigned int}]{encoding}
+\end{DoxyParamCaption}
+)}\label{_buffy_8h_a80f964e13bcb69d08acd8cfa3dfb31a5}
+Get 1 -\/ 16 bits returned in a uint16.
+
+
+\begin{DoxyParams}{Parameters}
+{\em buffy} & the calling buffer \\
+\hline
+{\em bit\+\_\+offset} & the offset for from the currenty buffer position \\
+\hline
+{\em the} & number of bits to be read\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+unsigned 16 bit value representing the specified bit range 
+\end{DoxyReturn}
+\hypertarget{_buffy_8h_a211b787080332cc7832a5913f4fdd1c5}{}\index{Buffy.\+h@{Buffy.\+h}!Buffy\+\_\+get\+\_\+bits32@{Buffy\+\_\+get\+\_\+bits32}}
+\index{Buffy\+\_\+get\+\_\+bits32@{Buffy\+\_\+get\+\_\+bits32}!Buffy.\+h@{Buffy.\+h}}
+\subsubsection[{Buffy\+\_\+get\+\_\+bits32(\+Buffy\+\_\+t $\ast$buffy, unsigned int bit\+\_\+offset, const int no\+\_\+of\+\_\+bits, const unsigned int encoding)}]{\setlength{\rightskip}{0pt plus 5cm}uint32\+\_\+t Buffy\+\_\+get\+\_\+bits32 (
+\begin{DoxyParamCaption}
+\item[{Buffy\+\_\+t $\ast$}]{buffy, }
+\item[{unsigned int}]{bit\+\_\+offset, }
+\item[{const int}]{no\+\_\+of\+\_\+bits, }
+\item[{const unsigned int}]{encoding}
+\end{DoxyParamCaption}
+)}\label{_buffy_8h_a211b787080332cc7832a5913f4fdd1c5}
+Get 1 -\/ 32 bits returned in a uint32.
+
+
+\begin{DoxyParams}{Parameters}
+{\em buffy} & the calling buffer \\
+\hline
+{\em bit\+\_\+offset} & the offset for from the currenty buffer position \\
+\hline
+{\em the} & number of bits to be read\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+unsigned 32 bit value representing the specified bit range 
+\end{DoxyReturn}
+\hypertarget{_buffy_8h_a92035119238aa737383dd8666dac13bb}{}\index{Buffy.\+h@{Buffy.\+h}!Buffy\+\_\+get\+\_\+bits64@{Buffy\+\_\+get\+\_\+bits64}}
+\index{Buffy\+\_\+get\+\_\+bits64@{Buffy\+\_\+get\+\_\+bits64}!Buffy.\+h@{Buffy.\+h}}
+\subsubsection[{Buffy\+\_\+get\+\_\+bits64(\+Buffy\+\_\+t $\ast$buffy, unsigned int bit\+\_\+offset, const int no\+\_\+of\+\_\+bits, const unsigned int encoding)}]{\setlength{\rightskip}{0pt plus 5cm}uint64\+\_\+t Buffy\+\_\+get\+\_\+bits64 (
+\begin{DoxyParamCaption}
+\item[{Buffy\+\_\+t $\ast$}]{buffy, }
+\item[{unsigned int}]{bit\+\_\+offset, }
+\item[{const int}]{no\+\_\+of\+\_\+bits, }
+\item[{const unsigned int}]{encoding}
+\end{DoxyParamCaption}
+)}\label{_buffy_8h_a92035119238aa737383dd8666dac13bb}
+Get 1 -\/ 64 bits returned in a uint64.
+
+
+\begin{DoxyParams}{Parameters}
+{\em buffy} & the calling buffer \\
+\hline
+{\em bit\+\_\+offset} & the offset for from the currenty buffer position \\
+\hline
+{\em the} & number of bits to be read\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+unsigned 64 bit value representing the specified bit range 
+\end{DoxyReturn}
+\hypertarget{_buffy_8h_ade00c0797aedaa513fd554a4e59839ca}{}\index{Buffy.\+h@{Buffy.\+h}!Buffy\+\_\+get\+\_\+bits8@{Buffy\+\_\+get\+\_\+bits8}}
+\index{Buffy\+\_\+get\+\_\+bits8@{Buffy\+\_\+get\+\_\+bits8}!Buffy.\+h@{Buffy.\+h}}
+\subsubsection[{Buffy\+\_\+get\+\_\+bits8(\+Buffy\+\_\+t $\ast$buffy, unsigned int bit\+\_\+offset, const int no\+\_\+of\+\_\+bits)}]{\setlength{\rightskip}{0pt plus 5cm}uint8\+\_\+t Buffy\+\_\+get\+\_\+bits8 (
+\begin{DoxyParamCaption}
+\item[{Buffy\+\_\+t $\ast$}]{buffy, }
+\item[{unsigned int}]{bit\+\_\+offset, }
+\item[{const int}]{no\+\_\+of\+\_\+bits}
+\end{DoxyParamCaption}
+)}\label{_buffy_8h_ade00c0797aedaa513fd554a4e59839ca}
+Get 1 -\/ 8 bits returned in a uint8.
+
+
+\begin{DoxyParams}{Parameters}
+{\em buffy} & the calling buffer \\
+\hline
+{\em bit\+\_\+offset} & the offset for from the currenty buffer position \\
+\hline
+{\em the} & number of bits to be read\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+unsigned 8 bit value representing the specified bit range 
+\end{DoxyReturn}
