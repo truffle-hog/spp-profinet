@@ -1,7 +1,7 @@
 /* $Id$ */
 /* Snort Preprocessor Plugin Source File ProfiNet */
 
-/* spp_profinet_decode
+/* spp_profinet
  *
  * Purpose:
  *
@@ -36,16 +36,10 @@ static void ProfiNetInit(struct _SnortConfig *, char *args);
 static void DetectProfiNetPackets(Packet *, void *context);
 static void ProfiNetCleanExit(int, void *);
 
-/*
- * Function: SetupProfiNet()
- *
- * Purpose: Registers the preprocessor keyword and initialization
- *          function into the preprocessor list.  This is the function that
- *          gets called from InitPreprocessors() in plugbase.c.
- *
- * Arguments: None.
- *
- * Returns: void function
+/**
+ * Registers the preprocessor keyword and initialization
+ * function into the preprocessor list.  This is the function that
+ * gets called from InitPreprocessors() in plugbase.c.
  *
  */
 void SetupProfiNet()
@@ -53,24 +47,25 @@ void SetupProfiNet()
 
 }
 
+/**
+* Initializes the dissectors for the profinet protocols.
+*
+*/
 void DissectorInit()
 {
   tlRegister = DissectorRegister_new();
   Dissector_t *pnrtDissector = PNRTDissector_new();
-  
+
   tlRegister->ops->DissectorRegister_insert(tlRegister, prntDissector);
 
 }
 
 /*
- * Function: ProfiNetInit(u_char *)
+ * Calls the argument parsing function, performs final setup on data
+ * structs, links the preproc function into the function list.
  *
- * Purpose: Calls the argument parsing function, performs final setup on data
- *          structs, links the preproc function into the function list.
- *
- * Arguments: args => ptr to argument string
- *
- * Returns: void function
+ * @param sc the snort configuration
+ * @param args ptr to argument string
  *
  */
 static void ProfiNetInit(struct _SnortConfig * sc, char *args)
@@ -82,17 +77,13 @@ static void ProfiNetInit(struct _SnortConfig * sc, char *args)
 }
 
 /*
- * Function: PreprocFunction(Packet *)
+ *  Perform the preprocessor's intended function.  This can be
+ *  simple (statistics collection) or complex (IP defragmentation)
+ *  as you like.  Try not to destroy the performance of the whole
+ *  system by trying to do too much....
  *
- * Purpose: Perform the preprocessor's intended function.  This can be
- *          simple (statistics collection) or complex (IP defragmentation)
- *          as you like.  Try not to destroy the performance of the whole
- *          system by trying to do too much....
- *
- * Arguments: p => pointer to the current packet data struct
- *
- * Returns: void function
- *
+ * @param p pointer to the current packet data struct
+ * @param context the settings contex of the preprocessor
  */
 static void DetectProfiNetPackets(Packet *p, void *context)
 {
@@ -113,18 +104,15 @@ static void DetectProfiNetPackets(Packet *p, void *context)
 }
 
 /*
- * Function: PreprocCleanExitFunction(int, void *)
+ * This function gets called when Snort is exiting, if there's
+ * any cleanup that needs to be performed (e.g. closing files)
+ * it should be done here.
  *
- * Purpose: This function gets called when Snort is exiting, if there's
- *          any cleanup that needs to be performed (e.g. closing files)
- *          it should be done here.
+ * @param signal the code of the signal that was issued to Snort
  *
- * Arguments: signal => the code of the signal that was issued to Snort
- *            data => any arguments or data structs linked to this
- *                    functioin when it was registered, may be
- *                    needed to properly exit
- *
- * Returns: void function
+ * @param data any arguments or data structs linked to this
+ *             functioin when it was registered, may be
+ *             needed to properly exit
  */
 static void ProfiNetCleanExit(int signal, void *datas)
 {
