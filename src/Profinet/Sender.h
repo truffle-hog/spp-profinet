@@ -23,9 +23,14 @@ Sender_t * Sender_new(const struct sender_ops *ops);
 
 
 /**
- * Frees the given dissector.
+ * @brief Frees the given sender.
+ *
+ * @param sender the sender to be freed
+ *
+ * @return 0 if the freeing was successful,
+ *         -1 otherwise
  */
-void Sender_free(Sender_t *dissector);
+int Sender_free(Sender_t *sender);
 
 /**
  * Sends the given truffle to the specified ipc
