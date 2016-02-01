@@ -52,7 +52,7 @@ struct ProtocolTree_ops {
 };
 
 /**
- * @brief Buffer for dissecting packages in the profinet plugin.
+ * @brief Tree structure for building protocol information.
  *
  */
 struct ProtocolTree {
