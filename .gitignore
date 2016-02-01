@@ -36,6 +36,7 @@
 
 # Doc files
 latex
+html
 
 # CMake files
 CMakeLists.txt
