@@ -1,0 +1,133 @@
+\hypertarget{_dissector_8h}{}\section{src/\+Profinet/\+Dissector.h File Reference}
+\label{_dissector_8h}\index{src/\+Profinet/\+Dissector.\+h@{src/\+Profinet/\+Dissector.\+h}}
+
+
+The Basic \hyperlink{struct_dissector}{Dissector} abstraction (Interface).  
+
+
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{_dissector_8h_aaf24d89346635f91cb2cb35346859812}{}typedef struct \hyperlink{struct_dissector}{Dissector} {\bfseries Dissector\+\_\+t}\label{_dissector_8h_aaf24d89346635f91cb2cb35346859812}
+
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{struct_dissector}{Dissector\+\_\+t} $\ast$ \hyperlink{_dissector_8h_af24129fb1d5dc2fb277d819f6abc8043}{Dissector\+\_\+new} (const struct dissector\+\_\+ops $\ast$ops)
+\begin{DoxyCompactList}\small\item\em Creates a new \hyperlink{struct_dissector}{Dissector} with the given operations. \end{DoxyCompactList}\item 
+void \hyperlink{_dissector_8h_a77b80dfc415ed0b91add4f8686a78e25}{Dissector\+\_\+free} (\hyperlink{struct_dissector}{Dissector\+\_\+t} $\ast$dissector)
+\item 
+\hyperlink{struct_dissector}{Dissector\+\_\+t} $\ast$ \hyperlink{_dissector_8h_a15b4c5b5ebafd627ee67a17574276b01}{Dissector\+\_\+register\+Sub} (\hyperlink{struct_dissector}{Dissector\+\_\+t} $\ast$this, \hyperlink{struct_dissector}{Dissector\+\_\+t} $\ast$sub\+Dissector)
+\begin{DoxyCompactList}\small\item\em Registers a given sub dissector on this dissector. \end{DoxyCompactList}\item 
+\hyperlink{struct_dissector}{Dissector\+\_\+t} $\ast$ \hyperlink{_dissector_8h_a1ca99747985cee354f20a7d831d01838}{Dissector\+\_\+get\+Sub} (\hyperlink{struct_dissector}{Dissector\+\_\+t} $\ast$this, uint64\+\_\+t data)
+\begin{DoxyCompactList}\small\item\em Returns the sub dissector that is register for the given unsigned long. \end{DoxyCompactList}\item 
+int \hyperlink{_dissector_8h_a53867219bfa32d3cf1a7bd38f3119c2f}{Dissector\+\_\+dissect} (\hyperlink{struct_dissector}{Dissector\+\_\+t} $\ast$this, Buffer\+\_\+t $\ast$buf, Protocol\+Tree\+\_\+t $\ast$tree)
+\begin{DoxyCompactList}\small\item\em Dissects the package the given buffer is pointing to. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+The Basic \hyperlink{struct_dissector}{Dissector} abstraction (Interface). 
+
+The Base \hyperlink{struct_dissector}{Dissector} abstraction. Every implementation of a \hyperlink{struct_dissector}{Dissector} will use and implement the operations described in this interface. \hyperlink{struct_dissector}{Dissector} are used to dissect certain ranges of data in a network package, while having the possibility to link to further dissectors when the dissection of the desired range is complete.
+
+-\/$>$ It is possible to link several Dissectors together building a tree of dissectors and subdissectors that call each other when their dissection part is completed. 
+
+\subsection{Function Documentation}
+\hypertarget{_dissector_8h_a53867219bfa32d3cf1a7bd38f3119c2f}{}\index{Dissector.\+h@{Dissector.\+h}!Dissector\+\_\+dissect@{Dissector\+\_\+dissect}}
+\index{Dissector\+\_\+dissect@{Dissector\+\_\+dissect}!Dissector.\+h@{Dissector.\+h}}
+\subsubsection[{Dissector\+\_\+dissect(\+Dissector\+\_\+t $\ast$this, Buffer\+\_\+t $\ast$buf, Protocol\+Tree\+\_\+t $\ast$tree)}]{\setlength{\rightskip}{0pt plus 5cm}int Dissector\+\_\+dissect (
+\begin{DoxyParamCaption}
+\item[{{\bf Dissector\+\_\+t} $\ast$}]{this, }
+\item[{Buffer\+\_\+t $\ast$}]{buf, }
+\item[{Protocol\+Tree\+\_\+t $\ast$}]{tree}
+\end{DoxyParamCaption}
+)}\label{_dissector_8h_a53867219bfa32d3cf1a7bd38f3119c2f}
+
+
+Dissects the package the given buffer is pointing to. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em this} & the calling \hyperlink{struct_dissector}{Dissector} \\
+\hline
+{\em buf} & the buffer pointing to the package data currently being processed \\
+\hline
+{\em tree} & the tree strcture to save the package data in\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 if the dissection was successful wihtout any failures, -\/1 if it was a faulty package. The fault flag will be set in the \hyperlink{struct_protocol_tree}{Protocol\+Tree} accordingly 
+\end{DoxyReturn}
+\hypertarget{_dissector_8h_a77b80dfc415ed0b91add4f8686a78e25}{}\index{Dissector.\+h@{Dissector.\+h}!Dissector\+\_\+free@{Dissector\+\_\+free}}
+\index{Dissector\+\_\+free@{Dissector\+\_\+free}!Dissector.\+h@{Dissector.\+h}}
+\subsubsection[{Dissector\+\_\+free(\+Dissector\+\_\+t $\ast$dissector)}]{\setlength{\rightskip}{0pt plus 5cm}void Dissector\+\_\+free (
+\begin{DoxyParamCaption}
+\item[{{\bf Dissector\+\_\+t} $\ast$}]{dissector}
+\end{DoxyParamCaption}
+)}\label{_dissector_8h_a77b80dfc415ed0b91add4f8686a78e25}
+Frees the given dissector. \hypertarget{_dissector_8h_a1ca99747985cee354f20a7d831d01838}{}\index{Dissector.\+h@{Dissector.\+h}!Dissector\+\_\+get\+Sub@{Dissector\+\_\+get\+Sub}}
+\index{Dissector\+\_\+get\+Sub@{Dissector\+\_\+get\+Sub}!Dissector.\+h@{Dissector.\+h}}
+\subsubsection[{Dissector\+\_\+get\+Sub(\+Dissector\+\_\+t $\ast$this, uint64\+\_\+t data)}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Dissector\+\_\+t}$\ast$ Dissector\+\_\+get\+Sub (
+\begin{DoxyParamCaption}
+\item[{{\bf Dissector\+\_\+t} $\ast$}]{this, }
+\item[{uint64\+\_\+t}]{data}
+\end{DoxyParamCaption}
+)}\label{_dissector_8h_a1ca99747985cee354f20a7d831d01838}
+
+
+Returns the sub dissector that is register for the given unsigned long. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em this} & the dissector calling Dissector\+\_\+get\+Sub \\
+\hline
+{\em data} & the value for looking up in the dissector register\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the registered sub dissector if any, N\+U\+L\+L otherwise 
+\end{DoxyReturn}
+\hypertarget{_dissector_8h_af24129fb1d5dc2fb277d819f6abc8043}{}\index{Dissector.\+h@{Dissector.\+h}!Dissector\+\_\+new@{Dissector\+\_\+new}}
+\index{Dissector\+\_\+new@{Dissector\+\_\+new}!Dissector.\+h@{Dissector.\+h}}
+\subsubsection[{Dissector\+\_\+new(const struct dissector\+\_\+ops $\ast$ops)}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Dissector\+\_\+t}$\ast$ Dissector\+\_\+new (
+\begin{DoxyParamCaption}
+\item[{const struct dissector\+\_\+ops $\ast$}]{ops}
+\end{DoxyParamCaption}
+)}\label{_dissector_8h_af24129fb1d5dc2fb277d819f6abc8043}
+
+
+Creates a new \hyperlink{struct_dissector}{Dissector} with the given operations. 
+
+This Function is the interface constructor for every \hyperlink{struct_dissector}{Dissector} implementation. Calling this function will initialize the dissector correctly and fill the needed data within the \hyperlink{struct_dissector}{Dissector} structure.
+
+
+\begin{DoxyParams}{Parameters}
+{\em ops} & the pointer to the operations used for this dissector \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+a pointer to the created dissector 
+\end{DoxyReturn}
+\hypertarget{_dissector_8h_a15b4c5b5ebafd627ee67a17574276b01}{}\index{Dissector.\+h@{Dissector.\+h}!Dissector\+\_\+register\+Sub@{Dissector\+\_\+register\+Sub}}
+\index{Dissector\+\_\+register\+Sub@{Dissector\+\_\+register\+Sub}!Dissector.\+h@{Dissector.\+h}}
+\subsubsection[{Dissector\+\_\+register\+Sub(\+Dissector\+\_\+t $\ast$this, Dissector\+\_\+t $\ast$sub\+Dissector)}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Dissector\+\_\+t}$\ast$ Dissector\+\_\+register\+Sub (
+\begin{DoxyParamCaption}
+\item[{{\bf Dissector\+\_\+t} $\ast$}]{this, }
+\item[{{\bf Dissector\+\_\+t} $\ast$}]{sub\+Dissector}
+\end{DoxyParamCaption}
+)}\label{_dissector_8h_a15b4c5b5ebafd627ee67a17574276b01}
+
+
+Registers a given sub dissector on this dissector. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em this} & the dissector to register the sub\+Dissector on \\
+\hline
+{\em sub\+Dissector} & the dissector to be registered as sub\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+N\+U\+L\+L if there was no other dissector registered for the given interval otherwise the existing \hyperlink{struct_dissector}{Dissector} will be overwritten and returned. 
+\end{DoxyReturn}
