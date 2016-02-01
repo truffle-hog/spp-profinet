@@ -8,7 +8,7 @@
  */
 
 /**
- * @brief The PNRTDissector for Profi IO 0x8892.
+ * @brief The Dissector for Profi Real Time IO 0x8892.
  *
  */
 struct PNRTDissector {
