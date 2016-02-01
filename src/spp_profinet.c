@@ -2,7 +2,7 @@
  * @file spp_profinet.c
  *
  * $Id$
- * Snort Preprocessor Plugin Source File ProfiNet
+ * @brief Snort Preprocessor Plugin Source File ProfiNet
  * Purpose:
  *
  * Preprocessors perform some function *once* for *each* packet.  This is

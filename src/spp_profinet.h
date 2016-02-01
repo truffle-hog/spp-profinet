@@ -1,6 +1,6 @@
 /** @file spp_profinet.h
  *
- *  Snort Preprocessor Plugin Header
+ *  @brief Snort Preprocessor Plugin Header
  *
  *  This file gets included in plugbase.h when it is integrated into the rest
  *  of the program.
