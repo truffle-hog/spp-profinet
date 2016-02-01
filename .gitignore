@@ -34,5 +34,8 @@
 # Debug files
 *.dSYM/
 
+# Doc files
+latex
 
+# CMake files
 CMakeLists.txt
