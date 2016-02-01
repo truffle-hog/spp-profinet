@@ -1,0 +1,123 @@
+\hypertarget{struct_buffy__ops}{}\section{Buffy\+\_\+ops Struct Reference}
+\label{struct_buffy__ops}\index{Buffy\+\_\+ops@{Buffy\+\_\+ops}}
+
+
+The operations that can be called by a \hyperlink{struct_buffy}{Buffy} buffer.  
+
+
+
+
+{\ttfamily \#include $<$Buffy-\/int.\+h$>$}
+
+\subsection*{Data Fields}
+\begin{DoxyCompactItemize}
+\item 
+void($\ast$ \hyperlink{struct_buffy__ops_ab7bf66b999e3940f3a96e2c433f7cce3}{Buffy\+\_\+free} )(Buffy\+\_\+t $\ast$buffy)
+\begin{DoxyCompactList}\small\item\em Frees the given buffer from memory. \end{DoxyCompactList}\item 
+uint8\+\_\+t($\ast$ \hyperlink{struct_buffy__ops_a6f461fe87b9f795fb7ffd3db096297ea}{Buffy\+\_\+get\+\_\+bits8} )(Buffy\+\_\+t\textbackslash{}$\ast$this, unsigned int bit\+\_\+offset, const int no\+\_\+of\+\_\+bits)
+\begin{DoxyCompactList}\small\item\em Get 1 -\/ 8 bits returned in a uint8. \end{DoxyCompactList}\item 
+uint16\+\_\+t($\ast$ \hyperlink{struct_buffy__ops_a3df506773dc40f33aac389a45546b7ba}{Buffy\+\_\+get\+\_\+bits16} )(Buffy\+\_\+t\textbackslash{}$\ast$this, unsigned int bit\+\_\+offset, const int no\+\_\+of\+\_\+bits, const unsigned int encoding)
+\begin{DoxyCompactList}\small\item\em Get 1 -\/ 16 bits returned in a uint16. \end{DoxyCompactList}\item 
+uint32\+\_\+t($\ast$ \hyperlink{struct_buffy__ops_a79fb9eb286f713f3fcbd0c5844422320}{Buffy\+\_\+get\+\_\+bits32} )(Buffy\+\_\+t\textbackslash{}$\ast$this, unsigned int bit\+\_\+offset, const int no\+\_\+of\+\_\+bits, const unsigned int encoding)
+\begin{DoxyCompactList}\small\item\em Get 1 -\/ 32 bits returned in a uint32. \end{DoxyCompactList}\item 
+uint64\+\_\+t($\ast$ \hyperlink{struct_buffy__ops_a513ddb6f7d6baa2f916e08620e553ad0}{Buffy\+\_\+get\+\_\+bits64} )(Buffy\+\_\+t\textbackslash{}$\ast$this, unsigned int bit\+\_\+offset, const int no\+\_\+of\+\_\+bits, const unsigned int encoding)
+\begin{DoxyCompactList}\small\item\em Get 1 -\/ 64 bits returned in a uint64. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+The operations that can be called by a \hyperlink{struct_buffy}{Buffy} buffer. 
+
+\subsection{Field Documentation}
+\hypertarget{struct_buffy__ops_ab7bf66b999e3940f3a96e2c433f7cce3}{}\index{Buffy\+\_\+ops@{Buffy\+\_\+ops}!Buffy\+\_\+free@{Buffy\+\_\+free}}
+\index{Buffy\+\_\+free@{Buffy\+\_\+free}!Buffy\+\_\+ops@{Buffy\+\_\+ops}}
+\subsubsection[{Buffy\+\_\+free}]{\setlength{\rightskip}{0pt plus 5cm}void($\ast$ Buffy\+\_\+ops\+::\+Buffy\+\_\+free) (Buffy\+\_\+t $\ast$buffy)}\label{struct_buffy__ops_ab7bf66b999e3940f3a96e2c433f7cce3}
+
+
+Frees the given buffer from memory. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em buffy} & the buffer to be freed \\
+\hline
+\end{DoxyParams}
+\hypertarget{struct_buffy__ops_a3df506773dc40f33aac389a45546b7ba}{}\index{Buffy\+\_\+ops@{Buffy\+\_\+ops}!Buffy\+\_\+get\+\_\+bits16@{Buffy\+\_\+get\+\_\+bits16}}
+\index{Buffy\+\_\+get\+\_\+bits16@{Buffy\+\_\+get\+\_\+bits16}!Buffy\+\_\+ops@{Buffy\+\_\+ops}}
+\subsubsection[{Buffy\+\_\+get\+\_\+bits16}]{\setlength{\rightskip}{0pt plus 5cm}uint16\+\_\+t($\ast$ Buffy\+\_\+ops\+::\+Buffy\+\_\+get\+\_\+bits16) (Buffy\+\_\+t\textbackslash{}$\ast$this, unsigned int bit\+\_\+offset, const int no\+\_\+of\+\_\+bits, const unsigned int encoding)}\label{struct_buffy__ops_a3df506773dc40f33aac389a45546b7ba}
+
+
+Get 1 -\/ 16 bits returned in a uint16. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em this} & the calling buffer \\
+\hline
+{\em bit\+\_\+offset} & the offset for from the currenty buffer position \\
+\hline
+{\em the} & number of bits to be read\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+unsigned 16 bit value representing the specified bit range 
+\end{DoxyReturn}
+\hypertarget{struct_buffy__ops_a79fb9eb286f713f3fcbd0c5844422320}{}\index{Buffy\+\_\+ops@{Buffy\+\_\+ops}!Buffy\+\_\+get\+\_\+bits32@{Buffy\+\_\+get\+\_\+bits32}}
+\index{Buffy\+\_\+get\+\_\+bits32@{Buffy\+\_\+get\+\_\+bits32}!Buffy\+\_\+ops@{Buffy\+\_\+ops}}
+\subsubsection[{Buffy\+\_\+get\+\_\+bits32}]{\setlength{\rightskip}{0pt plus 5cm}uint32\+\_\+t($\ast$ Buffy\+\_\+ops\+::\+Buffy\+\_\+get\+\_\+bits32) (Buffy\+\_\+t\textbackslash{}$\ast$this, unsigned int bit\+\_\+offset, const int no\+\_\+of\+\_\+bits, const unsigned int encoding)}\label{struct_buffy__ops_a79fb9eb286f713f3fcbd0c5844422320}
+
+
+Get 1 -\/ 32 bits returned in a uint32. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em this} & the calling buffer \\
+\hline
+{\em bit\+\_\+offset} & the offset for from the currenty buffer position \\
+\hline
+{\em the} & number of bits to be read Gu \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+unsigned 32 bit value representing the specified bit range 
+\end{DoxyReturn}
+\hypertarget{struct_buffy__ops_a513ddb6f7d6baa2f916e08620e553ad0}{}\index{Buffy\+\_\+ops@{Buffy\+\_\+ops}!Buffy\+\_\+get\+\_\+bits64@{Buffy\+\_\+get\+\_\+bits64}}
+\index{Buffy\+\_\+get\+\_\+bits64@{Buffy\+\_\+get\+\_\+bits64}!Buffy\+\_\+ops@{Buffy\+\_\+ops}}
+\subsubsection[{Buffy\+\_\+get\+\_\+bits64}]{\setlength{\rightskip}{0pt plus 5cm}uint64\+\_\+t($\ast$ Buffy\+\_\+ops\+::\+Buffy\+\_\+get\+\_\+bits64) (Buffy\+\_\+t\textbackslash{}$\ast$this, unsigned int bit\+\_\+offset, const int no\+\_\+of\+\_\+bits, const unsigned int encoding)}\label{struct_buffy__ops_a513ddb6f7d6baa2f916e08620e553ad0}
+
+
+Get 1 -\/ 64 bits returned in a uint64. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em this} & the calling buffer \\
+\hline
+{\em bit\+\_\+offset} & the offset for from the currenty buffer position \\
+\hline
+{\em the} & number of bits to be read\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+unsigned 64 bit value representing the specified bit range 
+\end{DoxyReturn}
+\hypertarget{struct_buffy__ops_a6f461fe87b9f795fb7ffd3db096297ea}{}\index{Buffy\+\_\+ops@{Buffy\+\_\+ops}!Buffy\+\_\+get\+\_\+bits8@{Buffy\+\_\+get\+\_\+bits8}}
+\index{Buffy\+\_\+get\+\_\+bits8@{Buffy\+\_\+get\+\_\+bits8}!Buffy\+\_\+ops@{Buffy\+\_\+ops}}
+\subsubsection[{Buffy\+\_\+get\+\_\+bits8}]{\setlength{\rightskip}{0pt plus 5cm}uint8\+\_\+t($\ast$ Buffy\+\_\+ops\+::\+Buffy\+\_\+get\+\_\+bits8) (Buffy\+\_\+t\textbackslash{}$\ast$this, unsigned int bit\+\_\+offset, const int no\+\_\+of\+\_\+bits)}\label{struct_buffy__ops_a6f461fe87b9f795fb7ffd3db096297ea}
+
+
+Get 1 -\/ 8 bits returned in a uint8. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em this} & the calling buffer \\
+\hline
+{\em bit\+\_\+offset} & the offset for from the currenty buffer position \\
+\hline
+{\em the} & number of bits to be read\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+unsigned 8 bit value representing the specified bit range 
+\end{DoxyReturn}
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/\+Profinet/\hyperlink{_buffy-int_8h}{Buffy-\/int.\+h}\end{DoxyCompactItemize}

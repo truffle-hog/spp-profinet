@@ -1,0 +1,60 @@
+\hypertarget{_unix_socket_sender_8c}{}\section{src/\+Profinet/\+Unix\+Socket\+Sender.c File Reference}
+\label{_unix_socket_sender_8c}\index{src/\+Profinet/\+Unix\+Socket\+Sender.\+c@{src/\+Profinet/\+Unix\+Socket\+Sender.\+c}}
+
+
+This file houses the operations that are specific for a \hyperlink{struct_unix_socket_sender}{Unix\+Socket\+Sender}.  
+
+
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{struct_unix_socket_sender}{Unix\+Socket\+Sender}
+\begin{DoxyCompactList}\small\item\em Sends Truffles to a unix socket a client is reading from. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{struct_sender}{Sender\+\_\+t} $\ast$ \hyperlink{_unix_socket_sender_8c_a47b11edc788d19799db0bbf1c7d5e657}{Unix\+Socket\+Sender\+\_\+new} ()
+\item 
+int \hyperlink{_unix_socket_sender_8c_a0565ed317071504184f8097c9e34986d}{Unix\+Socket\+Sender\+\_\+free} (\hyperlink{struct_sender}{Sender\+\_\+t} $\ast$\hyperlink{spp__profinet_8c_a6aa2b3eed1dbaeff6fd73bd762ed09b4}{sender})
+\item 
+int \hyperlink{_unix_socket_sender_8c_a9b2ff46d11168c8b5dfc8694245a4046}{Unix\+Socket\+Sender\+\_\+send} (\hyperlink{struct_sender}{Sender\+\_\+t} $\ast$this, \hyperlink{struct_truffle}{Truffle\+\_\+t} $\ast$truffle)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+This file houses the operations that are specific for a \hyperlink{struct_unix_socket_sender}{Unix\+Socket\+Sender}. 
+
+\hyperlink{struct_unix_socket_sender}{Unix\+Socket\+Sender} uses Unix sockets for sending a \hyperlink{struct_truffle}{Truffle} to a listening client. 
+
+\subsection{Function Documentation}
+\hypertarget{_unix_socket_sender_8c_a0565ed317071504184f8097c9e34986d}{}\index{Unix\+Socket\+Sender.\+c@{Unix\+Socket\+Sender.\+c}!Unix\+Socket\+Sender\+\_\+free@{Unix\+Socket\+Sender\+\_\+free}}
+\index{Unix\+Socket\+Sender\+\_\+free@{Unix\+Socket\+Sender\+\_\+free}!Unix\+Socket\+Sender.\+c@{Unix\+Socket\+Sender.\+c}}
+\subsubsection[{Unix\+Socket\+Sender\+\_\+free(\+Sender\+\_\+t $\ast$sender)}]{\setlength{\rightskip}{0pt plus 5cm}int Unix\+Socket\+Sender\+\_\+free (
+\begin{DoxyParamCaption}
+\item[{{\bf Sender\+\_\+t} $\ast$}]{sender}
+\end{DoxyParamCaption}
+)}\label{_unix_socket_sender_8c_a0565ed317071504184f8097c9e34986d}
+\begin{DoxySeeAlso}{See also}
+\hyperlink{_sender_8h_ac9dfdaf3d7458a0d4f7675453aa28073}{Sender\+\_\+free} 
+\end{DoxySeeAlso}
+\hypertarget{_unix_socket_sender_8c_a47b11edc788d19799db0bbf1c7d5e657}{}\index{Unix\+Socket\+Sender.\+c@{Unix\+Socket\+Sender.\+c}!Unix\+Socket\+Sender\+\_\+new@{Unix\+Socket\+Sender\+\_\+new}}
+\index{Unix\+Socket\+Sender\+\_\+new@{Unix\+Socket\+Sender\+\_\+new}!Unix\+Socket\+Sender.\+c@{Unix\+Socket\+Sender.\+c}}
+\subsubsection[{Unix\+Socket\+Sender\+\_\+new()}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Sender\+\_\+t}$\ast$ Unix\+Socket\+Sender\+\_\+new (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\label{_unix_socket_sender_8c_a47b11edc788d19799db0bbf1c7d5e657}
+\begin{DoxySeeAlso}{See also}
+\hyperlink{_sender_8h_a8fd47a704efa4b163bce4835be401bd9}{Sender\+\_\+new} 
+\end{DoxySeeAlso}
+\hypertarget{_unix_socket_sender_8c_a9b2ff46d11168c8b5dfc8694245a4046}{}\index{Unix\+Socket\+Sender.\+c@{Unix\+Socket\+Sender.\+c}!Unix\+Socket\+Sender\+\_\+send@{Unix\+Socket\+Sender\+\_\+send}}
+\index{Unix\+Socket\+Sender\+\_\+send@{Unix\+Socket\+Sender\+\_\+send}!Unix\+Socket\+Sender.\+c@{Unix\+Socket\+Sender.\+c}}
+\subsubsection[{Unix\+Socket\+Sender\+\_\+send(\+Sender\+\_\+t $\ast$this, Truffle\+\_\+t $\ast$truffle)}]{\setlength{\rightskip}{0pt plus 5cm}int Unix\+Socket\+Sender\+\_\+send (
+\begin{DoxyParamCaption}
+\item[{{\bf Sender\+\_\+t} $\ast$}]{this, }
+\item[{{\bf Truffle\+\_\+t} $\ast$}]{truffle}
+\end{DoxyParamCaption}
+)}\label{_unix_socket_sender_8c_a9b2ff46d11168c8b5dfc8694245a4046}
+\begin{DoxySeeAlso}{See also}
+\hyperlink{_sender_8h_a7c84568d236ef5d64415a9ca9fb559b3}{Sender\+\_\+send} 
+\end{DoxySeeAlso}

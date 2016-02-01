@@ -1,0 +1,101 @@
+\hypertarget{_dissector_register_8h}{}\section{src/\+Profinet/\+Dissector\+Register.h File Reference}
+\label{_dissector_register_8h}\index{src/\+Profinet/\+Dissector\+Register.\+h@{src/\+Profinet/\+Dissector\+Register.\+h}}
+
+
+The interface for dissector registers.  
+
+
+{\ttfamily \#include \char`\"{}Dissector.\+h\char`\"{}}\\*
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{_dissector_register_8h_ad9dafbc93ee31322f85b1608f346486d}{}typedef struct \hyperlink{struct_dissector_register}{Dissector\+Register} {\bfseries Dissector\+Register\+\_\+t}\label{_dissector_register_8h_ad9dafbc93ee31322f85b1608f346486d}
+
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{struct_dissector_register}{Dissector\+Register\+\_\+t} $\ast$ \hyperlink{_dissector_register_8h_aaee18837c45beccc9ae46f56219015c0}{Dissector\+Register\+\_\+new} (const struct \hyperlink{struct_dissector_register__ops}{Dissector\+Register\+\_\+ops} $\ast$ops)
+\begin{DoxyCompactList}\small\item\em Creates a new \hyperlink{struct_dissector_register}{Dissector\+Register} with the given operations. \end{DoxyCompactList}\item 
+\hypertarget{_dissector_register_8h_aa64e62a327864994c2ef8c84683f1714}{}void \hyperlink{_dissector_register_8h_aa64e62a327864994c2ef8c84683f1714}{Dissector\+Register\+\_\+free} (\hyperlink{struct_dissector_register}{Dissector\+Register\+\_\+t} $\ast$this)\label{_dissector_register_8h_aa64e62a327864994c2ef8c84683f1714}
+
+\begin{DoxyCompactList}\small\item\em Frees the given \hyperlink{struct_dissector_register}{Dissector\+Register}. \end{DoxyCompactList}\item 
+\hyperlink{struct_dissector}{Dissector\+\_\+t} $\ast$ \hyperlink{_dissector_register_8h_a615b559af56d66f2e9e1aa31df16d57d}{Dissector\+Register\+\_\+insert} (\hyperlink{struct_dissector_register}{Dissector\+Register\+\_\+t} $\ast$this, \hyperlink{struct_dissector}{Dissector\+\_\+t} $\ast$dissector)
+\begin{DoxyCompactList}\small\item\em Inserts a new \hyperlink{struct_dissector}{Dissector}. \end{DoxyCompactList}\item 
+\hyperlink{struct_dissector}{Dissector\+\_\+t} $\ast$ \hyperlink{_dissector_register_8h_aa5c1e0bbb49be89a6cba6c88507a3b9c}{Dissector\+Register\+\_\+get} (\hyperlink{struct_dissector_register}{Dissector\+Register\+\_\+t} $\ast$this, uint64\+\_\+t data)
+\begin{DoxyCompactList}\small\item\em Returns the \hyperlink{struct_dissector}{Dissector} that is registered for the given unsigned long. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+The interface for dissector registers. 
+
+The dissector register is used to register dissectors to intervals. Thereby making it possible to dissect a package while using certain data ranges for calling a next dissector that is mapped to the given data. 
+
+\subsection{Function Documentation}
+\hypertarget{_dissector_register_8h_aa5c1e0bbb49be89a6cba6c88507a3b9c}{}\index{Dissector\+Register.\+h@{Dissector\+Register.\+h}!Dissector\+Register\+\_\+get@{Dissector\+Register\+\_\+get}}
+\index{Dissector\+Register\+\_\+get@{Dissector\+Register\+\_\+get}!Dissector\+Register.\+h@{Dissector\+Register.\+h}}
+\subsubsection[{Dissector\+Register\+\_\+get(\+Dissector\+Register\+\_\+t $\ast$this, uint64\+\_\+t data)}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Dissector\+\_\+t}$\ast$ Dissector\+Register\+\_\+get (
+\begin{DoxyParamCaption}
+\item[{{\bf Dissector\+Register\+\_\+t} $\ast$}]{this, }
+\item[{uint64\+\_\+t}]{data}
+\end{DoxyParamCaption}
+)}\label{_dissector_register_8h_aa5c1e0bbb49be89a6cba6c88507a3b9c}
+
+
+Returns the \hyperlink{struct_dissector}{Dissector} that is registered for the given unsigned long. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em this} & the \hyperlink{struct_dissector_register}{Dissector\+Register} calling \\
+\hline
+{\em data} & the value for looking up in the \hyperlink{struct_dissector_register}{Dissector\+Register}\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the registered \hyperlink{struct_dissector}{Dissector} if any, N\+U\+L\+L otherwise 
+\end{DoxyReturn}
+\hypertarget{_dissector_register_8h_a615b559af56d66f2e9e1aa31df16d57d}{}\index{Dissector\+Register.\+h@{Dissector\+Register.\+h}!Dissector\+Register\+\_\+insert@{Dissector\+Register\+\_\+insert}}
+\index{Dissector\+Register\+\_\+insert@{Dissector\+Register\+\_\+insert}!Dissector\+Register.\+h@{Dissector\+Register.\+h}}
+\subsubsection[{Dissector\+Register\+\_\+insert(\+Dissector\+Register\+\_\+t $\ast$this, Dissector\+\_\+t $\ast$dissector)}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Dissector\+\_\+t}$\ast$ Dissector\+Register\+\_\+insert (
+\begin{DoxyParamCaption}
+\item[{{\bf Dissector\+Register\+\_\+t} $\ast$}]{this, }
+\item[{{\bf Dissector\+\_\+t} $\ast$}]{dissector}
+\end{DoxyParamCaption}
+)}\label{_dissector_register_8h_a615b559af56d66f2e9e1aa31df16d57d}
+
+
+Inserts a new \hyperlink{struct_dissector}{Dissector}. 
+
+The new dissector will be inserted into the \hyperlink{struct_dissector_register}{Dissector\+Register} by obtaining its lower and upper identifier bounds and mapping it accordingly.
+
+
+\begin{DoxyParams}{Parameters}
+{\em this} & the calling register \\
+\hline
+{\em dissector} & the dissector to be inserted\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+N\+U\+L\+L if there is no previous dissector registered within its interval, otherwise overwrites the old dissector and returns it 
+\end{DoxyReturn}
+\hypertarget{_dissector_register_8h_aaee18837c45beccc9ae46f56219015c0}{}\index{Dissector\+Register.\+h@{Dissector\+Register.\+h}!Dissector\+Register\+\_\+new@{Dissector\+Register\+\_\+new}}
+\index{Dissector\+Register\+\_\+new@{Dissector\+Register\+\_\+new}!Dissector\+Register.\+h@{Dissector\+Register.\+h}}
+\subsubsection[{Dissector\+Register\+\_\+new(const struct Dissector\+Register\+\_\+ops $\ast$ops)}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Dissector\+Register\+\_\+t}$\ast$ Dissector\+Register\+\_\+new (
+\begin{DoxyParamCaption}
+\item[{const struct {\bf Dissector\+Register\+\_\+ops} $\ast$}]{ops}
+\end{DoxyParamCaption}
+)}\label{_dissector_register_8h_aaee18837c45beccc9ae46f56219015c0}
+
+
+Creates a new \hyperlink{struct_dissector_register}{Dissector\+Register} with the given operations. 
+
+This Function is the interface constructor for every \hyperlink{struct_dissector_register}{Dissector\+Register} implementation. By calling this function a new dissector register will be stored in heap memory and initialized correctly.
+
+
+\begin{DoxyParams}{Parameters}
+{\em ops} & the pointer to the operations used for this \hyperlink{struct_dissector_register}{Dissector\+Register} \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+a pointer to the created \hyperlink{struct_dissector_register}{Dissector\+Register} 
+\end{DoxyReturn}
