@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief The interface for Buffy.
+ * @brief The internal structure of Buffy.
  */
 
 #ifndef __BUFFY_INT_H__

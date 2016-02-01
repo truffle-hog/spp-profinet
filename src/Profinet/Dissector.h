@@ -1,12 +1,7 @@
 /**
- * @file
- * @brief The interface for dissectors
- */
-
-#ifndef __DISSECTOR_H__
-#define __DISSECTOR_H__
-
-/** @file Dissector.h
+ * @file Dissector.h
+ *
+ * @brief The Basic Dissector abstraction (Interface).
  *
  * The Base Dissector abstraction. Every implementation of a Dissector will use
  * and implement the operations described in this interface.
@@ -17,6 +12,11 @@
  * -> It is possible to link several Dissectors together building a tree of dissectors
  * and subdissectors that call each other when their dissection part is completed.
  */
+
+#ifndef __DISSECTOR_H__
+#define __DISSECTOR_H__
+
+
 struct Dissector;
 typedef struct Dissector Dissector_t;
 

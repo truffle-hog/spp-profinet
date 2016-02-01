@@ -1,6 +1,11 @@
 #ifndef __TRUFFLE_H__
 #define __TRUFFLE_H__
 
+/**
+ * @file
+ * @brief The structure of a Truffle that is send via ipc.
+ */
+
 // TODO define the flags that are used within the truffle
 
 /**

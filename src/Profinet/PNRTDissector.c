@@ -1,11 +1,18 @@
 /**
  * @file
- * @brief This file houses the operations that are specific for a UnixSocketSender
+ * @brief PNRTDissector implementation.
  *
- * UnixSocketSender uses Unix sockets for sending a Truffle to a listening client.
+ * This Dissector is the 0x8892 toplevel dissector, which will be followed by frame
+ * and block dissectors.
+ *
  */
 
+/**
+ * @brief The PNRTDissector for Profi IO 0x8892.
+ *
+ */
 struct PNRTDissector {
+  /** @brief Houses a Dissector internally for safe type casting. **/
   struct Dissector dissector;
 
 };

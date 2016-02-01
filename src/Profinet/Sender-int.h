@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief The internal functionality of Sender.
+ * @brief The internal structure of Sender.
  */
 
 #ifndef __SENDER_INT_H__
