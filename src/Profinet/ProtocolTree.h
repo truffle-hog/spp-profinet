@@ -6,67 +6,56 @@
 #ifndef __PROTOCOL_TREE_H__
 #define __PROTOCOL_TREE_H__
 
-/**
- * @brief Creates a new buffer from the given snort package.
- *
- * @param p the packet as defined by snort
- * @return the instantiated Buffer
- */
-ProtocolTree_t *ProtocolTree_new(Packet *p);
+/** @brief Info that can be inserte into a protocol tree as new branch. **/
+struct HeaderInfo {
+
+  /** @brief The caption of this info field. **/
+  char caption[256];
+  /** @brief Interesting bits that can be set. **/
+  uint64_t bitmask;
+  /** @brief Infofield, can contain any information in char format for specific size. **/
+  char infofield[256];
+  /** @brief A value that can be put for information. **/
+  long long value;
+  /** @brief Specifies the type of information. **/
+  int type;
+
+}
 
 /**
- * @brief Frees the given buffer from memory.
+ * @brief Creates a new ProtocolTree.
  *
- * @param buffy the buffer to be freed
+ * @return the instantiated Tree
  */
-void ProtocolTree_free(ProtocolTree_t *buffy);
+ProtocolTree_t *ProtocolTree_new();
 
 /**
- * @brief Get 1 - 8 bits returned in a uint8.
+ * @brief Frees the given ProtocolTree from memory.
  *
- * @param this the calling buffer
- * @param bit_offset the offset for from the currenty buffer position
- * @param the number of bits to be read
- *
- * @return unsigned 8 bit value representing the specified bit range
+ * @param proto the ProtocolTree to be freed
  */
-uint8_t ProtocolTree_get_bits8(ProtocolTree_t *this, unsigned int bit_offset,
-    const int no_of_bits);
+void ProtocolTree_free(ProtocolTree_t *proto);
 
 /**
- * @brief Get 1 - 16 bits returned in a uint16.
+ * @brief Creates a new branch with the given info field from the current root pointer of this ProtocolTree.
  *
- * @param this the calling buffer
- * @param bit_offset the offset for from the currenty buffer position
- * @param the number of bits to be read
+ * @param this the calling ProtocolTree
+ * @param info the header info to be inserted for the new subtree
  *
- * @return unsigned 16 bit value representing the specified bit range
+ * @return A pointer to a Subtree with the newly created branch as its root pointer.
  */
-uint16_t ProtocolTree_get_bits16(ProtocolTree_t *this, unsigned int bit_offset,
-    const int no_of_bits, const unsigned int encoding);
+ProtocolTree_t *ProtocolTree_branch(ProtocolTree_t *this, struct HeaderInfo *info);
 
 /**
- * @brief Get 1 - 32 bits returned in a uint32.
+ * @brief Searches and returns the branch with the given caption.
  *
- * @param this the calling buffer
- * @param bit_offset the offset for from the currenty buffer position
- * @param the number of bits to be read
+ * @param this the calling ProtocolTree
+ * @param the caption to be searched for
  *
- * @return unsigned 32 bit value representing the specified bit range
+ * @return the ProtocolTree starting at the found branch, NULL if there is no such
+ *          branch.
  */
-uint32_t ProtocolTree_get_bits32(ProtocolTree_t *this, unsigned int bit_offset,
-    const int no_of_bits, const unsigned int encoding);
+ProtocolTree_t *ProtocolTree_findBranch(ProtocolTree_t *this, char *caption);
 
-/**
- * @brief Get 1 - 64 bits returned in a uint64.
- *
- * @param this the calling buffer
- * @param bit_offset the offset for from the currenty buffer position
- * @param the number of bits to be read
- *
- * @return unsigned 64 bit value representing the specified bit range
- */
-uint64_t ProtocolTree_get_bits64(ProtocolTree_t *this, unsigned int bit_offset,
-    const int no_of_bits, const unsigned int encoding);
 
 #endif
