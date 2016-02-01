@@ -1,5 +1,6 @@
-\hypertarget{struct_sender__ops}{}\section{Sender\+\_\+ops Struct Reference}
-\label{struct_sender__ops}\index{Sender\+\_\+ops@{Sender\+\_\+ops}}
+\hypertarget{struct_sender__ops}{\section{Sender\-\_\-ops Struct Reference}
+\label{struct_sender__ops}\index{Sender\-\_\-ops@{Sender\-\_\-ops}}
+}
 
 
 The operations that can be called by a \hyperlink{struct_sender}{Sender}.  
@@ -7,14 +8,14 @@ The operations that can be called by a \hyperlink{struct_sender}{Sender}.
 
 
 
-{\ttfamily \#include $<$Sender-\/int.\+h$>$}
+{\ttfamily \#include $<$Sender-\/int.\-h$>$}
 
 \subsection*{Data Fields}
 \begin{DoxyCompactItemize}
 \item 
-int($\ast$ \hyperlink{struct_sender__ops_a2df5af2a8f99a3e1c374506b3563c245}{Sender\+\_\+free} )(\hyperlink{struct_sender}{Sender\+\_\+t} $\ast$\hyperlink{spp__profinet_8c_a6aa2b3eed1dbaeff6fd73bd762ed09b4}{sender})
+int($\ast$ \hyperlink{struct_sender__ops_a6dca3c0902479ba07947a9d2adb361ef}{Sender\-\_\-free} )(\hyperlink{struct_sender}{Sender\-\_\-t} $\ast$\hyperlink{spp__profinet_8c_a6aa2b3eed1dbaeff6fd73bd762ed09b4}{sender})
 \begin{DoxyCompactList}\small\item\em Frees the given sender. \end{DoxyCompactList}\item 
-int($\ast$ \hyperlink{struct_sender__ops_a5adaf20efba44db11aedbe2c6c01d666}{Sender\+\_\+send} )(\hyperlink{struct_sender}{Sender\+\_\+t} $\ast$this, \hyperlink{struct_truffle}{Truffle\+\_\+t} $\ast$truffle)
+int($\ast$ \hyperlink{struct_sender__ops_a770fd3ebe41dcd7fd5e8f84eb25a888a}{Sender\-\_\-send} )(\hyperlink{struct_sender}{Sender\-\_\-t} $\ast$this, \hyperlink{struct_truffle}{Truffle\-\_\-t} $\ast$truffle)
 \end{DoxyCompactItemize}
 
 
@@ -22,9 +23,9 @@ int($\ast$ \hyperlink{struct_sender__ops_a5adaf20efba44db11aedbe2c6c01d666}{Send
 The operations that can be called by a \hyperlink{struct_sender}{Sender}. 
 
 \subsection{Field Documentation}
-\hypertarget{struct_sender__ops_a2df5af2a8f99a3e1c374506b3563c245}{}\index{Sender\+\_\+ops@{Sender\+\_\+ops}!Sender\+\_\+free@{Sender\+\_\+free}}
-\index{Sender\+\_\+free@{Sender\+\_\+free}!Sender\+\_\+ops@{Sender\+\_\+ops}}
-\subsubsection[{Sender\+\_\+free}]{\setlength{\rightskip}{0pt plus 5cm}int($\ast$ Sender\+\_\+ops\+::\+Sender\+\_\+free) ({\bf Sender\+\_\+t} $\ast${\bf sender})}\label{struct_sender__ops_a2df5af2a8f99a3e1c374506b3563c245}
+\hypertarget{struct_sender__ops_a6dca3c0902479ba07947a9d2adb361ef}{\index{Sender\-\_\-ops@{Sender\-\_\-ops}!Sender\-\_\-free@{Sender\-\_\-free}}
+\index{Sender\-\_\-free@{Sender\-\_\-free}!Sender_ops@{Sender\-\_\-ops}}
+\subsubsection[{Sender\-\_\-free}]{\setlength{\rightskip}{0pt plus 5cm}int($\ast$ Sender\-\_\-ops\-::\-Sender\-\_\-free)({\bf Sender\-\_\-t} $\ast${\bf sender})}}\label{struct_sender__ops_a6dca3c0902479ba07947a9d2adb361ef}
 
 
 Frees the given sender. 
@@ -37,9 +38,9 @@ Frees the given sender.
 \begin{DoxyReturn}{Returns}
 0 if the freeing was successful, -\/1 otherwise 
 \end{DoxyReturn}
-\hypertarget{struct_sender__ops_a5adaf20efba44db11aedbe2c6c01d666}{}\index{Sender\+\_\+ops@{Sender\+\_\+ops}!Sender\+\_\+send@{Sender\+\_\+send}}
-\index{Sender\+\_\+send@{Sender\+\_\+send}!Sender\+\_\+ops@{Sender\+\_\+ops}}
-\subsubsection[{Sender\+\_\+send}]{\setlength{\rightskip}{0pt plus 5cm}int($\ast$ Sender\+\_\+ops\+::\+Sender\+\_\+send) ({\bf Sender\+\_\+t} $\ast$this, {\bf Truffle\+\_\+t} $\ast$truffle)}\label{struct_sender__ops_a5adaf20efba44db11aedbe2c6c01d666}
+\hypertarget{struct_sender__ops_a770fd3ebe41dcd7fd5e8f84eb25a888a}{\index{Sender\-\_\-ops@{Sender\-\_\-ops}!Sender\-\_\-send@{Sender\-\_\-send}}
+\index{Sender\-\_\-send@{Sender\-\_\-send}!Sender_ops@{Sender\-\_\-ops}}
+\subsubsection[{Sender\-\_\-send}]{\setlength{\rightskip}{0pt plus 5cm}int($\ast$ Sender\-\_\-ops\-::\-Sender\-\_\-send)({\bf Sender\-\_\-t} $\ast$this, {\bf Truffle\-\_\-t} $\ast$truffle)}}\label{struct_sender__ops_a770fd3ebe41dcd7fd5e8f84eb25a888a}
 Sends the given truffle to the specified ipc
 
 
@@ -54,6 +55,6 @@ Sends the given truffle to the specified ipc
 \end{DoxyReturn}
 
 
-The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+The documentation for this struct was generated from the following file\-:\begin{DoxyCompactItemize}
 \item 
-src/\+Profinet/\hyperlink{_sender-int_8h}{Sender-\/int.\+h}\end{DoxyCompactItemize}
+src/\-Profinet/\hyperlink{_sender-int_8h}{Sender-\/int.\-h}\end{DoxyCompactItemize}

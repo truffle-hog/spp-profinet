@@ -1,5 +1,6 @@
-\hypertarget{struct_dissector_register}{}\section{Dissector\+Register Struct Reference}
-\label{struct_dissector_register}\index{Dissector\+Register@{Dissector\+Register}}
+\hypertarget{struct_dissector_register}{\section{Dissector\-Register Struct Reference}
+\label{struct_dissector_register}\index{Dissector\-Register@{Dissector\-Register}}
+}
 
 
 The datastructure for registering Dissectors on their specific intervals.  
@@ -7,14 +8,15 @@ The datastructure for registering Dissectors on their specific intervals.
 
 
 
-{\ttfamily \#include $<$Dissector\+Register-\/int.\+h$>$}
+{\ttfamily \#include $<$Dissector\-Register-\/int.\-h$>$}
 
 \subsection*{Data Fields}
 \begin{DoxyCompactItemize}
 \item 
 bool \hyperlink{struct_dissector_register_ac11ffde1776843c94f5ff251ec54710b}{initialized}
 \item 
-const struct \hyperlink{struct_dissector_register__ops}{Dissector\+Register\+\_\+ops} $\ast$ \hyperlink{struct_dissector_register_acb5f585a3d5d7dbeca84a74990bbaad8}{ops}
+const struct \\*
+\hyperlink{struct_dissector_register__ops}{Dissector\-Register\-\_\-ops} $\ast$ \hyperlink{struct_dissector_register_acb5f585a3d5d7dbeca84a74990bbaad8}{ops}
 \end{DoxyCompactItemize}
 
 
@@ -24,14 +26,14 @@ The datastructure for registering Dissectors on their specific intervals.
 The dissector register is used to register dissectors to intervals. Thereby making it possible to dissect a package while using certain data ranges for calling a next dissector that is mapped to the given data. 
 
 \subsection{Field Documentation}
-\hypertarget{struct_dissector_register_ac11ffde1776843c94f5ff251ec54710b}{}\index{Dissector\+Register@{Dissector\+Register}!initialized@{initialized}}
-\index{initialized@{initialized}!Dissector\+Register@{Dissector\+Register}}
-\subsubsection[{initialized}]{\setlength{\rightskip}{0pt plus 5cm}bool Dissector\+Register\+::initialized}\label{struct_dissector_register_ac11ffde1776843c94f5ff251ec54710b}
-Whether this dissector register is initialized. \hypertarget{struct_dissector_register_acb5f585a3d5d7dbeca84a74990bbaad8}{}\index{Dissector\+Register@{Dissector\+Register}!ops@{ops}}
-\index{ops@{ops}!Dissector\+Register@{Dissector\+Register}}
-\subsubsection[{ops}]{\setlength{\rightskip}{0pt plus 5cm}const struct {\bf Dissector\+Register\+\_\+ops}$\ast$ Dissector\+Register\+::ops}\label{struct_dissector_register_acb5f585a3d5d7dbeca84a74990bbaad8}
+\hypertarget{struct_dissector_register_ac11ffde1776843c94f5ff251ec54710b}{\index{Dissector\-Register@{Dissector\-Register}!initialized@{initialized}}
+\index{initialized@{initialized}!DissectorRegister@{Dissector\-Register}}
+\subsubsection[{initialized}]{\setlength{\rightskip}{0pt plus 5cm}bool Dissector\-Register\-::initialized}}\label{struct_dissector_register_ac11ffde1776843c94f5ff251ec54710b}
+Whether this dissector register is initialized. \hypertarget{struct_dissector_register_acb5f585a3d5d7dbeca84a74990bbaad8}{\index{Dissector\-Register@{Dissector\-Register}!ops@{ops}}
+\index{ops@{ops}!DissectorRegister@{Dissector\-Register}}
+\subsubsection[{ops}]{\setlength{\rightskip}{0pt plus 5cm}const struct {\bf Dissector\-Register\-\_\-ops}$\ast$ Dissector\-Register\-::ops}}\label{struct_dissector_register_acb5f585a3d5d7dbeca84a74990bbaad8}
 The dissector register operations. 
 
-The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+The documentation for this struct was generated from the following file\-:\begin{DoxyCompactItemize}
 \item 
-src/\+Profinet/\hyperlink{_dissector_register-int_8h}{Dissector\+Register-\/int.\+h}\end{DoxyCompactItemize}
+src/\-Profinet/\hyperlink{_dissector_register-int_8h}{Dissector\-Register-\/int.\-h}\end{DoxyCompactItemize}
