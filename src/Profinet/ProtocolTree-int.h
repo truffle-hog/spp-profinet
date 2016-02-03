@@ -6,6 +6,8 @@
 #ifndef __PROTOCOL_TREE_INT_H__
 #define __PROTOCOL_TREE_INT_H__
 
+#include "ProtocolTree.h"
+
 struct ProtocolTree;
 
 /**
@@ -14,12 +16,6 @@ struct ProtocolTree;
  */
 struct ProtocolTree_ops {
 
-  /**
-   * @brief Creates a new ProtocolTree.
-   *
-   * @return the instantiated Tree
-   */
-  ProtocolTree_t *(*ProtocolTree_new)();
 
   /**
    * @brief Frees the given ProtocolTree from memory.
@@ -73,6 +69,13 @@ struct ProtocolTree {
   const struct ProtocolTree_ops *ops;
 };
 
+
+/**
+ * @brief Creates a new ProtocolTree.
+ *
+ * @return the instantiated Tree
+ */
 ProtocolTree_t *ProtocolTree_new(Packet *p);
+
 
 #endif

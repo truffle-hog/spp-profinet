@@ -8,6 +8,8 @@
 
 // TODO define the flags that are used within the truffle
 
+#include <stdint.h>
+
 /**
  * @brief Houses specific information about the ether header.
  *
@@ -51,3 +53,5 @@ struct Truffle {
 
 };
 typedef struct Truffle Truffle_t;
+
+#endif

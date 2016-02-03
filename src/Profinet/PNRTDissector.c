@@ -6,6 +6,12 @@
  * and block dissectors.
  *
  */
+#include <stdlib.h>
+
+#include "Dissector-int.h"
+#include "Dissector.h"
+#include "ProtocolTree.h"
+#include "Buffy.h"
 
 /**
  * @brief The Dissector for Profi Real Time IO 0x8892.
@@ -16,6 +22,9 @@ struct PNRTDissector {
   struct Dissector dissector;
 
 };
+
+void PNRTDissector_free(Dissector_t *dissector);
+int PNRTDissector_dissect(Dissector_t *this, Buffy_t *buf, ProtocolTree_t *tree);
 
 /**
  * @see Dissector_ops
@@ -47,9 +56,21 @@ PNRTDissector_new() {
 /**
  * @see Dissector_free
  */
-void PNRTDissector_free(Dissector_t *dissector);
+void PNRTDissector_free(Dissector_t *dissector) {
+
+	(void) dissector;
+	// TODO implement
+}
 
 /**
  * @see Dissector_dissect
  */
-int PNRTDissector_dissect(Dissector_t *this, Buffer_t *buf, ProtocolTree_t *tree);
+int PNRTDissector_dissect(Dissector_t *this, Buffy_t *buf, ProtocolTree_t *tree) {
+
+	(void) this;
+	(void) buf;
+	(void) tree;
+	// TODO implement
+
+	return 0;
+}

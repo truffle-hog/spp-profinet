@@ -8,18 +8,10 @@
  * depending on the implementation.
  *
  */
+#include "Truffle.h"
+
 struct Sender;
 typedef struct Sender Sender_t;
-
-
-/**
- * Creates a new Dissector with the given operations. This Function is the
- * interface constructor for every Dissector implementation.
- *
- * @param ops the pointer to the operations used for this dissector
- * @return a pointer to the created dissector
- */
-Sender_t * Sender_new(const struct sender_ops *ops);
 
 
 /**

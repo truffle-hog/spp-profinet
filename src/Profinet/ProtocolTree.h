@@ -6,6 +6,11 @@
 #ifndef __PROTOCOL_TREE_H__
 #define __PROTOCOL_TREE_H__
 
+#include <stdint.h>
+
+struct ProtocolTree;
+typedef struct ProtocolTree ProtocolTree_t;
+
 /** @brief Info that can be inserte into a protocol tree as new branch. **/
 struct HeaderInfo {
 
@@ -20,14 +25,8 @@ struct HeaderInfo {
   /** @brief Specifies the type of information. **/
   int type;
 
-}
+};
 
-/**
- * @brief Creates a new ProtocolTree.
- *
- * @return the instantiated Tree
- */
-ProtocolTree_t *ProtocolTree_new();
 
 /**
  * @brief Frees the given ProtocolTree from memory.

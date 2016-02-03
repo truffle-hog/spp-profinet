@@ -6,6 +6,12 @@
 #ifndef __SENDER_INT_H__
 #define __SENDER_INT_H__
 
+#include <stdbool.h>
+
+#include "Sender.h"
+
+#include "Truffle.h"
+
 struct Sender;
 
 /**
@@ -48,6 +54,15 @@ struct Sender {
   const struct Sender_ops *ops;
 };
 
-Sender_t * Sender_new(const struct sender_ops *ops);
+
+/**
+ * Creates a new Dissector with the given operations. This Function is the
+ * interface constructor for every Dissector implementation.
+ *
+ * @param ops the pointer to the operations used for this dissector
+ * @return a pointer to the created dissector
+ */
+
+Sender_t * Sender_new(const struct Sender_ops *ops);
 
 #endif

@@ -16,6 +16,10 @@
 #ifndef __DISSECTOR_H__
 #define __DISSECTOR_H__
 
+#include <stdint.h>
+
+#include "ProtocolTree.h"
+#include "Buffy.h"
 
 struct Dissector;
 typedef struct Dissector Dissector_t;
@@ -31,7 +35,7 @@ typedef struct Dissector Dissector_t;
  * @param ops the pointer to the operations used for this dissector
  * @return a pointer to the created dissector
  */
-Dissector_t * Dissector_new(const struct dissector_ops *ops);
+//Dissector_t * Dissector_new(const struct Dissector_ops *ops);
 
 
 /**
@@ -73,6 +77,6 @@ Dissector_t * Dissector_getSub(Dissector_t *this, uint64_t data);
  *         -1 if it was a faulty package. The fault flag will be set in the
  *         ProtocolTree accordingly
  */
-int Dissector_dissect(Dissector_t *this, Buffer_t *buf, ProtocolTree_t *tree);
+int Dissector_dissect(Dissector_t *this, Buffy_t *buf, ProtocolTree_t *tree);
 
 #endif

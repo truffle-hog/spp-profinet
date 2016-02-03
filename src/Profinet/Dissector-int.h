@@ -8,6 +8,11 @@
 #ifndef __DISSECTOR_INT_H__
 #define __DISSECTOR_INT_H__
 
+#include <stdint.h>
+#include <sys/types.h>
+#include <stdbool.h>
+
+#include "Dissector.h"
 
 struct Dissector;
 
@@ -29,7 +34,7 @@ struct Dissector_ops {
   *
   * @return the lower bound this subdissector is being called upon
   */
-  unit64_t Dissector_lower;
+  uint64_t Dissector_lower;
 
   /**
   * @brief Returns the upper bound this subdissector is being called upon.
@@ -53,7 +58,7 @@ struct Dissector_ops {
   * @return NULL if there was no other dissector registered for the given interval
   *         otherwise the existing Dissector will be overwritten and returned.
   */
-  Dissector_t * (*Dissector_registerSub)(Dissector_t *this, Dissector_t *subDissector, Interval interval);
+  Dissector_t * (*Dissector_registerSub)(Dissector_t *this, Dissector_t *subDissector);
 
   /**
   * @brief Returns the sub dissector that is register for the given unsigned long.
@@ -76,7 +81,7 @@ struct Dissector_ops {
   *         -1 if it was a faulty package. The fault flag will be set in the
   *         ProtocolTree accordingly
   */
-  int (*Dissector_dissect)(Dissector_t *this, Buffer_t *buf, ProtocolTree_t *tree);
+  int (*Dissector_dissect)(Dissector_t *this, Buffy_t *buf, ProtocolTree_t *tree);
 };
 
 /**
@@ -101,6 +106,17 @@ struct Dissector {
   Dissector_t *calling;
 };
 
-Dissector_t *Dissector_new(const struct Dissector_ops *ops);
+/**
+ * @brief Creates a new Dissector with the given operations.
+ *
+ * This Function is the interface constructor for every Dissector implementation.
+ * Calling this function will initialize the dissector correctly and fill the needed
+ * data within the Dissector structure.
+ *
+ * @param ops the pointer to the operations used for this dissector
+ * @return a pointer to the created dissector
+ */
+Dissector_t * Dissector_new(const struct Dissector_ops *ops);
+
 
 #endif

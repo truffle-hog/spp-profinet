@@ -5,6 +5,9 @@
  * UnixSocketSender uses Unix sockets for sending a Truffle to a listening client.
  */
 
+#include "Sender.h"
+#include "Sender-int.h"
+
 /**
  * @brief Sends Truffles to a unix socket a client is reading from.
  *
@@ -15,6 +18,9 @@ struct UnixSocketSender {
    // TODO implement specific fields / functionality
 };
 
+int UnixSocketSender_free(Sender_t *sender);
+int UnixSocketSender_send(Sender_t *this, Truffle_t *truffle);
+	
 /**
  * @see Sender_ops
  */
@@ -29,17 +35,19 @@ static const struct Sender_ops UnixSocketSenderOverride_ops = {
 Sender_t *
 UnixSocketSender_new() {
 
-  Sender_t *dissector;
+  Sender_t *sender;
 
-  dissector = Dissector_new(&UnixSocketSenderOverride_ops);
+  sender = Sender_new(&UnixSocketSenderOverride_ops);
 
-  return dissector;
+  return sender;
 }
 
 /**
  * @see Sender_free
  */
 int UnixSocketSender_free(Sender_t *sender) {
+
+	(void) sender;
 
   //TODO implement
   return 0;
@@ -50,6 +58,8 @@ int UnixSocketSender_free(Sender_t *sender) {
  */
 int UnixSocketSender_send(Sender_t *this, Truffle_t *truffle) {
 
+	(void) this;
+	(void) truffle;
   //TODO implement
   return 0;
 }

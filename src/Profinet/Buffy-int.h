@@ -6,6 +6,11 @@
 #ifndef __BUFFY_INT_H__
 #define __BUFFY_INT_H__
 
+#include <stdbool.h>
+#include <stdint.h>
+
+#include "Buffy.h"
+
 struct Buffy;
 
 /**
@@ -30,7 +35,7 @@ struct Buffy_ops {
    *
    * @return unsigned 8 bit value representing the specified bit range
    */
-  uint8_t (*Buffy_get_bits8)(Buffy_t \*this, unsigned int bit_offset,
+  uint8_t (*Buffy_get_bits8)(Buffy_t *this, unsigned int bit_offset,
       const int no_of_bits);
 
   /**
@@ -42,7 +47,7 @@ struct Buffy_ops {
    *
    * @return unsigned 16 bit value representing the specified bit range
    */
-  uint16_t (*Buffy_get_bits16)(Buffy_t \*this, unsigned int bit_offset,
+  uint16_t (*Buffy_get_bits16)(Buffy_t *this, unsigned int bit_offset,
       const int no_of_bits, const unsigned int encoding);
 
   /**
@@ -54,7 +59,7 @@ struct Buffy_ops {
    Gu
    * @return unsigned 32 bit value representing the specified bit range
    */
-  uint32_t (*Buffy_get_bits32)(Buffy_t \*this, unsigned int bit_offset,
+  uint32_t (*Buffy_get_bits32)(Buffy_t *this, unsigned int bit_offset,
       const int no_of_bits, const unsigned int encoding);
 
   /**
@@ -66,7 +71,7 @@ struct Buffy_ops {
    *
    * @return unsigned 64 bit value representing the specified bit range
    */
-  uint64_t (*Buffy_get_bits64)(Buffy_t \*this, unsigned int bit_offset,
+  uint64_t (*Buffy_get_bits64)(Buffy_t *this, unsigned int bit_offset,
       const int no_of_bits, const unsigned int encoding);
 
 };
@@ -87,6 +92,13 @@ struct Buffy {
   const struct Buffy_ops *ops;
 };
 
+
+/**
+ * @brief Creates a new buffer from the given snort package.
+ *
+ * @param p the packet as defined by snort
+ * @return the instantiated Buffer
+ */
 Buffy_t *Buffy_new(Packet *p);
 
 #endif

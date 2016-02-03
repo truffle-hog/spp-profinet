@@ -8,6 +8,11 @@
 #ifndef __DISSECTOR_REGISTER_INT_H__
 #define __DISSECTOR_REGISTER_INT_H__
 
+#include <sys/types.h>
+#include <stdint.h>
+#include <stdbool.h>
+#include "DissectorRegister.h"
+
 struct DissectorRegister;
 
 /**
@@ -41,7 +46,7 @@ struct DissectorRegister_ops {
   * @return NULL if there is no previous dissector registered within its interval,
   *         otherwise overwrites the old dissector and returns it
   */
-  Dissector_t * DissectorRegister_insert(DissectorRegister_t *this,
+  Dissector_t * (*DissectorRegister_insert)(DissectorRegister_t *this,
                              Dissector_t *dissector);
 
   /**
@@ -71,6 +76,17 @@ struct DissectorRegister {
   const struct DissectorRegister_ops *ops;
 };
 
-Dissector_t *DissectorRegister_new(const struct DissectorRegister_ops *ops);
+/**
+ * @brief Creates a new DissectorRegister with the given operations.
+ *
+ * This Function is the interface constructor for every DissectorRegister
+ * implementation. By calling this function a new dissector register will be
+ * stored in heap memory and initialized correctly.
+ *
+ * @param ops the pointer to the operations used for this DissectorRegister
+ * @return a pointer to the created DissectorRegister
+ */
+DissectorRegister_t * DissectorRegister_new(const struct DissectorRegister_ops *ops);
+
 
 #endif

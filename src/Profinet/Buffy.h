@@ -6,13 +6,11 @@
 #ifndef __BUFFY_H__
 #define __BUFFY_H__
 
-/**
- * @brief Creates a new buffer from the given snort package.
- *
- * @param p the packet as defined by snort
- * @return the instantiated Buffer
- */
-Buffy_t *Buffy_new(Packet *p);
+#include <stdint.h>
+
+struct Buffy;
+typedef struct Buffy Buffy_t;
+
 
 /**
  * @brief Frees the given buffer from memory.
