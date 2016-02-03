@@ -1,49 +1,48 @@
-\hypertarget{struct_dissector_register__ops}{\section{Dissector\-Register\-\_\-ops Struct Reference}
-\label{struct_dissector_register__ops}\index{Dissector\-Register\-\_\-ops@{Dissector\-Register\-\_\-ops}}
-}
+\hypertarget{struct_dissector_register__ops}{}\section{Dissector\+Register\+\_\+ops Struct Reference}
+\label{struct_dissector_register__ops}\index{Dissector\+Register\+\_\+ops@{Dissector\+Register\+\_\+ops}}
 
 
-The operations that can be called by a \hyperlink{struct_dissector_register}{Dissector\-Register}.  
+The operations that can be called by a \hyperlink{struct_dissector_register}{Dissector\+Register}.  
 
 
 
 
-{\ttfamily \#include $<$Dissector\-Register-\/int.\-h$>$}
+{\ttfamily \#include $<$Dissector\+Register-\/int.\+h$>$}
 
 \subsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\hyperlink{struct_dissector}{Dissector\-\_\-t} $\ast$ \hyperlink{struct_dissector_register__ops_a8446d3a1c7fab1257da22cbede148d68}{Dissector\-Register\-\_\-insert} (\hyperlink{struct_dissector_register}{Dissector\-Register\-\_\-t} $\ast$this, \hyperlink{struct_dissector}{Dissector\-\_\-t} $\ast$dissector)
+\hyperlink{struct_dissector}{Dissector\+\_\+t} $\ast$ \hyperlink{struct_dissector_register__ops_a8446d3a1c7fab1257da22cbede148d68}{Dissector\+Register\+\_\+insert} (\hyperlink{struct_dissector_register}{Dissector\+Register\+\_\+t} $\ast$this, \hyperlink{struct_dissector}{Dissector\+\_\+t} $\ast$dissector)
 \begin{DoxyCompactList}\small\item\em Inserts a new \hyperlink{struct_dissector}{Dissector}. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \subsection*{Data Fields}
 \begin{DoxyCompactItemize}
 \item 
-size\-\_\-t \hyperlink{struct_dissector_register__ops_abe25ddc2aed0125710137695861079e6}{Dissector\-Register\-\_\-size}
+size\+\_\+t \hyperlink{struct_dissector_register__ops_abe25ddc2aed0125710137695861079e6}{Dissector\+Register\+\_\+size}
 \begin{DoxyCompactList}\small\item\em Returns the number dissectors registered. \end{DoxyCompactList}\item 
-\hypertarget{struct_dissector_register__ops_a07ea786eeed3d6b44ff0e8ceeac379f9}{void $\ast$($\ast$ \hyperlink{struct_dissector_register__ops_a07ea786eeed3d6b44ff0e8ceeac379f9}{Dissector\-Register\-\_\-free} )(\hyperlink{struct_dissector_register}{Dissector\-Register\-\_\-t} $\ast$this)}\label{struct_dissector_register__ops_a07ea786eeed3d6b44ff0e8ceeac379f9}
+\hypertarget{struct_dissector_register__ops_a35bbfa803ee2d70e035bd0526d4e6f81}{}void $\ast$($\ast$ \hyperlink{struct_dissector_register__ops_a35bbfa803ee2d70e035bd0526d4e6f81}{Dissector\+Register\+\_\+free} )(\hyperlink{struct_dissector_register}{Dissector\+Register\+\_\+t} $\ast$this)\label{struct_dissector_register__ops_a35bbfa803ee2d70e035bd0526d4e6f81}
 
-\begin{DoxyCompactList}\small\item\em Frees the given \hyperlink{struct_dissector_register}{Dissector\-Register}. \end{DoxyCompactList}\item 
-\hyperlink{struct_dissector}{Dissector\-\_\-t} $\ast$($\ast$ \hyperlink{struct_dissector_register__ops_a3ecfba9eaa94eab24cf5a4c205860603}{Dissector\-Register\-\_\-get} )(\hyperlink{struct_dissector_register}{Dissector\-Register\-\_\-t} $\ast$this, uint64\-\_\-t data)
+\begin{DoxyCompactList}\small\item\em Frees the given \hyperlink{struct_dissector_register}{Dissector\+Register}. \end{DoxyCompactList}\item 
+\hyperlink{struct_dissector}{Dissector\+\_\+t} $\ast$($\ast$ \hyperlink{struct_dissector_register__ops_a12af14c97dc640811729e46fc34aefdb}{Dissector\+Register\+\_\+get} )(\hyperlink{struct_dissector_register}{Dissector\+Register\+\_\+t} $\ast$this, uint64\+\_\+t data)
 \begin{DoxyCompactList}\small\item\em Returns the \hyperlink{struct_dissector}{Dissector} that is registered for the given unsigned long. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \subsection{Detailed Description}
-The operations that can be called by a \hyperlink{struct_dissector_register}{Dissector\-Register}. 
+The operations that can be called by a \hyperlink{struct_dissector_register}{Dissector\+Register}. 
 
 \subsection{Member Function Documentation}
-\hypertarget{struct_dissector_register__ops_a8446d3a1c7fab1257da22cbede148d68}{\index{Dissector\-Register\-\_\-ops@{Dissector\-Register\-\_\-ops}!Dissector\-Register\-\_\-insert@{Dissector\-Register\-\_\-insert}}
-\index{Dissector\-Register\-\_\-insert@{Dissector\-Register\-\_\-insert}!DissectorRegister_ops@{Dissector\-Register\-\_\-ops}}
-\subsubsection[{Dissector\-Register\-\_\-insert}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Dissector\-\_\-t}$\ast$ Dissector\-Register\-\_\-ops\-::\-Dissector\-Register\-\_\-insert (
+\hypertarget{struct_dissector_register__ops_a8446d3a1c7fab1257da22cbede148d68}{}\index{Dissector\+Register\+\_\+ops@{Dissector\+Register\+\_\+ops}!Dissector\+Register\+\_\+insert@{Dissector\+Register\+\_\+insert}}
+\index{Dissector\+Register\+\_\+insert@{Dissector\+Register\+\_\+insert}!Dissector\+Register\+\_\+ops@{Dissector\+Register\+\_\+ops}}
+\subsubsection[{Dissector\+Register\+\_\+insert(\+Dissector\+Register\+\_\+t $\ast$this, Dissector\+\_\+t $\ast$dissector)}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Dissector\+\_\+t}$\ast$ Dissector\+Register\+\_\+ops\+::\+Dissector\+Register\+\_\+insert (
 \begin{DoxyParamCaption}
-\item[{{\bf Dissector\-Register\-\_\-t} $\ast$}]{this, }
-\item[{{\bf Dissector\-\_\-t} $\ast$}]{dissector}
+\item[{{\bf Dissector\+Register\+\_\+t} $\ast$}]{this, }
+\item[{{\bf Dissector\+\_\+t} $\ast$}]{dissector}
 \end{DoxyParamCaption}
-)}}\label{struct_dissector_register__ops_a8446d3a1c7fab1257da22cbede148d68}
+)}\label{struct_dissector_register__ops_a8446d3a1c7fab1257da22cbede148d68}
 
 
 Inserts a new \hyperlink{struct_dissector}{Dissector}. 
 
-The new dissector will be inserted into the \hyperlink{struct_dissector_register}{Dissector\-Register} by obtaining its lower and upper identifier bounds and mapping it accordingly.
+The new dissector will be inserted into the \hyperlink{struct_dissector_register}{Dissector\+Register} by obtaining its lower and upper identifier bounds and mapping it accordingly.
 
 
 \begin{DoxyParams}{Parameters}
@@ -53,31 +52,31 @@ The new dissector will be inserted into the \hyperlink{struct_dissector_register
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
-N\-U\-L\-L if there is no previous dissector registered within its interval, otherwise overwrites the old dissector and returns it 
+N\+U\+L\+L if there is no previous dissector registered within its interval, otherwise overwrites the old dissector and returns it 
 \end{DoxyReturn}
 
 
 \subsection{Field Documentation}
-\hypertarget{struct_dissector_register__ops_a3ecfba9eaa94eab24cf5a4c205860603}{\index{Dissector\-Register\-\_\-ops@{Dissector\-Register\-\_\-ops}!Dissector\-Register\-\_\-get@{Dissector\-Register\-\_\-get}}
-\index{Dissector\-Register\-\_\-get@{Dissector\-Register\-\_\-get}!DissectorRegister_ops@{Dissector\-Register\-\_\-ops}}
-\subsubsection[{Dissector\-Register\-\_\-get}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Dissector\-\_\-t}$\ast$($\ast$ Dissector\-Register\-\_\-ops\-::\-Dissector\-Register\-\_\-get)({\bf Dissector\-Register\-\_\-t} $\ast$this, uint64\-\_\-t data)}}\label{struct_dissector_register__ops_a3ecfba9eaa94eab24cf5a4c205860603}
+\hypertarget{struct_dissector_register__ops_a12af14c97dc640811729e46fc34aefdb}{}\index{Dissector\+Register\+\_\+ops@{Dissector\+Register\+\_\+ops}!Dissector\+Register\+\_\+get@{Dissector\+Register\+\_\+get}}
+\index{Dissector\+Register\+\_\+get@{Dissector\+Register\+\_\+get}!Dissector\+Register\+\_\+ops@{Dissector\+Register\+\_\+ops}}
+\subsubsection[{Dissector\+Register\+\_\+get}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Dissector\+\_\+t}$\ast$($\ast$ Dissector\+Register\+\_\+ops\+::\+Dissector\+Register\+\_\+get) ({\bf Dissector\+Register\+\_\+t} $\ast$this, uint64\+\_\+t data)}\label{struct_dissector_register__ops_a12af14c97dc640811729e46fc34aefdb}
 
 
 Returns the \hyperlink{struct_dissector}{Dissector} that is registered for the given unsigned long. 
 
 
 \begin{DoxyParams}{Parameters}
-{\em this} & the \hyperlink{struct_dissector_register}{Dissector\-Register} calling \\
+{\em this} & the \hyperlink{struct_dissector_register}{Dissector\+Register} calling \\
 \hline
-{\em data} & the value for looking up in the \hyperlink{struct_dissector_register}{Dissector\-Register}\\
+{\em data} & the value for looking up in the \hyperlink{struct_dissector_register}{Dissector\+Register}\\
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
-the registered \hyperlink{struct_dissector}{Dissector} if any, N\-U\-L\-L otherwise 
+the registered \hyperlink{struct_dissector}{Dissector} if any, N\+U\+L\+L otherwise 
 \end{DoxyReturn}
-\hypertarget{struct_dissector_register__ops_abe25ddc2aed0125710137695861079e6}{\index{Dissector\-Register\-\_\-ops@{Dissector\-Register\-\_\-ops}!Dissector\-Register\-\_\-size@{Dissector\-Register\-\_\-size}}
-\index{Dissector\-Register\-\_\-size@{Dissector\-Register\-\_\-size}!DissectorRegister_ops@{Dissector\-Register\-\_\-ops}}
-\subsubsection[{Dissector\-Register\-\_\-size}]{\setlength{\rightskip}{0pt plus 5cm}size\-\_\-t Dissector\-Register\-\_\-ops\-::\-Dissector\-Register\-\_\-size}}\label{struct_dissector_register__ops_abe25ddc2aed0125710137695861079e6}
+\hypertarget{struct_dissector_register__ops_abe25ddc2aed0125710137695861079e6}{}\index{Dissector\+Register\+\_\+ops@{Dissector\+Register\+\_\+ops}!Dissector\+Register\+\_\+size@{Dissector\+Register\+\_\+size}}
+\index{Dissector\+Register\+\_\+size@{Dissector\+Register\+\_\+size}!Dissector\+Register\+\_\+ops@{Dissector\+Register\+\_\+ops}}
+\subsubsection[{Dissector\+Register\+\_\+size}]{\setlength{\rightskip}{0pt plus 5cm}size\+\_\+t Dissector\+Register\+\_\+ops\+::\+Dissector\+Register\+\_\+size}\label{struct_dissector_register__ops_abe25ddc2aed0125710137695861079e6}
 
 
 Returns the number dissectors registered. 
@@ -87,6 +86,6 @@ the number of dissectors in this register
 \end{DoxyReturn}
 
 
-The documentation for this struct was generated from the following file\-:\begin{DoxyCompactItemize}
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
 \item 
-src/\-Profinet/\hyperlink{_dissector_register-int_8h}{Dissector\-Register-\/int.\-h}\end{DoxyCompactItemize}
+src/\+Profinet/\hyperlink{_dissector_register-int_8h}{Dissector\+Register-\/int.\+h}\end{DoxyCompactItemize}

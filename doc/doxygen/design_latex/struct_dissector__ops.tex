@@ -1,6 +1,5 @@
-\hypertarget{struct_dissector__ops}{\section{Dissector\-\_\-ops Struct Reference}
-\label{struct_dissector__ops}\index{Dissector\-\_\-ops@{Dissector\-\_\-ops}}
-}
+\hypertarget{struct_dissector__ops}{}\section{Dissector\+\_\+ops Struct Reference}
+\label{struct_dissector__ops}\index{Dissector\+\_\+ops@{Dissector\+\_\+ops}}
 
 
 The operations that can be called by a \hyperlink{struct_dissector}{Dissector}.  
@@ -8,24 +7,24 @@ The operations that can be called by a \hyperlink{struct_dissector}{Dissector}.
 
 
 
-{\ttfamily \#include $<$Dissector-\/int.\-h$>$}
+{\ttfamily \#include $<$Dissector-\/int.\+h$>$}
 
 \subsection*{Data Fields}
 \begin{DoxyCompactItemize}
 \item 
-size\-\_\-t \hyperlink{struct_dissector__ops_a8982a0368e988bc9cb93ee83d5411b99}{Dissector\-\_\-size}
+size\+\_\+t \hyperlink{struct_dissector__ops_a8982a0368e988bc9cb93ee83d5411b99}{Dissector\+\_\+size}
 \begin{DoxyCompactList}\small\item\em Returns the number of subdissectors in this dissector. \end{DoxyCompactList}\item 
-unit64\-\_\-t \hyperlink{struct_dissector__ops_a12f42148d4173471c21f3b33296d9256}{Dissector\-\_\-lower}
+unit64\+\_\+t \hyperlink{struct_dissector__ops_a12f42148d4173471c21f3b33296d9256}{Dissector\+\_\+lower}
 \begin{DoxyCompactList}\small\item\em Returns the lower bound this subdissector is being called upon. \end{DoxyCompactList}\item 
-uint64\-\_\-t \hyperlink{struct_dissector__ops_a3d9e177f508734b6136538e051b64699}{Dissector\-\_\-upper}
+uint64\+\_\+t \hyperlink{struct_dissector__ops_a3d9e177f508734b6136538e051b64699}{Dissector\+\_\+upper}
 \begin{DoxyCompactList}\small\item\em Returns the upper bound this subdissector is being called upon. \end{DoxyCompactList}\item 
-void($\ast$ \hyperlink{struct_dissector__ops_ad864a69acd7f1c8a503d1d2cb1ef8d90}{Dissector\-\_\-free} )(\hyperlink{struct_dissector}{Dissector\-\_\-t} $\ast$dissector)
+void($\ast$ \hyperlink{struct_dissector__ops_aa783c09975ec10c4b01884938d543346}{Dissector\+\_\+free} )(\hyperlink{struct_dissector}{Dissector\+\_\+t} $\ast$dissector)
 \begin{DoxyCompactList}\small\item\em Returns the number of subdissectors in this dissector. \end{DoxyCompactList}\item 
-\hyperlink{struct_dissector}{Dissector\-\_\-t} $\ast$($\ast$ \hyperlink{struct_dissector__ops_ac7b5b8ae6f666ad291eede1507effc20}{Dissector\-\_\-register\-Sub} )(\hyperlink{struct_dissector}{Dissector\-\_\-t} $\ast$this, \hyperlink{struct_dissector}{Dissector\-\_\-t} $\ast$sub\-Dissector, Interval interval)
+\hyperlink{struct_dissector}{Dissector\+\_\+t} $\ast$($\ast$ \hyperlink{struct_dissector__ops_a66cf6888070f1e49cfa555ef28a96f8a}{Dissector\+\_\+register\+Sub} )(\hyperlink{struct_dissector}{Dissector\+\_\+t} $\ast$this, \hyperlink{struct_dissector}{Dissector\+\_\+t} $\ast$sub\+Dissector, Interval interval)
 \begin{DoxyCompactList}\small\item\em Registers a given sub dissector on this dissector. \end{DoxyCompactList}\item 
-\hyperlink{struct_dissector}{Dissector\-\_\-t} $\ast$($\ast$ \hyperlink{struct_dissector__ops_ae44baede5c27c672485228b01be89f4f}{Dissector\-\_\-get\-Sub} )(\hyperlink{struct_dissector}{Dissector\-\_\-t} $\ast$this, uint64\-\_\-t data)
+\hyperlink{struct_dissector}{Dissector\+\_\+t} $\ast$($\ast$ \hyperlink{struct_dissector__ops_a75d23262c0f9f303cc6dfb18446f4265}{Dissector\+\_\+get\+Sub} )(\hyperlink{struct_dissector}{Dissector\+\_\+t} $\ast$this, uint64\+\_\+t data)
 \begin{DoxyCompactList}\small\item\em Returns the sub dissector that is register for the given unsigned long. \end{DoxyCompactList}\item 
-int($\ast$ \hyperlink{struct_dissector__ops_a1a584a8476cc37171505fac4157bc2cf}{Dissector\-\_\-dissect} )(\hyperlink{struct_dissector}{Dissector\-\_\-t} $\ast$this, Buffer\-\_\-t $\ast$buf, Protocol\-Tree\-\_\-t $\ast$tree)
+int($\ast$ \hyperlink{struct_dissector__ops_a6dcacad56d3939148ddd7bca89b7c72b}{Dissector\+\_\+dissect} )(\hyperlink{struct_dissector}{Dissector\+\_\+t} $\ast$this, Buffer\+\_\+t $\ast$buf, Protocol\+Tree\+\_\+t $\ast$tree)
 \begin{DoxyCompactList}\small\item\em Dissects the package the given buffer is pointing to. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
@@ -33,9 +32,9 @@ int($\ast$ \hyperlink{struct_dissector__ops_a1a584a8476cc37171505fac4157bc2cf}{D
 The operations that can be called by a \hyperlink{struct_dissector}{Dissector}. 
 
 \subsection{Field Documentation}
-\hypertarget{struct_dissector__ops_a1a584a8476cc37171505fac4157bc2cf}{\index{Dissector\-\_\-ops@{Dissector\-\_\-ops}!Dissector\-\_\-dissect@{Dissector\-\_\-dissect}}
-\index{Dissector\-\_\-dissect@{Dissector\-\_\-dissect}!Dissector_ops@{Dissector\-\_\-ops}}
-\subsubsection[{Dissector\-\_\-dissect}]{\setlength{\rightskip}{0pt plus 5cm}int($\ast$ Dissector\-\_\-ops\-::\-Dissector\-\_\-dissect)({\bf Dissector\-\_\-t} $\ast$this, Buffer\-\_\-t $\ast$buf, Protocol\-Tree\-\_\-t $\ast$tree)}}\label{struct_dissector__ops_a1a584a8476cc37171505fac4157bc2cf}
+\hypertarget{struct_dissector__ops_a6dcacad56d3939148ddd7bca89b7c72b}{}\index{Dissector\+\_\+ops@{Dissector\+\_\+ops}!Dissector\+\_\+dissect@{Dissector\+\_\+dissect}}
+\index{Dissector\+\_\+dissect@{Dissector\+\_\+dissect}!Dissector\+\_\+ops@{Dissector\+\_\+ops}}
+\subsubsection[{Dissector\+\_\+dissect}]{\setlength{\rightskip}{0pt plus 5cm}int($\ast$ Dissector\+\_\+ops\+::\+Dissector\+\_\+dissect) ({\bf Dissector\+\_\+t} $\ast$this, Buffer\+\_\+t $\ast$buf, Protocol\+Tree\+\_\+t $\ast$tree)}\label{struct_dissector__ops_a6dcacad56d3939148ddd7bca89b7c72b}
 
 
 Dissects the package the given buffer is pointing to. 
@@ -50,11 +49,11 @@ Dissects the package the given buffer is pointing to.
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
-0 if the dissection was successful wihtout any failures, -\/1 if it was a faulty package. The fault flag will be set in the \hyperlink{struct_protocol_tree}{Protocol\-Tree} accordingly 
+0 if the dissection was successful wihtout any failures, -\/1 if it was a faulty package. The fault flag will be set in the \hyperlink{struct_protocol_tree}{Protocol\+Tree} accordingly 
 \end{DoxyReturn}
-\hypertarget{struct_dissector__ops_ad864a69acd7f1c8a503d1d2cb1ef8d90}{\index{Dissector\-\_\-ops@{Dissector\-\_\-ops}!Dissector\-\_\-free@{Dissector\-\_\-free}}
-\index{Dissector\-\_\-free@{Dissector\-\_\-free}!Dissector_ops@{Dissector\-\_\-ops}}
-\subsubsection[{Dissector\-\_\-free}]{\setlength{\rightskip}{0pt plus 5cm}void($\ast$ Dissector\-\_\-ops\-::\-Dissector\-\_\-free)({\bf Dissector\-\_\-t} $\ast$dissector)}}\label{struct_dissector__ops_ad864a69acd7f1c8a503d1d2cb1ef8d90}
+\hypertarget{struct_dissector__ops_aa783c09975ec10c4b01884938d543346}{}\index{Dissector\+\_\+ops@{Dissector\+\_\+ops}!Dissector\+\_\+free@{Dissector\+\_\+free}}
+\index{Dissector\+\_\+free@{Dissector\+\_\+free}!Dissector\+\_\+ops@{Dissector\+\_\+ops}}
+\subsubsection[{Dissector\+\_\+free}]{\setlength{\rightskip}{0pt plus 5cm}void($\ast$ Dissector\+\_\+ops\+::\+Dissector\+\_\+free) ({\bf Dissector\+\_\+t} $\ast$dissector)}\label{struct_dissector__ops_aa783c09975ec10c4b01884938d543346}
 
 
 Returns the number of subdissectors in this dissector. 
@@ -62,26 +61,26 @@ Returns the number of subdissectors in this dissector.
 \begin{DoxyReturn}{Returns}
 the number of sub-\/dissectors in this dissector 
 \end{DoxyReturn}
-\hypertarget{struct_dissector__ops_ae44baede5c27c672485228b01be89f4f}{\index{Dissector\-\_\-ops@{Dissector\-\_\-ops}!Dissector\-\_\-get\-Sub@{Dissector\-\_\-get\-Sub}}
-\index{Dissector\-\_\-get\-Sub@{Dissector\-\_\-get\-Sub}!Dissector_ops@{Dissector\-\_\-ops}}
-\subsubsection[{Dissector\-\_\-get\-Sub}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Dissector\-\_\-t}$\ast$($\ast$ Dissector\-\_\-ops\-::\-Dissector\-\_\-get\-Sub)({\bf Dissector\-\_\-t} $\ast$this, uint64\-\_\-t data)}}\label{struct_dissector__ops_ae44baede5c27c672485228b01be89f4f}
+\hypertarget{struct_dissector__ops_a75d23262c0f9f303cc6dfb18446f4265}{}\index{Dissector\+\_\+ops@{Dissector\+\_\+ops}!Dissector\+\_\+get\+Sub@{Dissector\+\_\+get\+Sub}}
+\index{Dissector\+\_\+get\+Sub@{Dissector\+\_\+get\+Sub}!Dissector\+\_\+ops@{Dissector\+\_\+ops}}
+\subsubsection[{Dissector\+\_\+get\+Sub}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Dissector\+\_\+t}$\ast$($\ast$ Dissector\+\_\+ops\+::\+Dissector\+\_\+get\+Sub) ({\bf Dissector\+\_\+t} $\ast$this, uint64\+\_\+t data)}\label{struct_dissector__ops_a75d23262c0f9f303cc6dfb18446f4265}
 
 
 Returns the sub dissector that is register for the given unsigned long. 
 
 
 \begin{DoxyParams}{Parameters}
-{\em this} & the dissector calling Dissector\-\_\-get\-Sub \\
+{\em this} & the dissector calling Dissector\+\_\+get\+Sub \\
 \hline
 {\em data} & the value for looking up in the dissector register\\
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
-the registered sub dissector if any, N\-U\-L\-L otherwise 
+the registered sub dissector if any, N\+U\+L\+L otherwise 
 \end{DoxyReturn}
-\hypertarget{struct_dissector__ops_a12f42148d4173471c21f3b33296d9256}{\index{Dissector\-\_\-ops@{Dissector\-\_\-ops}!Dissector\-\_\-lower@{Dissector\-\_\-lower}}
-\index{Dissector\-\_\-lower@{Dissector\-\_\-lower}!Dissector_ops@{Dissector\-\_\-ops}}
-\subsubsection[{Dissector\-\_\-lower}]{\setlength{\rightskip}{0pt plus 5cm}unit64\-\_\-t Dissector\-\_\-ops\-::\-Dissector\-\_\-lower}}\label{struct_dissector__ops_a12f42148d4173471c21f3b33296d9256}
+\hypertarget{struct_dissector__ops_a12f42148d4173471c21f3b33296d9256}{}\index{Dissector\+\_\+ops@{Dissector\+\_\+ops}!Dissector\+\_\+lower@{Dissector\+\_\+lower}}
+\index{Dissector\+\_\+lower@{Dissector\+\_\+lower}!Dissector\+\_\+ops@{Dissector\+\_\+ops}}
+\subsubsection[{Dissector\+\_\+lower}]{\setlength{\rightskip}{0pt plus 5cm}unit64\+\_\+t Dissector\+\_\+ops\+::\+Dissector\+\_\+lower}\label{struct_dissector__ops_a12f42148d4173471c21f3b33296d9256}
 
 
 Returns the lower bound this subdissector is being called upon. 
@@ -89,26 +88,26 @@ Returns the lower bound this subdissector is being called upon.
 \begin{DoxyReturn}{Returns}
 the lower bound this subdissector is being called upon 
 \end{DoxyReturn}
-\hypertarget{struct_dissector__ops_ac7b5b8ae6f666ad291eede1507effc20}{\index{Dissector\-\_\-ops@{Dissector\-\_\-ops}!Dissector\-\_\-register\-Sub@{Dissector\-\_\-register\-Sub}}
-\index{Dissector\-\_\-register\-Sub@{Dissector\-\_\-register\-Sub}!Dissector_ops@{Dissector\-\_\-ops}}
-\subsubsection[{Dissector\-\_\-register\-Sub}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Dissector\-\_\-t}$\ast$($\ast$ Dissector\-\_\-ops\-::\-Dissector\-\_\-register\-Sub)({\bf Dissector\-\_\-t} $\ast$this, {\bf Dissector\-\_\-t} $\ast$sub\-Dissector, Interval interval)}}\label{struct_dissector__ops_ac7b5b8ae6f666ad291eede1507effc20}
+\hypertarget{struct_dissector__ops_a66cf6888070f1e49cfa555ef28a96f8a}{}\index{Dissector\+\_\+ops@{Dissector\+\_\+ops}!Dissector\+\_\+register\+Sub@{Dissector\+\_\+register\+Sub}}
+\index{Dissector\+\_\+register\+Sub@{Dissector\+\_\+register\+Sub}!Dissector\+\_\+ops@{Dissector\+\_\+ops}}
+\subsubsection[{Dissector\+\_\+register\+Sub}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Dissector\+\_\+t}$\ast$($\ast$ Dissector\+\_\+ops\+::\+Dissector\+\_\+register\+Sub) ({\bf Dissector\+\_\+t} $\ast$this, {\bf Dissector\+\_\+t} $\ast$sub\+Dissector, Interval interval)}\label{struct_dissector__ops_a66cf6888070f1e49cfa555ef28a96f8a}
 
 
 Registers a given sub dissector on this dissector. 
 
 
 \begin{DoxyParams}{Parameters}
-{\em this} & the dissector to register the sub\-Dissector on \\
+{\em this} & the dissector to register the sub\+Dissector on \\
 \hline
-{\em sub\-Dissector} & the dissector to be registered as sub\\
+{\em sub\+Dissector} & the dissector to be registered as sub\\
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
-N\-U\-L\-L if there was no other dissector registered for the given interval otherwise the existing \hyperlink{struct_dissector}{Dissector} will be overwritten and returned. 
+N\+U\+L\+L if there was no other dissector registered for the given interval otherwise the existing \hyperlink{struct_dissector}{Dissector} will be overwritten and returned. 
 \end{DoxyReturn}
-\hypertarget{struct_dissector__ops_a8982a0368e988bc9cb93ee83d5411b99}{\index{Dissector\-\_\-ops@{Dissector\-\_\-ops}!Dissector\-\_\-size@{Dissector\-\_\-size}}
-\index{Dissector\-\_\-size@{Dissector\-\_\-size}!Dissector_ops@{Dissector\-\_\-ops}}
-\subsubsection[{Dissector\-\_\-size}]{\setlength{\rightskip}{0pt plus 5cm}size\-\_\-t Dissector\-\_\-ops\-::\-Dissector\-\_\-size}}\label{struct_dissector__ops_a8982a0368e988bc9cb93ee83d5411b99}
+\hypertarget{struct_dissector__ops_a8982a0368e988bc9cb93ee83d5411b99}{}\index{Dissector\+\_\+ops@{Dissector\+\_\+ops}!Dissector\+\_\+size@{Dissector\+\_\+size}}
+\index{Dissector\+\_\+size@{Dissector\+\_\+size}!Dissector\+\_\+ops@{Dissector\+\_\+ops}}
+\subsubsection[{Dissector\+\_\+size}]{\setlength{\rightskip}{0pt plus 5cm}size\+\_\+t Dissector\+\_\+ops\+::\+Dissector\+\_\+size}\label{struct_dissector__ops_a8982a0368e988bc9cb93ee83d5411b99}
 
 
 Returns the number of subdissectors in this dissector. 
@@ -116,9 +115,9 @@ Returns the number of subdissectors in this dissector.
 \begin{DoxyReturn}{Returns}
 the number of sub-\/dissectors in this dissector 
 \end{DoxyReturn}
-\hypertarget{struct_dissector__ops_a3d9e177f508734b6136538e051b64699}{\index{Dissector\-\_\-ops@{Dissector\-\_\-ops}!Dissector\-\_\-upper@{Dissector\-\_\-upper}}
-\index{Dissector\-\_\-upper@{Dissector\-\_\-upper}!Dissector_ops@{Dissector\-\_\-ops}}
-\subsubsection[{Dissector\-\_\-upper}]{\setlength{\rightskip}{0pt plus 5cm}uint64\-\_\-t Dissector\-\_\-ops\-::\-Dissector\-\_\-upper}}\label{struct_dissector__ops_a3d9e177f508734b6136538e051b64699}
+\hypertarget{struct_dissector__ops_a3d9e177f508734b6136538e051b64699}{}\index{Dissector\+\_\+ops@{Dissector\+\_\+ops}!Dissector\+\_\+upper@{Dissector\+\_\+upper}}
+\index{Dissector\+\_\+upper@{Dissector\+\_\+upper}!Dissector\+\_\+ops@{Dissector\+\_\+ops}}
+\subsubsection[{Dissector\+\_\+upper}]{\setlength{\rightskip}{0pt plus 5cm}uint64\+\_\+t Dissector\+\_\+ops\+::\+Dissector\+\_\+upper}\label{struct_dissector__ops_a3d9e177f508734b6136538e051b64699}
 
 
 Returns the upper bound this subdissector is being called upon. 
@@ -128,6 +127,6 @@ the upper bound this subdissector is being called upon
 \end{DoxyReturn}
 
 
-The documentation for this struct was generated from the following file\-:\begin{DoxyCompactItemize}
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
 \item 
-src/\-Profinet/\hyperlink{_dissector-int_8h}{Dissector-\/int.\-h}\end{DoxyCompactItemize}
+src/\+Profinet/\hyperlink{_dissector-int_8h}{Dissector-\/int.\+h}\end{DoxyCompactItemize}
