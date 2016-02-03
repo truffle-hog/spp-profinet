@@ -1,0 +1,26 @@
+var searchData=
+[
+  ['b',['b',['../structBoxStruct__struct.html#aee44748dc579c5d794853ee8b133d197',1,'BoxStruct_struct']]],
+  ['bitmask',['bitmask',['../structHeaderInfo.html#a427985c4a3b001b3c609e05807fec939',1,'HeaderInfo::bitmask()'],['../ProtocolTree_8h.html#a4942358fcc2da2384c52cafadc23f256',1,'bitmask():&#160;ProtocolTree.h']]],
+  ['box_5fthe_5ffunction_5fname',['Box_The_Function_Name',['../doxygen__c_8h.html#aaddf8ced9406a68229baee8c1e922b6a',1,'doxygen_c.h']]],
+  ['box_5fthe_5flast_5fone',['Box_The_Last_One',['../doxygen__c_8h.html#a01d1bdf75bc1d4b6445faeafa8fd853d',1,'doxygen_c.h']]],
+  ['box_5fthe_5fsecond_5ffunction',['Box_The_Second_Function',['../doxygen__c_8h.html#a7ec4699a4197d74b5487929228b0597c',1,'doxygen_c.h']]],
+  ['boxenum',['BoxEnum',['../doxygen__c_8h.html#a354be0627e025b594a719a4c3f92a69f',1,'doxygen_c.h']]],
+  ['boxenum_5fenum',['BoxEnum_enum',['../doxygen__c_8h.html#abdf4994e8e07b3eda6c6a5a9bf5357e4',1,'doxygen_c.h']]],
+  ['boxenum_5fetc',['BOXENUM_ETC',['../doxygen__c_8h.html#abdf4994e8e07b3eda6c6a5a9bf5357e4a227130e825c6c4506cc4a226539d85fb',1,'doxygen_c.h']]],
+  ['boxenum_5ffirst',['BOXENUM_FIRST',['../doxygen__c_8h.html#abdf4994e8e07b3eda6c6a5a9bf5357e4a2bf0bdd7b9b287724c66f6c0f74ceb01',1,'doxygen_c.h']]],
+  ['boxenum_5fsecond',['BOXENUM_SECOND',['../doxygen__c_8h.html#abdf4994e8e07b3eda6c6a5a9bf5357e4a3ede3b6dfb2dbdac72634f0334e11c63',1,'doxygen_c.h']]],
+  ['boxstruct',['BoxStruct',['../doxygen__c_8h.html#a718548848862b3d5da8f7c7cea677de1',1,'doxygen_c.h']]],
+  ['boxstruct_5fstruct',['BoxStruct_struct',['../structBoxStruct__struct.html',1,'']]],
+  ['branches',['branches',['../structProtocolTree.html#aab7be83543870f7313efbec39b72385f',1,'ProtocolTree']]],
+  ['buffy',['Buffy',['../structBuffy.html',1,'']]],
+  ['buffy_2dint_2eh',['Buffy-int.h',['../Buffy-int_8h.html',1,'']]],
+  ['buffy_2eh',['Buffy.h',['../Buffy_8h.html',1,'']]],
+  ['buffy_5ffree',['Buffy_free',['../structBuffy__ops.html#a1bf805e996d3880005be3da20e718b1a',1,'Buffy_ops::Buffy_free()'],['../Buffy_8h.html#abd09b8005e89776590e5405194de164d',1,'Buffy_free():&#160;Buffy.h']]],
+  ['buffy_5fget_5fbits16',['Buffy_get_bits16',['../structBuffy__ops.html#a342ee8fffa1a034b236773573fc691c8',1,'Buffy_ops::Buffy_get_bits16()'],['../Buffy_8h.html#a3ca973afccd3e7e81c2e66caa477c268',1,'Buffy_get_bits16():&#160;Buffy.h']]],
+  ['buffy_5fget_5fbits32',['Buffy_get_bits32',['../structBuffy__ops.html#a1e222289ccf2cedf28b0d12d77f72f63',1,'Buffy_ops::Buffy_get_bits32()'],['../Buffy_8h.html#a34896554afc3be4a1b02587a31b5fac1',1,'Buffy_get_bits32():&#160;Buffy.h']]],
+  ['buffy_5fget_5fbits64',['Buffy_get_bits64',['../structBuffy__ops.html#a7618fdc673f1de40c5718dc55fc2e6bf',1,'Buffy_ops::Buffy_get_bits64()'],['../Buffy_8h.html#a530f9b9c44f72a0ae0f03360aefd7c27',1,'Buffy_get_bits64():&#160;Buffy.h']]],
+  ['buffy_5fget_5fbits8',['Buffy_get_bits8',['../structBuffy__ops.html#a1bda227c6a32b52849c8c7e7b9eb00e4',1,'Buffy_ops::Buffy_get_bits8()'],['../Buffy_8h.html#acc60c5a1d5726e5ef0564e2bfd914602',1,'Buffy_get_bits8():&#160;Buffy.h']]],
+  ['buffy_5fnew',['Buffy_new',['../Buffy_8h.html#a1274babfe9f124dab45c870ac6630496',1,'Buffy.h']]],
+  ['buffy_5fops',['Buffy_ops',['../structBuffy__ops.html',1,'']]]
+];
