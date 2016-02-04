@@ -70,10 +70,15 @@ struct DissectorRegister_ops {
  */
 struct DissectorRegister {
 
-  /** Whether this dissector register is initialized. **/
-  bool initialized;
-  /** The dissector register operations. **/
-  const struct DissectorRegister_ops *ops;
+	size_t size;
+	uint64_t lowList[1024];
+	uint64_t highList[1024];
+	Dissector_t* dissectorList[1024];
+
+	/** Whether this dissector register is initialized. **/
+	bool initialized;
+	/** The dissector register operations. **/
+	const struct DissectorRegister_ops *ops;
 };
 
 /**
@@ -86,7 +91,7 @@ struct DissectorRegister {
  * @param ops the pointer to the operations used for this DissectorRegister
  * @return a pointer to the created DissectorRegister
  */
-DissectorRegister_t * DissectorRegister_new(const struct DissectorRegister_ops *ops);
+DissectorRegister_t * DissectorRegister_new();
 
 
 #endif

@@ -12,6 +12,7 @@
 #include <sys/types.h>
 #include <stdbool.h>
 
+#include "DissectorRegister.h"
 #include "Dissector.h"
 
 struct Dissector;
@@ -99,6 +100,8 @@ struct Dissector {
 
   /** Whether this dissector was initialized. **/
   bool initialized;
+
+  DissectorRegister_t *dissectorRegister;
 
   /** The dissectors operations. **/
   const struct Dissector_ops *ops;

@@ -80,7 +80,10 @@ char * convert_to_homepath_name(char *socket_name_) {
 
 	socket_file[0] = '\0';
 	strcat(socket_file, homedir);
+	strcat(socket_file, "/");
 	strcat(socket_file, socket_name);
+
+	printf("created socket file: %s\n", socket_file);
 
 	return socket_file;
 
@@ -100,12 +103,19 @@ void * await_request( void* args) {
 
 	memset(buffer, 0, 256);
 
-	n = read(data->client_sockfd,buffer,255);
-	check(n >= 0, "error reading from socket");
+	// TODO implement a valid chancel condition
+	while(true) {
 
-//	DEBUG_WRAP(DebugMessage(DEBUG_PLUGIN, "Received message: %s\n",buffer));
+		n = read(data->client_sockfd,buffer,255);
+		check(n >= 0, "error reading from socket");
 
-	data->client_detected = 1;
+	//	DEBUG_WRAP(DebugMessage(DEBUG_PLUGIN, "Received message: %s\n",buffer));
+		
+		// TODO instead of toggling request a specific ID from the client
+		// something secure
+
+		data->client_detected = !data->client_detected;;
+	}
 
 	return NULL;
 error:
@@ -123,13 +133,10 @@ UnixSocketSender_new() {
 	struct UnixSocketSender *unixSocketSender = malloc(sizeof(struct UnixSocketSender));
   	check_mem(unixSocketSender);
 
+	unixSocketSender->socketData.client_detected = false;
+
 	unixSocketSender->sender = *Sender_new(&UnixSocketSenderOverride_ops);
-
-
-	// = malloc (sizeof(SocketData));
-	//check_mem(data);
-	//	SocketData *sockData = malloc (sizeof(SocketData));
-	//	check_mem(sockData);
+	check_mem(&unixSocketSender->sender);
 	// declare some variabled in use
 	pthread_t thread;
 	int bind_check, len;
@@ -189,9 +196,12 @@ int UnixSocketSender_send(Sender_t *this, Truffle_t *truffle) {
 
 	if (unixSocketSender->socketData.client_detected) {
 
-			n = write (unixSocketSender->socketData.client_sockfd, (void*) &truffle, sizeof(Truffle_t));
-			check (n >= 0, "error writing to socket");
-		}
+		n = write(unixSocketSender->socketData.client_sockfd, (void*) truffle, sizeof(Truffle_t));
+		
+		check (n >= 0, "error writing to socket");
+
+		return n;
+	}
 
   return 0;
 

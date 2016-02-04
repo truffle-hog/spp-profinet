@@ -26,5 +26,8 @@ src/preprocessors/Profinet/Makefile
 
 !src/detect.c
 
+*.a
+*.o
+
 # ...even if they are in subdirectories
 !*/

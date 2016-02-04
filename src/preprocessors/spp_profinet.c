@@ -60,6 +60,13 @@
 #include "Sender.h"
 #include "UnixSocketSender.h"
 
+#include "Dissector.h"
+#include "Dissector-int.h"
+#include "PNRTDissector.h"
+
+#include "DissectorRegister.h"
+#include "DissectorRegister-int.h"
+
 /*
  * put in other inculdes as necessary
  */
@@ -98,6 +105,11 @@ typdef struct _FrameRtDcpRequest
  */
 
 Sender_t *sender;
+
+DissectorRegister_t *topLevelDissectorRegister;
+
+long long n = 0;
+
 
 /*
  * function prototypes go here
@@ -154,6 +166,13 @@ void SetupProfiNet()
     DEBUG_WRAP(DebugMessage(DEBUG_PLUGIN, "Preprocessor: ProfiNet is setup...\n"));
 }
 
+void DissectorInit(DissectorRegister_t *dReg) {
+
+	Dissector_t *pnrtDissector = PNRTDissector_new();
+	dReg->ops->DissectorRegister_insert(dReg, pnrtDissector);
+
+
+}
 
 /*
  * Function: ProfiNetInit(u_char *)
@@ -171,13 +190,18 @@ static void ProfiNetInit(struct _SnortConfig * sc, char *args)
 	(void) args;
 
 	sender = UnixSocketSender_new();
-
 	check_mem(sender);
+
+	topLevelDissectorRegister = DissectorRegister_new();
+	check_mem(topLevelDissectorRegister);
+
+	DissectorInit(topLevelDissectorRegister);
 
  	DEBUG_WRAP(DebugMessage(DEBUG_PLUGIN, "Preprocessor: ProfiNet Initialized\n"));
 
     AddFuncToPreprocList(sc, DetectProfiNetPackets, PRIORITY_NETWORK, PP_PROFINET, PROTO_BIT__ALL );
 //    AddFuncToPreprocCleanExitList(ProfiNetCleanExit, NULL, PRIORITY_LAST, PP_ENABLE_ALL);
+
 
 error:
 
@@ -229,6 +253,8 @@ bool IsProfinet(Packet *p)
 	return PacketIsEtherProfi(p);
 }
 
+
+
 /*
  * Function: PreprocFunction(Packet *)
  *
@@ -248,13 +274,36 @@ static void DetectProfiNetPackets(Packet *p, void *context)
 
 	Truffle_t truffle;
 
+  if (!(p->eh))
+  {
+      return;
+  }
+
+	Dissector_t *primeDissector = topLevelDissectorRegister->ops->DissectorRegister_get(topLevelDissectorRegister, (int64_t) ntohs(p->eh->ether_type));
+
+	if (primeDissector == NULL) return;
+	//check(primeDissector != NULL, "no dissector detected for ethertype: %d", ntohs(p->eh->ether_type));
+
+	primeDissector->ops->Dissector_dissect(primeDissector, NULL, NULL);
+
 	if (PacketIsEtherProfi(p)) {
+
+		n++;
 
 		memcpy(&truffle.eh.sourceMacAddress, p->eh->ether_src, 6);
 		memcpy(&truffle.eh.destMacAddress, p->eh->ether_dst, 6);
 
-		sender->ops->Sender_send(sender, &truffle);					
+		// TODO put this in debug wrap if at all
+		printf("--------- %lld ---------\n", n);
+
+		printf("src: %ld\n", truffle.eh.sourceMacAddress);
+		printf("dest: %ld\n", truffle.eh.destMacAddress);
+
+		sender->ops->Sender_send(sender, &truffle);
 	}
+
+error:
+	return;
 
 }
 

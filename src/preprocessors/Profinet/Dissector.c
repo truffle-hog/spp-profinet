@@ -13,70 +13,66 @@
  * and subdissectors that call each other when their dissection part is completed.
  */
 
-#ifndef __DISSECTOR_H__
-#define __DISSECTOR_H__
-
+#include <stdlib.h>
 #include <stdint.h>
 
 #include "ProtocolTree.h"
 #include "Buffy.h"
 
-struct Dissector;
-typedef struct Dissector Dissector_t;
+#include "Dissector-int.h"
+#include "Dissector.h"
+
+#include "DissectorRegister-int.h"
+#include "DissectorRegister.h"
+
+#include "dbg.h"
+
+Dissector_t * Dissector_new(const struct Dissector_ops *ops) {
+
+	Dissector_t *dissector = malloc(sizeof(Dissector_t));
+	check_mem(dissector);
+
+	dissector->dissectorRegister = DissectorRegister_new();
+	check_mem(dissector->dissectorRegister);
+
+	dissector->ops = ops;
+
+	return dissector;
+
+error:
+	return NULL;
+}
+
+void Dissector_free(Dissector_t *dissector) {
+
+	dissector->dissectorRegister->ops->DissectorRegister_free(dissector->dissectorRegister);
+
+	free(dissector);
+}
 
 
-/**
- * @brief Creates a new Dissector with the given operations.
- *
- * This Function is the interface constructor for every Dissector implementation.
- * Calling this function will initialize the dissector correctly and fill the needed
- * data within the Dissector structure.
- *
- * @param ops the pointer to the operations used for this dissector
- * @return a pointer to the created dissector
- */
-//Dissector_t * Dissector_new(const struct Dissector_ops *ops);
-
-
-/**
- * Frees the given dissector.
- */
-void Dissector_free(Dissector_t *dissector);
-
-
-/**
- * @brief Registers a given sub dissector on this dissector.
- *
- * @param this the dissector to register the subDissector on
- * @param subDissector the dissector to be registered as sub
- *
- * @return NULL if there was no other dissector registered for the given interval
- *         otherwise the existing Dissector will be overwritten and returned.
- */
 Dissector_t * Dissector_registerSub(Dissector_t *this,
-                           Dissector_t *subDissector);
+                           Dissector_t *subDissector) {
+
+	DissectorRegister_t *thisRegister = this->dissectorRegister;
+
+	Dissector_t *existing = this->dissectorRegister->ops->DissectorRegister_insert(thisRegister, subDissector);
+
+	// TODO implement proper error testing and duplicates with insertion
+
+	return existing;
+}
+
+Dissector_t * Dissector_getSub(Dissector_t *this, uint64_t data) {
+
+	return this->dissectorRegister->ops->DissectorRegister_get(this->dissectorRegister, data);
+
+}
 
 /**
- * @brief Returns the sub dissector that is register for the given unsigned long.
- *
- * @param this the dissector calling Dissector_getSub
- * @param data the value for looking up in the dissector register
- *
- * @return the registered sub dissector if any, NULL otherwise
- */
-Dissector_t * Dissector_getSub(Dissector_t *this, uint64_t data);
+int Dissector_dissect(Dissector_t *this, Buffy_t *buf, ProtocolTree_t *tree) {
 
-/**
- * @brief Dissects the package the given buffer is pointing to.
- *
- * @param this the calling Dissector
- * @param buf the buffer pointing to the package data currently being processed
- * @param tree the tree strcture to save the package data in
- *
- * @return 0 if the dissection was successful wihtout any failures,
- *         -1 if it was a faulty package. The fault flag will be set in the
- *         ProtocolTree accordingly
- */
-int Dissector_dissect(Dissector_t *this, Buffy_t *buf, ProtocolTree_t *tree);
 
-#endif
+
+}
+*/

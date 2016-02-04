@@ -32,9 +32,10 @@ spp_session.c spp_session.h \
 session_api.c session_api.h \
 stream_api.c stream_api.h \
 spp_normalize.c spp_normalize.h \
+spp_profinet.c spp_profinet.h \
 normalize.c normalize.h \
-sip_common.h \
-spp_profinet.c spp_profinet.h
+sip_common.h
+
 
 
 INCLUDES = @INCLUDES@

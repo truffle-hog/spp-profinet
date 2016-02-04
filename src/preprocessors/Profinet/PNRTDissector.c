@@ -7,11 +7,14 @@
  *
  */
 #include <stdlib.h>
+#include <stdio.h>
 
 #include "Dissector-int.h"
 #include "Dissector.h"
 #include "ProtocolTree.h"
 #include "Buffy.h"
+
+#include "dbg.h"
 
 /**
  * @brief The Dissector for Profi Real Time IO 0x8892.
@@ -24,6 +27,7 @@ struct PNRTDissector {
 };
 
 void PNRTDissector_free(Dissector_t *dissector);
+
 int PNRTDissector_dissect(Dissector_t *this, Buffy_t *buf, ProtocolTree_t *tree);
 
 /**
@@ -35,8 +39,8 @@ static const struct Dissector_ops PNRTDissectorOverride_ops = {
   (uint64_t) 0x8892,
   (uint64_t) 0x8892,
   PNRTDissector_free,
-  NULL,
-  NULL,
+  Dissector_registerSub,
+  Dissector_getSub,
   PNRTDissector_dissect
 };
 
@@ -46,17 +50,33 @@ static const struct Dissector_ops PNRTDissectorOverride_ops = {
 Dissector_t *
 PNRTDissector_new() {
 
-  Dissector_t *dissector;
 
-  dissector = Dissector_new(&PNRTDissectorOverride_ops);
+  	struct PNRTDissector *pnrtDissector;
 
-  return dissector;
+	pnrtDissector = malloc(sizeof(struct PNRTDissector));
+  check_mem(pnrtDissector);
+
+  Dissector_t *disser = Dissector_new(&PNRTDissectorOverride_ops);
+  check_mem(disser);
+
+  pnrtDissector->dissector = *disser;
+
+  return (Dissector_t*) pnrtDissector;
+
+error:
+  return NULL;
+
 }
 
 /**
  * @see Dissector_free
  */
 void PNRTDissector_free(Dissector_t *dissector) {
+
+	struct PNRTDissector *this = (struct PNRTDissector*) dissector;
+
+	free(this);
+//	this->dissector.ops->Dissector_free(&this->dissector);
 
 	(void) dissector;
 	// TODO implement
@@ -70,6 +90,8 @@ int PNRTDissector_dissect(Dissector_t *this, Buffy_t *buf, ProtocolTree_t *tree)
 	(void) this;
 	(void) buf;
 	(void) tree;
+
+	printf("dissecting very bigtime\n");
 	// TODO implement
 
 	return 0;
