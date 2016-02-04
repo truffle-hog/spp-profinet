@@ -23,6 +23,7 @@
 
 #include "Sender.h"
 #include "Sender-int.h"
+#include "UnixSocketSender.h"
 
 typedef struct SocketData {
 	int server_sockfd;

@@ -3,7 +3,7 @@ AUTOMAKE_OPTIONS=foreign no-dependencies
 
 noinst_LIBRARIES = libspp.a
 
-SUBDIRS = HttpInspect Stream6 Session
+SUBDIRS =  Profinet HttpInspect Stream6 Session
 
 if BUILD_PROCPIDSTATS
 PROCPIDSTATS_SOURCE = sfprocpidstats.c sfprocpidstats.h
