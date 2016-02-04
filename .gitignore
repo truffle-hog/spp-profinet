@@ -14,6 +14,9 @@
 src/preprocessors/Profinet/Makefile.in
 src/preprocessors/Profinet/Makefile
 
+!configure.in
+!configure.sh
+
 !src/preprocessors/Makefile.am
 
 !src/plugbase.c
