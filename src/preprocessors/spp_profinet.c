@@ -55,13 +55,10 @@
 #include <pwd.h>
 #include <pthread.h>
 #include "dbg.h"
-//#include "proto.h"
 
-//#include "Profinet/plugin.c"
-
-//#include "Profinet/epan/tvbuff.h"
-//#include "Profinet/epan/tvbuff-int.h"
-//#include <glib.h>
+#include "Profinet/Sender-int.h"
+#include "Profinet/Sender.h"
+#include "Profinet/UnixSocketSender.h"
 
 /*
  * put in other inculdes as necessary
