@@ -11,6 +11,9 @@
 !src/preprocessors/spp_profinet.h
 !src/preprocessors/dbg.h
 
+src/preprocessors/Profinet/Makefile.in
+src/preprocessors/Profinet/Makefile
+
 !src/preprocessors/Makefile.am
 
 !src/plugbase.c
