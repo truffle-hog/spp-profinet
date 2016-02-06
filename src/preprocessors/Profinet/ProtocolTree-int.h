@@ -77,7 +77,7 @@ struct ProtocolTest {
 
 enum FieldType {
 
-	STRING = 0, INT = 1, REAL = 2, BOOL = 3
+	STRING = 0, INT = 1, REAL = 2, BOOL = 3, RAW = 4
 
 };
 
@@ -89,7 +89,6 @@ struct FieldInfo {
 	/** The length of this data in Bits **/
 	int length;
 	enum FieldType type;
-
 };
 
 
@@ -118,7 +117,7 @@ struct ProtocolNode {
 
 	/** The children of this ProtocolNode. **/
 	struct ProtocolNode **children;
-	
+
 	/** The next sister Node of this Node. **/
 	struct ProtocolNode *next;
 

@@ -7,6 +7,8 @@
 # Plugin specific
 !src/preprocessors/Profinet
 !src/preprocessors/Profinet/*
+!src/preprocessors/Profinet/dissectors
+!src/preprocessors/Profinet/dissectors/*
 !src/preprocessors/spp_profinet.c
 !src/preprocessors/spp_profinet.h
 !src/preprocessors/dbg.h

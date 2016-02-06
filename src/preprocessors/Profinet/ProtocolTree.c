@@ -23,6 +23,7 @@ ProtocolTree_t *ProtocolTree_new() {
 
 	tree->hInfo = malloc(sizeof(struct HeaderInfo));
 
+	return tree;
 
 error:
 	return NULL;

@@ -1422,7 +1422,7 @@ fi
 echo $CFLAGS > cflags.out
 echo $CPPFLAGS > cppflags.out
 
-INCLUDES='-I$(top_srcdir) -I$(top_srcdir)/src -I$(top_srcdir)/src/sfutil $(extra_incl) -I$(top_srcdir)/src/output-plugins -I$(top_srcdir)/src/detection-plugins -I$(top_srcdir)/src/dynamic-plugins -I$(top_srcdir)/src/preprocessors -I$(top_srcdir)/src/preprocessors/portscan -I$(top_srcdir)/src/preprocessors/HttpInspect/include -I$(top_srcdir)/src/preprocessors/Session -I$(top_srcdir)/src/preprocessors/Stream6 -I$(top_srcdir)/src/target-based -I$(top_srcdir)/src/control -I$(top_srcdir)/src/file-process -I$(top_srcdir)/src/file-process/libs -I$(top_srcdir)/src/side-channel -I$(top_srcdir)/src/side-channel/plugins -I$(top_srcdir)/src/preprocessors/Profinet'
+INCLUDES='-I$(top_srcdir) -I$(top_srcdir)/src -I$(top_srcdir)/src/sfutil $(extra_incl) -I$(top_srcdir)/src/output-plugins -I$(top_srcdir)/src/detection-plugins -I$(top_srcdir)/src/dynamic-plugins -I$(top_srcdir)/src/preprocessors -I$(top_srcdir)/src/preprocessors/portscan -I$(top_srcdir)/src/preprocessors/HttpInspect/include -I$(top_srcdir)/src/preprocessors/Session -I$(top_srcdir)/src/preprocessors/Stream6 -I$(top_srcdir)/src/target-based -I$(top_srcdir)/src/control -I$(top_srcdir)/src/file-process -I$(top_srcdir)/src/file-process/libs -I$(top_srcdir)/src/side-channel -I$(top_srcdir)/src/side-channel/plugins -I$(top_srcdir)/src/preprocessors/Profinet -I$(top_srcdir)/src/preprocessors/Profinet/dissectors'
 
 AC_SUBST(INCLUDES)
 AC_SUBST(CONFIGFLAGS)
@@ -1490,6 +1490,7 @@ src/preprocessors/HttpInspect/user_interface/Makefile \
 src/preprocessors/Session/Makefile \
 src/preprocessors/Stream6/Makefile \
 src/preprocessors/Profinet/Makefile \
+src/preprocessors/Profinet/dissectors/Makefile \
 src/parser/Makefile \
 src/target-based/Makefile \
 doc/Makefile \
