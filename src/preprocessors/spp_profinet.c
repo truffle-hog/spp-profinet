@@ -280,9 +280,9 @@ static void DetectProfiNetPackets(Packet *p, void *context)
 {
 	(void) context;
 
-	ProtocolTree_t *protoTree = ProtocolTree_new();
+//	ProtocolTree_t *protoTree = ProtocolTree_new();
 
-	Buffy_t *buffy = Buffy_new(p);
+//	Buffy_t *buffy = Buffy_new(p);
 
 	Truffle_t truffle;
 
@@ -296,9 +296,9 @@ static void DetectProfiNetPackets(Packet *p, void *context)
 	if (primeDissector == NULL) return;
 	//check(primeDissector != NULL, "no dissector detected for ethertype: %d", ntohs(p->eh->ether_type));
 
-	primeDissector->ops->Dissector_dissect(primeDissector, buffy, protoTree);
+	primeDissector->ops->Dissector_dissect(primeDissector, NULL, NULL);
 
-	Truffle_t *truffle = Truffle_new(protoTree);
+//	Truffle_t *truffle = Truffle_new(protoTree);
 
 	if (PacketIsEtherProfi(p)) {
 
