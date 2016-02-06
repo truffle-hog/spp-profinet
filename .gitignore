@@ -10,23 +10,25 @@
 !src/preprocessors/spp_profinet.c
 !src/preprocessors/spp_profinet.h
 !src/preprocessors/dbg.h
-
+# not take the preprocessors generated make files
 src/preprocessors/Profinet/Makefile.in
 src/preprocessors/Profinet/Makefile
 
+# the snort base configure and automake genrators that had to be edited
 !src/Makefile.am
 !configure.in
-!configure.sh
-
 !src/preprocessors/Makefile.am
 
-!src/.ycm_extra_conf.py
 
+# edited this from the main snort src files
 !src/plugbase.c
-
 !src/preprocids.h
-
 !src/detect.c
+
+
+# the ycmconf file for vim autocompletion
+!src/.ycm_extra_conf.py
+!configure.sh # my custom configure script
 
 *.a
 *.o
