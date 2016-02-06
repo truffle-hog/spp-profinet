@@ -10,6 +10,7 @@
 
 #include <stdint.h>
 
+#include "ProtocolTree.h"
 /**
  * @brief Houses specific information about the ether header.
  *
@@ -53,5 +54,7 @@ struct Truffle {
 
 };
 typedef struct Truffle Truffle_t;
+
+Truffle_t *Truffle_new(const ProtocolTree_t *protoTree);
 
 #endif

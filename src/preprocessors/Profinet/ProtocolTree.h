@@ -8,8 +8,12 @@
 
 #include <stdint.h>
 
-struct ProtocolTree;
-typedef struct ProtocolTree ProtocolTree_t;
+
+
+/** A protocol tree element. */
+typedef struct ProtocolNode ProtocolTree_t;
+/** A protocol item element. */
+typedef struct ProtocolNode ProtocolItem_t;
 
 /** @brief Info that can be inserte into a protocol tree as new branch. **/
 struct HeaderInfo {

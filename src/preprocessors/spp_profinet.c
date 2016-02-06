@@ -67,6 +67,14 @@
 #include "DissectorRegister.h"
 #include "DissectorRegister-int.h"
 
+#include "ProtocolTree.h"
+#include "ProtocolTree-int.h"
+
+#include "Buffy.h"
+#include "Buffy-int.h"
+
+#include "Truffle.h"
+
 /*
  * put in other inculdes as necessary
  */
@@ -272,6 +280,10 @@ static void DetectProfiNetPackets(Packet *p, void *context)
 {
 	(void) context;
 
+	ProtocolTree_t *protoTree = ProtocolTree_new();
+
+	Buffy_t *buffy = Buffy_new(p);
+
 	Truffle_t truffle;
 
   if (!(p->eh))
@@ -284,7 +296,9 @@ static void DetectProfiNetPackets(Packet *p, void *context)
 	if (primeDissector == NULL) return;
 	//check(primeDissector != NULL, "no dissector detected for ethertype: %d", ntohs(p->eh->ether_type));
 
-	primeDissector->ops->Dissector_dissect(primeDissector, NULL, NULL);
+	primeDissector->ops->Dissector_dissect(primeDissector, buffy, protoTree);
+
+	Truffle_t *truffle = Truffle_new(protoTree);
 
 	if (PacketIsEtherProfi(p)) {
 
@@ -293,18 +307,20 @@ static void DetectProfiNetPackets(Packet *p, void *context)
 		memcpy(&truffle.eh.sourceMacAddress, p->eh->ether_src, 6);
 		memcpy(&truffle.eh.destMacAddress, p->eh->ether_dst, 6);
 
+		truffle.eh.sourceMacAddress = (htobe64(truffle.eh.sourceMacAddress)) >> 4*4;
+		truffle.eh.destMacAddress = (htobe64(truffle.eh.destMacAddress)) >> 4*4;
+
+
+//		printf("get: %016llX\n", data);
+
 		// TODO put this in debug wrap if at all
 		printf("--------- %lld ---------\n", n);
 
-		printf("src: %ld\n", truffle.eh.sourceMacAddress);
-		printf("dest: %ld\n", truffle.eh.destMacAddress);
+		printf("src: %016lX\n", truffle.eh.sourceMacAddress);
+		printf("dest: %016lX\n", truffle.eh.destMacAddress);
 
 		sender->ops->Sender_send(sender, &truffle);
 	}
-
-error:
-	return;
-
 }
 
 /*

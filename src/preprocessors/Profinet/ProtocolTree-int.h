@@ -6,9 +6,15 @@
 #ifndef __PROTOCOL_TREE_INT_H__
 #define __PROTOCOL_TREE_INT_H__
 
+#include <stdbool.h>
+
 #include "ProtocolTree.h"
 
-struct ProtocolTree;
+struct TreeData;
+
+struct ProtocolNode;
+
+struct FieldInfo;
 
 /**
  * @brief The operations that can be called by a ProtocolTree.
@@ -51,7 +57,7 @@ struct ProtocolTree_ops {
  * @brief Tree structure for building protocol information.
  *
  */
-struct ProtocolTree {
+struct ProtocolTest {
 
   /** Whether this protocol Subtree was initialized. **/
   bool initialized;
@@ -69,13 +75,74 @@ struct ProtocolTree {
   const struct ProtocolTree_ops *ops;
 };
 
+enum FieldType {
+
+	STRING = 0, INT = 1, REAL = 2, BOOL = 3
+
+};
+
+struct FieldInfo {
+
+	char *name;
+	void *data;
+
+	/** The length of this data in Bits **/
+	int length;
+	enum FieldType type;
+
+};
+
+
+/** every protocol tree has one of these data. each node in the tree points to the same one **/
+struct TreeData {
+//	GHashTable  *interesting_hfids;
+//	boolean     visible;
+//	boolean     fake_protocols;
+
+	/** The number of Nodes in this ProtocolTree. **/
+	int         count;
+//	struct _packet_info *pinfo;
+};
+
+/** Each proto_tree, proto_item is one of these. */
+struct ProtocolNode {
+
+	/** The number of sibblings on this ProtocolTree level. **/
+	int sibblingCount;
+
+	/** The number of children from this ProtocolNode. **/
+	int childCount;
+
+	/** The unique key identifying this ProtocolNode. **/
+	char *key;
+
+	/** The children of this ProtocolNode. **/
+	struct ProtocolNode **children;
+	
+	/** The next sister Node of this Node. **/
+	struct ProtocolNode *next;
+
+	/** The previous sister Node of this Node. **/
+	struct ProtocolNode *prev;
+
+	/** The parent of this ProtocolNode. **/
+	struct ProtocolNode *parent;
+
+	/** The field info this ProtocolNode has. **/
+	struct FieldInfo  *fieldInfo;
+
+	/** The tree data common for every Node in this nodes tree. **/
+	struct TreeData *treeData;
+
+};
+
 
 /**
  * @brief Creates a new ProtocolTree.
  *
  * @return the instantiated Tree
  */
-ProtocolTree_t *ProtocolTree_new(Packet *p);
+ProtocolTree_t *ProtocolTree_new();
 
 
 #endif
