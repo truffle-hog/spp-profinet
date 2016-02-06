@@ -15,6 +15,8 @@
 # not take the preprocessors generated make files
 src/preprocessors/Profinet/Makefile.in
 src/preprocessors/Profinet/Makefile
+Makefile
+Makefile.in
 
 # the snort base configure and automake genrators that had to be edited
 !src/Makefile.am
