@@ -33,6 +33,8 @@ Makefile.in
 # the ycmconf file for vim autocompletion
 !src/.ycm_extra_conf.py
 !configure.sh # my custom configure script
+!create_eth10.sh
+!destroy_eth10.sh
 
 *.a
 *.o
