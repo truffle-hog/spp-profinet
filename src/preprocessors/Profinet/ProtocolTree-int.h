@@ -26,6 +26,9 @@ struct ProtocolTree_ops {
   /**
    * @brief Frees the given ProtocolTree from memory.
    *
+   * Freeing the tree with this method will free the whole subtree starting
+   * from the given node. No parent nodes will be freed.
+   *
    * @param proto the ProtocolTree to be freed
    */
   void (*ProtocolTree_free)(ProtocolTree_t *proto);
@@ -38,7 +41,7 @@ struct ProtocolTree_ops {
    *
    * @return A pointer to a Subtree with the newly created branch as its root pointer.
    */
-  ProtocolTree_t *(*ProtocolTree_branch)(ProtocolTree_t *this, struct HeaderInfo *info);
+  ProtocolItem_t *(*ProtocolNode_branch)(struct ProtocolNode *this);
 
   /**
    * @brief Searches and returns the branch with the given caption.
@@ -49,7 +52,7 @@ struct ProtocolTree_ops {
    * @return the ProtocolTree starting at the found branch, NULL if there is no such
    *          branch.
    */
-  ProtocolTree_t *(*ProtocolTree_findBranch)(ProtocolTree_t *this, char *caption);
+  ProtocolTree_t *(*ProtocolTree_getBranch)(ProtocolTree_t *this, char *caption);
 
 };
 
@@ -75,22 +78,6 @@ struct ProtocolTest {
   const struct ProtocolTree_ops *ops;
 };
 
-enum FieldType {
-
-	STRING = 0, INT = 1, REAL = 2, BOOL = 3, RAW = 4
-
-};
-
-struct FieldInfo {
-
-	char *name;
-	void *data;
-
-	/** The length of this data in Bits **/
-	int length;
-	enum FieldType type;
-};
-
 
 /** every protocol tree has one of these data. each node in the tree points to the same one **/
 struct TreeData {
@@ -106,6 +93,7 @@ struct TreeData {
 /** Each proto_tree, proto_item is one of these. */
 struct ProtocolNode {
 
+	struct ProtocolTree_ops *ops;
 	/** The number of sibblings on this ProtocolTree level. **/
 	int sibblingCount;
 

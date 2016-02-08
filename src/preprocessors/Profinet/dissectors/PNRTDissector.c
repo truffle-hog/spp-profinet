@@ -44,6 +44,14 @@ static const struct Dissector_ops PNRTDissectorOverride_ops = {
   PNRTDissector_dissect
 };
 
+void initializeSubDissectors(Dissector_t *this) {
+
+    Dissector_t *pnrtaDissector = PNRTADissector_new();
+
+    this->ops->Dissector_registerSub(this, pnrtaDissector);
+
+}
+
 /**
  * @see Dissector_new
  */
@@ -51,20 +59,22 @@ Dissector_t *
 PNRTDissector_new() {
 
 
-  	struct PNRTDissector *pnrtDissector;
+    struct PNRTDissector *pnrtDissector;
 
-	pnrtDissector = malloc(sizeof(struct PNRTDissector));
-  check_mem(pnrtDissector);
+    pnrtDissector = malloc(sizeof(struct PNRTDissector));
+    check_mem(pnrtDissector);
 
-  Dissector_t *disser = Dissector_new(&PNRTDissectorOverride_ops);
-  check_mem(disser);
+    Dissector_t *disser = Dissector_new(&PNRTDissectorOverride_ops);
+    check_mem(disser);
 
-  pnrtDissector->dissector = *disser;
+    pnrtDissector->dissector = *disser;
 
-  return (Dissector_t*) pnrtDissector;
+    initializeSubDissectors((Dissector_t*) pnrtDissector);
+
+    return (Dissector_t*) pnrtDissector;
 
 error:
-  return NULL;
+    return NULL;
 
 }
 
@@ -90,6 +100,8 @@ int PNRTDissector_dissect(Dissector_t *this, Buffy_t *buf, ProtocolTree_t *tree)
 	(void) this;
 	(void) buf;
 	(void) tree;
+
+    uint16_t frameID = buf->Buffy_get_bits16(buf, 0, 16, 0);
 
 	printf("dissecting very bigtime\n");
 	// TODO implement

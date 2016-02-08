@@ -7,7 +7,7 @@
 #define __PROTOCOL_TREE_H__
 
 #include <stdint.h>
-
+#include "FieldInfos.h"
 
 
 /** A protocol tree element. */
@@ -40,25 +40,33 @@ struct HeaderInfo {
 void ProtocolTree_free(ProtocolTree_t *proto);
 
 /**
- * @brief Creates a new branch with the given info field from the current root pointer of this ProtocolTree.
+ * @brief Creates a new branch from the given ProtocolNode (root Tree or Item) and returns a pointer to the newly created ProtocolItem.
  *
- * @param this the calling ProtocolTree
- * @param info the header info to be inserted for the new subtree
+ * @param this the calling ProtocolNode
  *
  * @return A pointer to a Subtree with the newly created branch as its root pointer.
  */
-ProtocolTree_t *ProtocolTree_branch(ProtocolTree_t *this, struct HeaderInfo *info);
+ProtocolItem_t *ProtocolTree_branch(struct ProtocolNode *this);
+
+/**
+ * @brief Sets the given field information for this protocol item.
+ *
+ * @param this the calling ProtocolItem
+ * @param fieldInfo the info to be set for this item
+ */
+ProtocolItem_t *ProtocolItem_setFieldInfo(ProtocolItem_t *this, struct FieldInfo *fieldInfo);
+
 
 /**
  * @brief Searches and returns the branch with the given caption.
  *
  * @param this the calling ProtocolTree
- * @param the caption to be searched for
+ * @param key the key to be searched for
  *
  * @return the ProtocolTree starting at the found branch, NULL if there is no such
  *          branch.
  */
-ProtocolTree_t *ProtocolTree_findBranch(ProtocolTree_t *this, char *caption);
+ProtocolTree_t *ProtocolTree_findBranch(ProtocolTree_t *this, char *key);
 
 
 #endif

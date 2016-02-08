@@ -3,9 +3,8 @@
  * @brief The interface for the PacketDissector.
  */
 
-#ifndef __PACKET_DISSECTOR_H__
-#define __PACKET_DISSECTOR_H__
-
+#ifndef __ETHERNET_DISSECTOR_H__
+#define __ETHERNET_DISSECTOR_H__
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -18,16 +17,17 @@
 /**
  * @see Dissector_new
  */
-Dissector_t *PacketDissector_new();
+Dissector_t *EthernetDissector_new();
 
 /**
  * @see Dissector_free
  */
-void PacketDissector_free(Dissector_t *dissector);
+void EthernetDissector_free(Dissector_t *dissector);
 
 /**
  * @see Dissector_dissect
  */
-int PacketDissector_dissect(Dissector_t *this, Buffy_t *buf, ProtocolTree_t *tree);
+int EthernetDissector_dissect(Dissector_t *this, Buffy_t *buf, ProtocolTree_t *tree);
+
 
 #endif

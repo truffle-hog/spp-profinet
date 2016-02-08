@@ -114,7 +114,9 @@ typdef struct _FrameRtDcpRequest
 
 Sender_t *sender;
 
-DissectorRegister_t *topLevelDissectorRegister;
+//DissectorRegister_t *topLevelDissectorRegister;
+
+Dissector_t *packetDissector;
 
 long long n = 0;
 
@@ -174,14 +176,6 @@ void SetupProfiNet()
     DEBUG_WRAP(DebugMessage(DEBUG_PLUGIN, "Preprocessor: ProfiNet is setup...\n"));
 }
 
-void DissectorInit(DissectorRegister_t *dReg) {
-
-	Dissector_t *pnrtDissector = PNRTDissector_new();
-	dReg->ops->DissectorRegister_insert(dReg, pnrtDissector);
-
-
-}
-
 /*
  * Function: ProfiNetInit(u_char *)
  *
@@ -200,10 +194,13 @@ static void ProfiNetInit(struct _SnortConfig * sc, char *args)
 	sender = UnixSocketSender_new();
 	check_mem(sender);
 
-	topLevelDissectorRegister = DissectorRegister_new();
-	check_mem(topLevelDissectorRegister);
+	//topLevelDissectorRegister = DissectorRegister_new();
+	//check_mem(topLevelDissectorRegister);
 
-	DissectorInit(topLevelDissectorRegister);
+	packetDissector = PacketDissector_new();
+	check_mem(packetDissector);
+
+	//DissectorInit(topLevelDissectorRegister);
 
  	DEBUG_WRAP(DebugMessage(DEBUG_PLUGIN, "Preprocessor: ProfiNet Initialized\n"));
 
@@ -280,46 +277,14 @@ static void DetectProfiNetPackets(Packet *p, void *context)
 {
 	(void) context;
 
-//	ProtocolTree_t *protoTree = ProtocolTree_new();
+	ProtocolTree_t *protoTree = ProtocolTree_new();
+	Buffy_t *buffy = Buffy_new(p);
 
-//	Buffy_t *buffy = Buffy_new(p);
+	packetDissector->ops->Dissector_dissect(packetDissector, buffy, protoTree);
+	Truffle_t *truffle = Truffle_new(protoTree);
 
-	Truffle_t truffle;
-
-  if (!(p->eh))
-  {
-      return;
-  }
-
-	Dissector_t *primeDissector = topLevelDissectorRegister->ops->DissectorRegister_get(topLevelDissectorRegister, (int64_t) ntohs(p->eh->ether_type));
-
-	if (primeDissector == NULL) return;
-	//check(primeDissector != NULL, "no dissector detected for ethertype: %d", ntohs(p->eh->ether_type));
-
-	primeDissector->ops->Dissector_dissect(primeDissector, NULL, NULL);
-
-//	Truffle_t *truffle = Truffle_new(protoTree);
-
-	if (PacketIsEtherProfi(p)) {
-
-		n++;
-
-		memcpy(&truffle.eh.sourceMacAddress, p->eh->ether_src, 6);
-		memcpy(&truffle.eh.destMacAddress, p->eh->ether_dst, 6);
-
-		truffle.eh.sourceMacAddress = (htobe64(truffle.eh.sourceMacAddress)) >> 4*4;
-		truffle.eh.destMacAddress = (htobe64(truffle.eh.destMacAddress)) >> 4*4;
-
-
-//		printf("get: %016llX\n", data);
-
-		// TODO put this in debug wrap if at all
-		printf("--------- %lld ---------\n", n);
-
-		printf("src: %016lX\n", truffle.eh.sourceMacAddress);
-		printf("dest: %016lX\n", truffle.eh.destMacAddress);
-
-		sender->ops->Sender_send(sender, &truffle);
+	if (truffle) {
+		sender->ops->Sender_send(sender, truffle);
 	}
 }
 

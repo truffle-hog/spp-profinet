@@ -43,7 +43,6 @@ typedef struct Dissector Dissector_t;
  */
 void Dissector_free(Dissector_t *dissector);
 
-
 /**
  * @brief Registers a given sub dissector on this dissector.
  *
