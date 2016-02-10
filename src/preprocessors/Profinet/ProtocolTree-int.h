@@ -78,6 +78,18 @@ struct ProtocolTest {
   const struct ProtocolTree_ops *ops;
 };
 
+struct value {
+
+    int lengt;
+    enum { is_int, is_long, is_float, is_char } type;
+    union {
+        int ival;
+        long lval;
+        float fval;
+        char cval;
+    } *val;
+};
+
 
 /** every protocol tree has one of these data. each node in the tree points to the same one **/
 struct TreeData {
