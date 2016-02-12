@@ -7,7 +7,7 @@
 
 #include "Dissector-int.h"
 #include "PacketDissector.h"
-//#include "EthernetDissector.h"
+#include "EthernetDissector.h"
 
 #include "ProtocolTree.h"
 #include "ProtocolTree-int.h"
@@ -15,9 +15,10 @@
 #include "Buffy.h"
 #include "Buffy-int.h"
 
+#include "ProtocolTypes.h"
+
 #include "dbg.h"
 
-enum ProtocolType { ETHERNET = 0 };
 
 /**
  * @brief The Dissector for Profi Real Time IO 0x8892.
@@ -49,10 +50,9 @@ static const struct Dissector_ops PacketDissectorOverride_ops = {
 
 void initializeSubDissectors(Dissector_t *this) {
 
-	(void) this;
-    //Dissector_t *ethernetDissector = EthernetDissector_new();
-    //
-    // this->ops->Dissector_registerSub(this, ethernetDissector);
+    Dissector_t *ethernetDissector = EthernetDissector_new();
+
+    this->ops->Dissector_registerSub(this, ethernetDissector);
 }
 
 /**
@@ -100,7 +100,7 @@ PacketDissector_dissect(Dissector_t *this, Buffy_t *buf, struct ProtocolNode *no
 
 	// TODO create a proper EMPTY value in the header that can be used as empty labels
 	struct Value NONE;
-	NONE.val.cval = '2';
+	NONE.val.cval = '0';
 
     struct Value frameLength;
 	frameLength.val.ival = 0;
@@ -117,9 +117,9 @@ PacketDissector_dissect(Dissector_t *this, Buffy_t *buf, struct ProtocolNode *no
 	node->ops->ProtocolTree_branch(node, "frame_time_delta", timeDelta);
 
     struct Value etherDest;
-    timeDelta.val.lval = 0x0003323;
-	timeDelta.length = 64;
-	timeDelta.type = is_long;
+    etherDest.val.lval = 0;
+	etherDest.length = 64;
+	etherDest.type = is_long;
 
     node->ops->ProtocolTree_branch(node, "ether_dest", etherDest);
 
@@ -127,14 +127,18 @@ PacketDissector_dissect(Dissector_t *this, Buffy_t *buf, struct ProtocolNode *no
 
 	// TODO check for the next package to be used
   //  if (isEthernet(buf)) {
-//        nextDissector = this->ops->Dissector_getSub(this, ETHERNET);
-//        key = "ethernet";
+    nextDissector = this->ops->Dissector_getSub(this, ETHERNET);
+    key = "ethernet";
   //  }
 
-//    ProtocolItem_t *child = node->ops->ProtocolTree_branch(node, key, NONE);
-//    nextDissector->ops->Dissector_dissect(nextDissector, buf, child);
+    ProtocolItem_t *child = node->ops->ProtocolTree_branch(node, key, NONE);
+    check_mem(child);
+
+    nextDissector->ops->Dissector_dissect(nextDissector, buf, child);
 
 	// TODO implement
 
 	return 0;
+error:
+    return -1;
 }

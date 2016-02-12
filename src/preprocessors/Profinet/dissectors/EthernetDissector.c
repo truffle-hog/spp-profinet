@@ -9,12 +9,15 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include "ProtocolTypes.h"
+
 #include "Dissector-int.h"
 #include "Dissector.h"
 #include "ProtocolTree.h"
 #include "ProtocolTree-int.h"
 
 #include "Buffy.h"
+#include "Buffy-int.h"
 
 #include "dbg.h"
 
@@ -93,31 +96,38 @@ EthernetDissector_free(Dissector_t *dissector) {
 int
 EthernetDissector_dissect(Dissector_t *this, Buffy_t *buf, ProtocolTree_t *tree) {
 
-    char *key = "destination_mac_address";
-
 	struct Value dest;
 	dest.length = 64;
 	dest.val.lval = 0;
 	dest.type = is_long;
 
-    memcpy(dest.val.lval, buf->p->eh->ether_dst, 6);
+    memcpy(&dest.val.lval, buf->p->eh->ether_dst, 6);
     dest.val.lval = (htobe64(dest.val.lval)) >> 16;
 
-	ProtocolItem_t *destItem = tree->ops->ProtocolTree_branch(tree, key, dest);
+	tree->ops->ProtocolTree_branch(tree, "ether_dest", dest);
 
     printf("dest: %016lX\n", (uint64_t) dest.val.lval);
 
-	struct Value sourceVal;
-	sourceVal.length = 64;
-	sourceVal.val.ival = 20;
-	sourceVal.type = is_int;
+	struct Value source;
+	source.length = 64;
+	source.val.lval = 0;
+	source.type = is_long;
 
-    ProtocolItem_t *source = tree->ops->ProtocolTree_branch(tree, "ether_source", sourceVal);
-    struct FieldInfo *srcInfo = malloc(sizeof(struct FieldInfo));
+	memcpy(&source.val.lval, buf->p->eh->ether_src, 6);
+	source.val.lval = (htobe64(source.val.lval)) >> 16;	
 
+    tree->ops->ProtocolTree_branch(tree, "ether_source", source);
 
+	printf("src: %016lX\n", (uint64_t) dest.val.lval);
 
+	struct Value ethertype;
+	ethertype.length = 16;
+	ethertype.val.ival = buf->p->eh->ether_type;
+	ethertype.type = is_int;
 
+	tree->ops->ProtocolTree_branch(tree, "ether_type", ethertype);
+
+	printf("type: %016X\n", (uint16_t) ethertype.val.ival);
     // memcpy(&truffle.eh.sourceMacAddress, p->eh->ether_src, 6);
     // memcpy(&truffle.eh.destMacAddress, p->eh->ether_dst, 6);
     //

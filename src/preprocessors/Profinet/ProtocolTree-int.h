@@ -49,20 +49,20 @@ struct ProtocolTree_ops {
      *
      * @return the value of this Node
      */
-    struct Value (*ProtocolTree_getValue)(struct ProtocolNode *this);
+    struct Value (*ProtocolTree_getValue)(const struct ProtocolNode *this);
 
     /**
      * @brief Returns this Tree's root Node that this ProtocolNode belongs to.
      * @param this the calling ProtocolNode
      *
      */
-    struct ProtocolNode *(*ProtocolTree_getRoot)(struct ProtocolNode *this);
+    struct ProtocolNode *(*ProtocolTree_getRoot)(const struct ProtocolNode *this);
 
     /**
      * @brief Returns this node's parent.
      * @return the parent of this node
      */
-    struct ProtocolNode *(*ProtocolTree_getParent)(struct ProtocolNode *this);
+    struct ProtocolNode *(*ProtocolTree_getParent)(const struct ProtocolNode *this);
 
     /**
      * @brief Returns the child with the specified index of this ProtocolNode.
@@ -72,7 +72,7 @@ struct ProtocolTree_ops {
      *
      * @return the child at the specified index
      */
-    struct ProtocolNode *(*ProtocolTree_getChild)(struct ProtocolNode *this, int index);
+    struct ProtocolNode *(*ProtocolTree_getChild)(const struct ProtocolNode *this, int index);
 
     /**
      * @brief Retrieves the Node with the specified key in this node's tree.
@@ -82,7 +82,7 @@ struct ProtocolTree_ops {
      *
      * @return the ProtocolNode with the given key in this node's tree
      */
-    struct ProtocolNode *(*ProtocolTree_getNode)(struct ProtocolNode *this, char *key);
+    struct ProtocolNode *(*ProtocolTree_getNode)(const struct ProtocolNode *this, char *key);
 
 };
 

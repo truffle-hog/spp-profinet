@@ -14,6 +14,7 @@ Truffle_t *Truffle_new(const struct ProtocolNode *protoTree) {
 
 	ProtocolItem_t *etherDestNode = protoTree->ops->ProtocolTree_getNode(protoTree, "ether_dest");
 
+	printf("%ld\n", etherDestNode->value.val.lval);
 	//truffle->eh.sourceMacAddress = protoTree->ops->ProtocolTree_getNode(protoTree, "ether_source")->value.val.lval;
 	// truffle->eh.destMacAddress = protoTree->ops->ProtocolTree_getNode(protoTree,"ether_dest")->value.val.lval;
 	//truffle->eh.etherType = protoTree->ops->ProtocolTree_getNode(protoTree,"ether_type")->value.val.ival;

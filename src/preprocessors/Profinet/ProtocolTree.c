@@ -107,6 +107,8 @@ struct ProtocolNode *ProtocolTree_branch(struct ProtocolNode *this, char *key, s
 	this->childCount++;
 	this->treeData->size++;
 
+	return child;
+
 error:
 	return NULL;
 }
@@ -124,7 +126,7 @@ struct Value ProtocolTree_setValue(struct ProtocolNode *this, struct Value value
 /**
  * @see ProtocolTree_setValue
  */
-struct Value ProtocolTree_getValue(struct ProtocolNode *this) {
+struct Value ProtocolTree_getValue(const struct ProtocolNode *this) {
 
 	return this->value;
 }
@@ -134,7 +136,7 @@ struct Value ProtocolTree_getValue(struct ProtocolNode *this) {
 /**
  * @see ProtocolTree_getRoot
  */
-struct ProtocolNode *ProtocolTree_getRoot(struct ProtocolNode *this) {
+struct ProtocolNode *ProtocolTree_getRoot(const struct ProtocolNode *this) {
 
 	return this->treeData->root;
 
@@ -143,7 +145,7 @@ struct ProtocolNode *ProtocolTree_getRoot(struct ProtocolNode *this) {
 /**
  * @see ProtocolTree_getParent
  */
-struct ProtocolNode *ProtocolTree_getParent(struct ProtocolNode *this) {
+struct ProtocolNode *ProtocolTree_getParent(const struct ProtocolNode *this) {
 
 	return this->parent;
 }
@@ -151,7 +153,7 @@ struct ProtocolNode *ProtocolTree_getParent(struct ProtocolNode *this) {
 /**
  * @see ProtocolTree_getChild
  */
-struct ProtocolNode *ProtocolTree_getChild(struct ProtocolNode *this, int index) {
+struct ProtocolNode *ProtocolTree_getChild(const struct ProtocolNode *this, int index) {
 
 	return this->children[index];
 }
@@ -159,13 +161,13 @@ struct ProtocolNode *ProtocolTree_getChild(struct ProtocolNode *this, int index)
 /**
  * @see ProtocolTree_getNode
  */
-struct ProtocolNode *ProtocolTree_getNode(struct ProtocolNode *this, char *key) {
+struct ProtocolNode *ProtocolTree_getNode(const struct ProtocolNode *this, char *key) {
 
 	int i = 0;
 	// TODO change linear search to real hasing ;)
 	for (i = 0; i < this->treeData->size; i++) {
 
-		printf("%s\n", this->treeData->keys[i]);
+//		printf("%s\n", this->treeData->keys[i]);
 
 		if (!strcmp(this->treeData->keys[i], key)) {
 			return this->treeData->mappedNodePointers[i];

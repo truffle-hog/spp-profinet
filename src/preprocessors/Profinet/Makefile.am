@@ -17,6 +17,7 @@ Truffle.c Truffle.h
 libprofinet_a_LIBADD = \
 Dissector.o \
 dissectors/PacketDissector.o \
+dissectors/EthernetDissector.o \
 Sender.o \
 Buffy.o \
 ProtocolTree.o \
