@@ -48,7 +48,7 @@ static const struct Dissector_ops PNRTDissectorOverride_ops = {
   PNRTDissector_dissect
 };
 
-void initializeSubDissectors(Dissector_t *this) {
+void PNRTDissector_initializeSubDissectors(Dissector_t *this) {
 
     //Dissector_t *pnrtaDissector = PNRTADissector_new();
 
@@ -73,7 +73,7 @@ PNRTDissector_new() {
 
     pnrtDissector->dissector = *disser;
 
-    initializeSubDissectors((Dissector_t*) pnrtDissector);
+    PNRTDissector_initializeSubDissectors((Dissector_t*) pnrtDissector);
 
     return (Dissector_t*) pnrtDissector;
 
@@ -101,13 +101,9 @@ void PNRTDissector_free(Dissector_t *dissector) {
  */
 int PNRTDissector_dissect(Dissector_t *this, Buffy_t *buf, ProtocolTree_t *tree) {
 
-	(void) this;
-	(void) buf;
-	(void) tree;
+    //uint16_t frameID = buf->ops->Buffy_getBits16(buf, 0, 16, 0);
 
-    uint16_t frameID = buf->ops->Buffy_getBits16(buf, 0, 16, 0);
-
-	printf("dissecting very bigtime\n");
+	debug("dissecting very bigtime");
 	// TODO implement
 
 	return 0;

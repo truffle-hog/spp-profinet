@@ -48,7 +48,7 @@ static const struct Dissector_ops PacketDissectorOverride_ops = {
     PacketDissector_dissect
 };
 
-void initializeSubDissectors(Dissector_t *this) {
+void PacketDissector_initializeSubDissectors(Dissector_t *this) {
 
     Dissector_t *ethernetDissector = EthernetDissector_new();
 
@@ -67,7 +67,7 @@ Dissector_t *PacketDissector_new() {
     packetDissector->dissector = *Dissector_new(&PacketDissectorOverride_ops);
     check_mem(&packetDissector->dissector);
 
-    initializeSubDissectors(&packetDissector->dissector);
+    PacketDissector_initializeSubDissectors(&packetDissector->dissector);
 
     return (Dissector_t*) packetDissector;
 
@@ -95,43 +95,33 @@ PacketDissector_free(Dissector_t *dissector) {
 int
 PacketDissector_dissect(Dissector_t *this, Buffy_t *buf, struct ProtocolNode *node) {
 
-	printf("packetDissector dissecting...\n");
-	char *key;
-
 	// TODO create a proper EMPTY value in the header that can be used as empty labels
 	struct Value NONE;
-	NONE.val.cval = '0';
+	NONE.val.character = '0';
 
     struct Value frameLength;
-	frameLength.val.ival = 0;
+	frameLength.val.int32 = 0;
 	frameLength.length = 32;
-	frameLength.type = is_int;
+	frameLength.type = is_int32;
 
-	node->ops->ProtocolTree_branch(node, "frame_length", frameLength);
+	check_mem(node->ops->ProtocolTree_branch(node, "frame_length", frameLength));
 
     struct Value timeDelta;
-    timeDelta.val.fval = 0.00023;
+    timeDelta.val.float32 = 0.00023;
 	timeDelta.length = 32;
 	timeDelta.type = is_float;
 
-	node->ops->ProtocolTree_branch(node, "frame_time_delta", timeDelta);
-
-    struct Value etherDest;
-    etherDest.val.lval = 0;
-	etherDest.length = 64;
-	etherDest.type = is_long;
-
-    node->ops->ProtocolTree_branch(node, "ether_dest", etherDest);
+	check_mem(node->ops->ProtocolTree_branch(node, "frame_time_delta", timeDelta));
 
     Dissector_t *nextDissector;
 
 	// TODO check for the next package to be used
   //  if (isEthernet(buf)) {
     nextDissector = this->ops->Dissector_getSub(this, ETHERNET);
-    key = "ethernet";
+    check(nextDissector != NULL, "there has to be a next dissector");
   //  }
 
-    ProtocolItem_t *child = node->ops->ProtocolTree_branch(node, key, NONE);
+    ProtocolItem_t *child = node->ops->ProtocolTree_branch(node, "ethernet", NONE);
     check_mem(child);
 
     nextDissector->ops->Dissector_dissect(nextDissector, buf, child);

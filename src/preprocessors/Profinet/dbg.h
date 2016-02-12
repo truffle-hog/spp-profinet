@@ -7,11 +7,11 @@
 #include <errno.h>
 #include <string.h>
 
-#ifdef NDEBUG
-#define debug(M, ...)
-#else
+//#ifdef NDEBUG
+//#define debug(M, ...)
+//#else
 #define debug(M, ...) fprintf(stderr, "Profinet Plugin DEBUG %s:%d: " M "\n", __FILE__, __LINE__, ##__VA_ARGS__)
-#endif
+//#endif
 
 #define clean_errno() (errno == 0 ? "None" : strerror(errno))
 
@@ -30,4 +30,3 @@
 #define check_debug(A, M, ...) if(!(A)) { debug(M, ##__VA_ARGS__); errno=0; goto error; }
 
 #endif
-

@@ -43,6 +43,12 @@ typedef struct Dissector Dissector_t;
  */
 void Dissector_free(Dissector_t *dissector);
 
+// /**
+//  * @brief Function that is called internally on initializations of the subdissectors.
+//  * This Function should never be called from outside the dissector itself
+//  */
+// void Dissector_initializeSubDissectors(Dissector_t *this);
+
 /**
  * @brief Registers a given sub dissector on this dissector.
  *

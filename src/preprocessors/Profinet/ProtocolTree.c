@@ -89,6 +89,9 @@ struct ProtocolNode *ProtocolTree_branch(struct ProtocolNode *this, char *key, s
 	child->key = key;
 	child->value = value;
 	child->ops = this->ops;
+	child->childCount = 0;
+	child->parent = this;
+	child->children = NULL;
 
 	// TODO implement dynamic growing
 	this->children = realloc(this->children, (this->childCount + 1) * sizeof(void*));

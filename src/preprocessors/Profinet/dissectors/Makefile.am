@@ -5,6 +5,7 @@ noinst_LIBRARIES = libprofinet_dissectors.a
 
 libprofinet_dissectors_a_SOURCES = \
 PacketDissector.c PacketDissector.h \
-EthernetDissector.c EthernetDissector.h
+EthernetDissector.c EthernetDissector.h \
+PNRTDissector.c PNRTDissector.h
 
 INCLUDES = @INCLUDES@
