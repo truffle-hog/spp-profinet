@@ -27,6 +27,24 @@
  *
  */
 
+/** Snort includes **/
+
+
+
+/** Profinet includes **/
+#include "Profinet/DissectorRegister.h"
+#include "Profinet/DissectorRegister-int.h"
+
+#include "Profinet/Dissector.h"
+#include "Profinet/Dissector-int.h"
+#include "Profinet/PNRTDissector.h"
+
+#include "Profinet/Sender.h"
+#include "Profinet/Sender-int.h"
+#include "Profinet/UnixSocketSender.h"
+
+
+
  /** The top level dissector register. **/
  DissectorRegister_t *tlRegister;
  /** The ipc sender. **/

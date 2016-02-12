@@ -1,3 +1,6 @@
+#ifndef __SENDER_H__
+#define __SENDER_H__
+
 /**
  * @file
  * @brief The sender interface.
@@ -33,3 +36,5 @@ int Sender_free(Sender_t *sender);
  * @return 0 if the sending was successful, -1 if no client is detected for receiving, or on other errors.
  */
 int Sender_send(Sender_t *this, Truffle_t *truffle);
+
+#endif
