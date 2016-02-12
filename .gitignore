@@ -4,6 +4,11 @@
 ######## But not these files... #########
 !.gitignore
 
+!profi_doc
+
+!LICENSE
+!README.md
+
 # Plugin specific
 !src/preprocessors/Profinet
 !src/preprocessors/Profinet/*
