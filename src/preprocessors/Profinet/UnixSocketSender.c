@@ -17,9 +17,7 @@
 #include <pwd.h>
 #include <pthread.h> // threads
 
-
 #include "dbg.h"
-
 
 #include "Sender.h"
 #include "Sender-int.h"
@@ -110,7 +108,7 @@ void * await_request( void* args) {
 		check(n >= 0, "error reading from socket");
 
 	//	DEBUG_WRAP(DebugMessage(DEBUG_PLUGIN, "Received message: %s\n",buffer));
-		
+
 		// TODO instead of toggling request a specific ID from the client
 		// something secure
 
@@ -141,7 +139,7 @@ UnixSocketSender_new() {
 	pthread_t thread;
 	int bind_check, len;
 
-	// open the unix socket, as sock_stream
+	// open the unix socket, as sock_seqpacket
 	unixSocketSender->socketData.server_sockfd = socket(AF_UNIX, SOCK_SEQPACKET, 0);
 	check(unixSocketSender->socketData.server_sockfd != -1, "cannot open socket");
 
@@ -197,7 +195,7 @@ int UnixSocketSender_send(Sender_t *this, Truffle_t *truffle) {
 	if (unixSocketSender->socketData.client_detected) {
 
 		n = write(unixSocketSender->socketData.client_sockfd, (void*) truffle, sizeof(Truffle_t));
-		
+
 		check (n >= 0, "error writing to socket");
 
 		return n;

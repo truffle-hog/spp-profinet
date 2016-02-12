@@ -8,6 +8,8 @@
 
 #include <stdint.h>
 
+enum Encoding;
+
 struct Buffy;
 typedef struct Buffy Buffy_t;
 
@@ -23,48 +25,48 @@ void Buffy_free(Buffy_t *buffy);
  * @brief Get 1 - 8 bits returned in a uint8.
  *
  * @param this the calling buffer
- * @param bit_offset the offset for from the currenty buffer position
+ * @param bitOffset the offset for from the currenty buffer position
  * @param the number of bits to be read
  *
  * @return unsigned 8 bit value representing the specified bit range
  */
-uint8_t Buffy_get_bits8(Buffy_t *this, unsigned int bit_offset,
-    const int no_of_bits);
+uint8_t Buffy_getBits8(Buffy_t *this, unsigned int bitOffset,
+    const int noOfBits);
 
 /**
  * @brief Get 1 - 16 bits returned in a uint16.
  *
  * @param this the calling buffer
- * @param bit_offset the offset for from the currenty buffer position
+ * @param bitOffset the offset for from the currenty buffer position
  * @param the number of bits to be read
  *
  * @return unsigned 16 bit value representing the specified bit range
  */
-uint16_t Buffy_get_bits16(Buffy_t *this, unsigned int bit_offset,
-    const int no_of_bits, const unsigned int encoding);
+uint16_t Buffy_getBits16(Buffy_t *this, unsigned int bitOffset,
+    const int noOfBits, const enum Encoding encoding);
 
 /**
  * @brief Get 1 - 32 bits returned in a uint32.
  *
  * @param this the calling buffer
- * @param bit_offset the offset for from the currenty buffer position
+ * @param bitOffset the offset for from the currenty buffer position
  * @param the number of bits to be read
  *
  * @return unsigned 32 bit value representing the specified bit range
  */
-uint32_t Buffy_get_bits32(Buffy_t *this, unsigned int bit_offset,
-    const int no_of_bits, const unsigned int encoding);
+uint32_t Buffy_getBits32(Buffy_t *this, unsigned int bitOffset,
+    const int noOfBits, const enum Encoding encoding);
 
 /**
  * @brief Get 1 - 64 bits returned in a uint64.
  *
  * @param this the calling buffer
- * @param bit_offset the offset for from the currenty buffer position
+ * @param bitOffset the offset for from the currenty buffer position
  * @param the number of bits to be read
  *
  * @return unsigned 64 bit value representing the specified bit range
  */
-uint64_t Buffy_get_bits64(Buffy_t *this, unsigned int bit_offset,
-    const int no_of_bits, const unsigned int encoding);
+uint64_t Buffy_getBits64(Buffy_t *this, unsigned int bitOffset,
+    const int noOfBits, const enum Encoding encoding);
 
 #endif

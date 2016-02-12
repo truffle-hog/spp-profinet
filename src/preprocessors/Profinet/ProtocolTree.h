@@ -7,66 +7,81 @@
 #define __PROTOCOL_TREE_H__
 
 #include <stdint.h>
-#include "FieldInfos.h"
 
-
+/** The value to be inserted for a ProtocolNode. **/
+struct Value;
 /** A protocol tree element. */
 typedef struct ProtocolNode ProtocolTree_t;
 /** A protocol item element. */
 typedef struct ProtocolNode ProtocolItem_t;
 
-/** @brief Info that can be inserte into a protocol tree as new branch. **/
-struct HeaderInfo {
-
-  /** @brief The caption of this info field. **/
-  char caption[256];
-  /** @brief Interesting bits that can be set. **/
-  uint64_t bitmask;
-  /** @brief Infofield, can contain any information in char format for specific size. **/
-  char infofield[256];
-  /** @brief A value that can be put for information. **/
-  long long value;
-  /** @brief Specifies the type of information. **/
-  int type;
-
-};
-
-
 /**
- * @brief Frees the given ProtocolTree from memory.
+ * @brief Frees the given ProtocolNode and all of its ancestors in memory.
  *
- * @param proto the ProtocolTree to be freed
+ * @param proto the ProtocolNode to be freed
  */
-void ProtocolTree_free(ProtocolTree_t *proto);
+void ProtocolTree_free(struct ProtocolNode *proto);
 
 /**
- * @brief Creates a new branch from the given ProtocolNode (root Tree or Item) and returns a pointer to the newly created ProtocolItem.
+ * @brief Creates a new branch from the given ProtocolNode and returns a pointer to the newly created ProtocolNode.
  *
  * @param this the calling ProtocolNode
  *
- * @return A pointer to a Subtree with the newly created branch as its root pointer.
+ * @return A pointer to the newly created Node.
  */
-ProtocolItem_t *ProtocolTree_branch(struct ProtocolNode *this);
+struct ProtocolNode *ProtocolTree_branch(struct ProtocolNode *this, char *key, struct Value);
 
 /**
  * @brief Sets the given field information for this protocol item.
  *
- * @param this the calling ProtocolItem
- * @param fieldInfo the info to be set for this item
+ * @param this the calling ProtocolNode
+ * @param value the value to be inserted for this Node
+ *
+ * @return the old value of this Node if there is one, NULL otherwise.
  */
-ProtocolItem_t *ProtocolItem_setFieldInfo(ProtocolItem_t *this, struct FieldInfo *fieldInfo);
-
+struct Value ProtocolTree_setValue(struct ProtocolNode *this, struct Value value);
 
 /**
- * @brief Searches and returns the branch with the given caption.
+ * @brief Returns the value of this Node.
  *
- * @param this the calling ProtocolTree
+ * @param this the calling ProtocolNode
+ *
+ * @return the value of this Node
+ */
+struct Value ProtocolTree_getValue(struct ProtocolNode *this);
+
+/**
+ * @brief Returns this Tree's root Node that this ProtocolNode belongs to.
+ * @param this the calling ProtocolNode
+ *
+ */
+struct ProtocolNode *ProtocolTree_getRoot(struct ProtocolNode *this);
+
+/**
+ * @brief Returns this node's parent.
+ * @return the parent of this node
+ */
+struct ProtocolNode *ProtocolTree_getParent(struct ProtocolNode *this);
+
+/**
+ * @brief Returns the child with the specified index of this ProtocolNode.
+ *
+ * @param this the calling ProtocolTree_getValue
+ * @param index the index of the child to be returned
+ *
+ * @return the child at the specified index
+ */
+struct ProtocolNode *ProtocolTree_getChild(struct ProtocolNode *this, int index);
+
+/**
+ * @brief Retrieves the Node with the specified key in this node's tree.
+ *
+ * @param this the calling ProtocolNode
  * @param key the key to be searched for
  *
- * @return the ProtocolTree starting at the found branch, NULL if there is no such
- *          branch.
+ * @return the ProtocolNode with the given key in this node's tree
  */
-ProtocolTree_t *ProtocolTree_findBranch(ProtocolTree_t *this, char *key);
+struct ProtocolNode *ProtocolTree_getNode(struct ProtocolNode *this, char *key);
 
 
 #endif

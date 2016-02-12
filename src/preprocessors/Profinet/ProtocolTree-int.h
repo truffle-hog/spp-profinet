@@ -10,110 +10,125 @@
 
 #include "ProtocolTree.h"
 
-struct TreeData;
-
-struct ProtocolNode;
-
-struct FieldInfo;
-
 /**
  * @brief The operations that can be called by a ProtocolTree.
  *
  */
 struct ProtocolTree_ops {
 
+    /**
+     * @brief Frees the given ProtocolNode and all of its ancestors in memory.
+     *
+     * @param proto the ProtocolNode to be freed
+     */
+    void (*ProtocolTree_free)(struct ProtocolNode *proto);
 
-  /**
-   * @brief Frees the given ProtocolTree from memory.
-   *
-   * Freeing the tree with this method will free the whole subtree starting
-   * from the given node. No parent nodes will be freed.
-   *
-   * @param proto the ProtocolTree to be freed
-   */
-  void (*ProtocolTree_free)(ProtocolTree_t *proto);
+    /**
+     * @brief Creates a new branch from the given ProtocolNode and returns a pointer to the newly created ProtocolNode.
+     *
+     * @param this the calling ProtocolNode
+     *
+     * @return A pointer to the newly created Node.
+     */
+    struct ProtocolNode *(*ProtocolTree_branch)(struct ProtocolNode *this, char *key, struct Value value);
 
-  /**
-   * @brief Creates a new branch with the given info field from the current root pointer of this ProtocolTree.
-   *
-   * @param this the calling ProtocolTree
-   * @param info the header info to be inserted for the new subtree
-   *
-   * @return A pointer to a Subtree with the newly created branch as its root pointer.
-   */
-  ProtocolItem_t *(*ProtocolNode_branch)(struct ProtocolNode *this);
+    /**
+     * @brief Sets the given field information for this protocol item.
+     *
+     * @param this the calling ProtocolNode
+     * @param value the value to be inserted for this Node
+     *
+     * @return the old value of this Node if there is one, NULL otherwise.
+     */
+    struct Value (*ProtocolTree_setValue)(struct ProtocolNode *this, struct Value value);
 
-  /**
-   * @brief Searches and returns the branch with the given caption.
-   *
-   * @param this the calling ProtocolTree
-   * @param the caption to be searched for
-   *
-   * @return the ProtocolTree starting at the found branch, NULL if there is no such
-   *          branch.
-   */
-  ProtocolTree_t *(*ProtocolTree_getBranch)(ProtocolTree_t *this, char *caption);
+    /**
+     * @brief Returns the value of this Node.
+     *
+     * @param this the calling ProtocolNode
+     *
+     * @return the value of this Node
+     */
+    struct Value (*ProtocolTree_getValue)(struct ProtocolNode *this);
+
+    /**
+     * @brief Returns this Tree's root Node that this ProtocolNode belongs to.
+     * @param this the calling ProtocolNode
+     *
+     */
+    struct ProtocolNode *(*ProtocolTree_getRoot)(struct ProtocolNode *this);
+
+    /**
+     * @brief Returns this node's parent.
+     * @return the parent of this node
+     */
+    struct ProtocolNode *(*ProtocolTree_getParent)(struct ProtocolNode *this);
+
+    /**
+     * @brief Returns the child with the specified index of this ProtocolNode.
+     *
+     * @param this the calling ProtocolTree_getValue
+     * @param index the index of the child to be returned
+     *
+     * @return the child at the specified index
+     */
+    struct ProtocolNode *(*ProtocolTree_getChild)(struct ProtocolNode *this, int index);
+
+    /**
+     * @brief Retrieves the Node with the specified key in this node's tree.
+     *
+     * @param this the calling ProtocolNode
+     * @param key the key to be searched for
+     *
+     * @return the ProtocolNode with the given key in this node's tree
+     */
+    struct ProtocolNode *(*ProtocolTree_getNode)(struct ProtocolNode *this, char *key);
 
 };
 
-/**
- * @brief Tree structure for building protocol information.
- *
- */
-struct ProtocolTest {
+struct Value {
 
-  /** Whether this protocol Subtree was initialized. **/
-  bool initialized;
-
-  /** The Info field of this Subtree **/
-  struct HeaderInfo *hInfo;
-
-  /** Pointer to the parent subtree **/
-  ProtocolTree_t *parent;
-
-  /** Pointing to the branching protocol trees of this root node **/
-  ProtocolTree_t **branches;
-
-  /** The operations that can be called by a ProtocolTree**/
-  const struct ProtocolTree_ops *ops;
-};
-
-struct value {
-
-    int lengt;
+    /** The length of this value. **/
+    int length;
+    /** The different types this value can be. **/
     enum { is_int, is_long, is_float, is_char } type;
+
+    /** Union of all data types that can be inserted for a Value. **/
     union {
         int ival;
         long lval;
         float fval;
         char cval;
-    } *val;
+    } val;
 };
 
-
-/** every protocol tree has one of these data. each node in the tree points to the same one **/
 struct TreeData {
-//	GHashTable  *interesting_hfids;
-//	boolean     visible;
-//	boolean     fake_protocols;
+
+    /** THE FAKE HASHMAP  ;) **/
+    char **keys;
+    struct ProtocolNode **mappedNodePointers;
+    /** -------------------  **/
+
+    /** The root Node of this ProtocolTree. **/
+    struct ProtocolNode *root;
 
 	/** The number of Nodes in this ProtocolTree. **/
-	int         count;
-//	struct _packet_info *pinfo;
+	int         size;
 };
 
 /** Each proto_tree, proto_item is one of these. */
 struct ProtocolNode {
 
-	struct ProtocolTree_ops *ops;
-	/** The number of sibblings on this ProtocolTree level. **/
-	int sibblingCount;
+	const struct ProtocolTree_ops *ops;
 
 	/** The number of children from this ProtocolNode. **/
 	int childCount;
 
 	/** The unique key identifying this ProtocolNode. **/
 	char *key;
+
+    /** The value this ProtocolNode has. **/
+    struct Value value;
 
 	/** The children of this ProtocolNode. **/
 	struct ProtocolNode **children;
@@ -127,10 +142,7 @@ struct ProtocolNode {
 	/** The parent of this ProtocolNode. **/
 	struct ProtocolNode *parent;
 
-	/** The field info this ProtocolNode has. **/
-	struct FieldInfo  *fieldInfo;
-
-	/** The tree data common for every Node in this nodes tree. **/
+	/** The treeData pointer common for every Node in this tree. **/
 	struct TreeData *treeData;
 
 };
@@ -139,9 +151,9 @@ struct ProtocolNode {
 /**
  * @brief Creates a new ProtocolTree.
  *
- * @return the instantiated Tree
+ * @return the instantiated Node
  */
-ProtocolTree_t *ProtocolTree_new();
+struct ProtocolNode *ProtocolTree_new();
 
 
 #endif

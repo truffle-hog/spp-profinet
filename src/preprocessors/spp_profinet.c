@@ -62,10 +62,7 @@
 
 #include "Dissector.h"
 #include "Dissector-int.h"
-#include "PNRTDissector.h"
-
-#include "DissectorRegister.h"
-#include "DissectorRegister-int.h"
+#include "dissectors/PacketDissector.h"
 
 #include "ProtocolTree.h"
 #include "ProtocolTree-int.h"
@@ -85,27 +82,6 @@
  */
 #include "spp_profinet.h"
 
-#define PROFI_ETHER_TYPE    0x8892
-
-#define FRAME_ID_RT_DCP_REQ	0xfefe
-#define FRAME_ID_RT_DCP_RES	0xfeff
-
-#define FRAME_ID_RT_C1		0xc000 // -> 0xf7ff
-
-typedef struct _ProfiNet
-{
-	uint16_t frameID;
-
-} ProfiNet;
-
-/*
-typdef struct _FrameRtDcpRequest
-{
-
-
-
-}*/
-
 
 /*
  * If you need to instantiate the preprocessor's
@@ -113,9 +89,6 @@ typdef struct _FrameRtDcpRequest
  */
 
 Sender_t *sender;
-
-//DissectorRegister_t *topLevelDissectorRegister;
-
 Dissector_t *packetDissector;
 
 long long n = 0;
@@ -235,28 +208,6 @@ static void ParseProfiNetArgs(char *args)
 }
 */
 
-int PacketIsEtherProfi(Packet *p)
-{
-
-    if (!(p->eh))
-    {
-        return 0;
-    }
-
-    if (ntohs(p->eh->ether_type) != PROFI_ETHER_TYPE)
-    {
-        return 0;
-    }
-
-    return 1;
-
-}
-
-bool IsProfinet(Packet *p)
-{
-	// TODO make the proper testing for profnet packaets
-	return PacketIsEtherProfi(p);
-}
 
 
 
@@ -281,6 +232,7 @@ static void DetectProfiNetPackets(Packet *p, void *context)
 	Buffy_t *buffy = Buffy_new(p);
 
 	packetDissector->ops->Dissector_dissect(packetDissector, buffy, protoTree);
+
 	Truffle_t *truffle = Truffle_new(protoTree);
 
 	if (truffle) {

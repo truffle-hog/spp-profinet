@@ -14,8 +14,8 @@
  */
 static const struct DissectorRegister_ops DissectorRegisterOverride_ops = {
 	0,
-  DissectorRegister_free,
-  DissectorRegister_insert,
+	DissectorRegister_free,
+	DissectorRegister_insert,
 	DissectorRegister_get
 };
 

@@ -12,6 +12,8 @@
 #include "Dissector-int.h"
 #include "Dissector.h"
 #include "ProtocolTree.h"
+#include "ProtocolTree-int.h"
+
 #include "Buffy.h"
 
 #include "dbg.h"
@@ -36,8 +38,8 @@ int EthernetDissector_dissect(Dissector_t *this, Buffy_t *buf, ProtocolTree_t *t
 static const struct Dissector_ops EthernetDissectorOverride_ops = {
 
     sizeof(struct EthernetDissector), /* size */
-    (uint64_t) 0x8892,
-    (uint64_t) 0x8892,
+    ETHERNET,
+    ETHERNET,
     EthernetDissector_free,
     Dissector_registerSub, // TODO can be NULL?
     Dissector_getSub, // TODO can be NULL?
@@ -91,29 +93,26 @@ EthernetDissector_free(Dissector_t *dissector) {
 int
 EthernetDissector_dissect(Dissector_t *this, Buffy_t *buf, ProtocolTree_t *tree) {
 
-    struct FieldInfo *etherInfo = malloc(sizeof(struct FieldInfo));
-    etherInfo->name = "ethernet_header";
+    char *key = "destination_mac_address";
 
-    tree->ops->ProtocolTree_setFieldInfo(tree, etherInfo);
+	struct Value dest;
+	dest.length = 64;
+	dest.val.lval = 0;
+	dest.type = is_long;
 
-    ProtocolItem_t *destBranch = tree->ops->ProtocolTree_branch(tree);
-    struct FieldInfo *destInfo = malloc(sizeof(struct FieldInfo));
-    destInfo->headerType = ETHERNET;
-    destInfo->key = "destination_mac_address";
-    destInfo->name = "";
-    destInfo->data = (void*) malloc(sizeof(uint64_t));
-    destInfo->dataType = UINT;
-    destInfo->length = 64;
+    memcpy(dest.val.lval, buf->p->eh->ether_dst, 6);
+    dest.val.lval = (htobe64(dest.val.lval)) >> 16;
 
-    memcpy(destInfo->data, buf->p->eh->ether_dst, 6);
-    destInfo->data = (htobe64(destInfo->data)) >> 16;
+	ProtocolItem_t *destItem = tree->ops->ProtocolTree_branch(tree, key, dest);
 
-    destBranch->ops->ProtocolTree_setFieldInfo(destBranch);
+    printf("dest: %016lX\n", (uint64_t) dest.val.lval);
 
-    printf("dest: %016lX\n", (uint64_t) *destInfo->data);
+	struct Value sourceVal;
+	sourceVal.length = 64;
+	sourceVal.val.ival = 20;
+	sourceVal.type = is_int;
 
-
-    ProtocolItem_t *source = tree->ops->ProtocolTree_branch(tree);
+    ProtocolItem_t *source = tree->ops->ProtocolTree_branch(tree, "ether_source", sourceVal);
     struct FieldInfo *srcInfo = malloc(sizeof(struct FieldInfo));
 
 

@@ -11,8 +11,12 @@
 
 #include "Dissector-int.h"
 #include "Dissector.h"
+//#include "PNRTADissector.h"
+
 #include "ProtocolTree.h"
 #include "Buffy.h"
+#include "Buffy-int.h"
+
 
 #include "dbg.h"
 
@@ -36,8 +40,8 @@ int PNRTDissector_dissect(Dissector_t *this, Buffy_t *buf, ProtocolTree_t *tree)
 static const struct Dissector_ops PNRTDissectorOverride_ops = {
 
   sizeof(struct PNRTDissector), /* size */
-  (uint64_t) 0x8892,
-  (uint64_t) 0x8892,
+  0x8892,
+  0x8892,
   PNRTDissector_free,
   Dissector_registerSub,
   Dissector_getSub,
@@ -46,9 +50,9 @@ static const struct Dissector_ops PNRTDissectorOverride_ops = {
 
 void initializeSubDissectors(Dissector_t *this) {
 
-    Dissector_t *pnrtaDissector = PNRTADissector_new();
+    //Dissector_t *pnrtaDissector = PNRTADissector_new();
 
-    this->ops->Dissector_registerSub(this, pnrtaDissector);
+    //this->ops->Dissector_registerSub(this, pnrtaDissector);
 
 }
 
@@ -101,7 +105,7 @@ int PNRTDissector_dissect(Dissector_t *this, Buffy_t *buf, ProtocolTree_t *tree)
 	(void) buf;
 	(void) tree;
 
-    uint16_t frameID = buf->Buffy_get_bits16(buf, 0, 16, 0);
+    uint16_t frameID = buf->ops->Buffy_getBits16(buf, 0, 16, 0);
 
 	printf("dissecting very bigtime\n");
 	// TODO implement

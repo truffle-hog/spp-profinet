@@ -106,7 +106,7 @@ struct Dissector {
   /** The dissectors operations. **/
   const struct Dissector_ops *ops;
   /** The dissector this dissector has been called from. **/
-  Dissector_t *calling;
+  struct Dissector *calling;
 };
 
 /**

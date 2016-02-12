@@ -7,8 +7,7 @@
 /**
  * @see Sender_new
  */
-Sender_t *
-UnixSocketSender_new();
+Sender_t *UnixSocketSender_new();
 
 /**
  * @see Sender_free

@@ -1,23 +1,23 @@
 /**
  * @file
  * @brief PacketDissector implementation.
- *
- *
  */
 #include <stdlib.h>
 #include <stdio.h>
 
 #include "Dissector-int.h"
-#include "Dissector.h"
+#include "PacketDissector.h"
+//#include "EthernetDissector.h"
+
 #include "ProtocolTree.h"
 #include "ProtocolTree-int.h"
+
 #include "Buffy.h"
-
-#include "FieldInfos.h"
-
-#include "EthernetDissector.h"
+#include "Buffy-int.h"
 
 #include "dbg.h"
+
+enum ProtocolType { ETHERNET = 0 };
 
 /**
  * @brief The Dissector for Profi Real Time IO 0x8892.
@@ -49,29 +49,25 @@ static const struct Dissector_ops PacketDissectorOverride_ops = {
 
 void initializeSubDissectors(Dissector_t *this) {
 
-    Dissector_t *ethernetDissector = EthernetDissector_new();
-
-    this->ops->Dissector_registerSub(this, ethernetDissector);
+	(void) this;
+    //Dissector_t *ethernetDissector = EthernetDissector_new();
+    //
+    // this->ops->Dissector_registerSub(this, ethernetDissector);
 }
 
 /**
  * @see Dissector_new
  */
-Dissector_t *
-PacketDissector_new() {
+Dissector_t *PacketDissector_new() {
 
 
-	struct PacketDissector *packetDissector;
-
-    packetDissector = malloc(sizeof(struct PacketDissector));
+	struct PacketDissector *packetDissector = malloc(sizeof(struct PacketDissector));;
     check_mem(packetDissector);
 
-    Dissector_t *disser = Dissector_new(&PacketDissectorOverride_ops);
-    check_mem(disser);
+    packetDissector->dissector = *Dissector_new(&PacketDissectorOverride_ops);
+    check_mem(&packetDissector->dissector);
 
-    packetDissector->dissector = *disser;
-
-    initializeSubDissectors((Dissector_t*) packetDissector);
+    initializeSubDissectors(&packetDissector->dissector);
 
     return (Dissector_t*) packetDissector;
 
@@ -90,8 +86,6 @@ PacketDissector_free(Dissector_t *dissector) {
 
 	free(this);
 //	this->dissector.ops->Dissector_free(&this->dissector);
-
-	(void) dissector;
 	// TODO implement
 }
 
@@ -99,22 +93,47 @@ PacketDissector_free(Dissector_t *dissector) {
  * @see Dissector_dissect
  */
 int
-PacketDissector_dissect(Dissector_t *this, Buffy_t *buf, ProtocolTree_t *tree) {
+PacketDissector_dissect(Dissector_t *this, Buffy_t *buf, struct ProtocolNode *node) {
 
+	printf("packetDissector dissecting...\n");
+	char *key;
 
-	struct FieldInfo *frameInfo = malloc(sizeof(struct FieldInfo));
-	frameInfo->key = "frame_info";
-	frameInfo->name = "Frame Information";	
-	frameInfo->headerType = FRAME;	
+	// TODO create a proper EMPTY value in the header that can be used as empty labels
+	struct Value NONE;
+	NONE.val.cval = '2';
 
-    tree->ops->ProtocolTree_setFieldInfo(tree, frameInfo);
+    struct Value frameLength;
+	frameLength.val.ival = 0;
+	frameLength.length = 32;
+	frameLength.type = is_int;
 
-    Dissector_t *nextDissector = this->ops->Dissector_getSub(this, frameInfo->headerType);
-    ProtocolItem_t *child = tree->ops->ProtocolNode_branch(tree);
+	node->ops->ProtocolTree_branch(node, "frame_length", frameLength);
 
-    nextDissector->ops->Dissector_dissect(nextDissector, buf, child);
+    struct Value timeDelta;
+    timeDelta.val.fval = 0.00023;
+	timeDelta.length = 32;
+	timeDelta.type = is_float;
 
-	printf("dissecting very bigtime\n");
+	node->ops->ProtocolTree_branch(node, "frame_time_delta", timeDelta);
+
+    struct Value etherDest;
+    timeDelta.val.lval = 0x0003323;
+	timeDelta.length = 64;
+	timeDelta.type = is_long;
+
+    node->ops->ProtocolTree_branch(node, "ether_dest", etherDest);
+
+    Dissector_t *nextDissector;
+
+	// TODO check for the next package to be used
+  //  if (isEthernet(buf)) {
+//        nextDissector = this->ops->Dissector_getSub(this, ETHERNET);
+//        key = "ethernet";
+  //  }
+
+//    ProtocolItem_t *child = node->ops->ProtocolTree_branch(node, key, NONE);
+//    nextDissector->ops->Dissector_dissect(nextDissector, buf, child);
+
 	// TODO implement
 
 	return 0;

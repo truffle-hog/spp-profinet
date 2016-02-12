@@ -7,15 +7,19 @@ SUBDIRS = dissectors
 
 libprofinet_a_SOURCES = \
 Dissector.c Dissector.h \
+DissectorRegister.c DissectorRegister.h \
 Sender.c Sender.h \
+Buffy.c Buffy.h \
+ProtocolTree.c ProtocolTree.h \
 UnixSocketSender.c UnixSocketSender.h \
-DissectorRegister.c DissectorRegister.h
+Truffle.c Truffle.h
 
 libprofinet_a_LIBADD = \
 Dissector.o \
-dissectors/PNRTDissector.o \
+dissectors/PacketDissector.o \
 Sender.o \
-UnixSocketSender.o \
-DissectorRegister.o
+Buffy.o \
+ProtocolTree.o \
+UnixSocketSender.o
 
 INCLUDES = @INCLUDES@

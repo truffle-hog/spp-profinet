@@ -10,7 +10,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "Dissector-int.h"
 #include "Dissector.h"
 #include "ProtocolTree.h"
 #include "Buffy.h"

@@ -55,6 +55,6 @@ struct Truffle {
 };
 typedef struct Truffle Truffle_t;
 
-Truffle_t *Truffle_new(const ProtocolTree_t *protoTree);
+Truffle_t *Truffle_new(const struct ProtocolNode *protoTree);
 
 #endif

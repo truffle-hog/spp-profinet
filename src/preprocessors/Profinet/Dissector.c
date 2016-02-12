@@ -19,8 +19,9 @@
 #include "ProtocolTree.h"
 #include "Buffy.h"
 
-#include "Dissector-int.h"
+
 #include "Dissector.h"
+#include "Dissector-int.h"
 
 #include "DissectorRegister-int.h"
 #include "DissectorRegister.h"

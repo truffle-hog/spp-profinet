@@ -21,16 +21,14 @@ typedef struct Sender Sender_t;
 Sender_t * Sender_new(const struct Sender_ops *ops) {
 
 	Sender_t *sender = malloc(sizeof(Sender_t));
-
 	check_mem(sender);
-
 
 	sender->ops = ops;
 
-	return sender;	
+	return sender;
 
 error:
-	return NULL;	
+	return NULL;
 }
 
 int Sender_free(Sender_t *sender) {
