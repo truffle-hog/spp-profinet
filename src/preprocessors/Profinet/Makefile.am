@@ -3,11 +3,9 @@ AUTOMAKE_OPTIONS=foreign no-dependencies
 
 noinst_LIBRARIES = libprofinet.a
 
-SUBDIRS = dissectors
+SUBDIRS = dissect
 
 libprofinet_a_SOURCES = \
-Dissector.c Dissector.h \
-DissectorRegister.c DissectorRegister.h \
 Sender.c Sender.h \
 Buffy.c Buffy.h \
 ProtocolTree.c ProtocolTree.h \
@@ -15,10 +13,11 @@ UnixSocketSender.c UnixSocketSender.h \
 Truffle.c Truffle.h
 
 libprofinet_a_LIBADD = \
-Dissector.o \
-dissectors/PacketDissector.o \
-dissectors/EthernetDissector.o \
-dissectors/PNRTDissector.o \
+dissect/Dissector.o \
+dissect/DissectorRegister.o \
+dissect/PacketDissector.o \
+dissect/EthernetDissector.o \
+dissect/PNRTDissector.o \
 Sender.o \
 Buffy.o \
 ProtocolTree.o \

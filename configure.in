@@ -76,7 +76,7 @@ case "$host" in
   *-hpux10*|*-hpux11*)
     AC_DEFINE([HPUX],[1],[Define if HP-UX 10 or 11])
     if test "x$ac_cv_c_bigendian" = "xno"; then
-        # exception to AC_C_BIGENDIAN and test "x$ac_cv_c_bigendian" = "xyes" above 
+        # exception to AC_C_BIGENDIAN and test "x$ac_cv_c_bigendian" = "xyes" above
         # causes the need for next three lines.
         AC_MSG_NOTICE([bigendian byte-order not detected but asserted for $host])
         AC_DEFINE([WORDS_BIGENDIAN],[1],[Define if words are big endian])
@@ -732,7 +732,7 @@ fi
 if test "x$ac_cv_func_daq_dp_add_dc" = "xyes"; then
 
     AC_CHECK_MEMBER([struct _DAQ_DP_key_t.sa.src_ip4],[],[DAQ_C99_STRUCT="no"],[#include <daq_common.h>])
-    
+
     if test "x$DAQ_C99_STRUCT" = "xno" ; then
         echo
         echo "   ERROR!  daq library missing C99 patch, upgrade to >=2.0.4, go get it from"
@@ -1102,7 +1102,7 @@ AC_ARG_ENABLE(test-coverage,
 if test "x$enable_test_coverage" = "xyes"; then
     CFLAGS=`echo $CFLAGS | sed 's/-O\d/-O0/g'`
     CFLAGS="$CFLAGS -fprofile-arcs -ftest-coverage -O0"
-fi    
+fi
 
 AC_ARG_ENABLE(ppm-test,
 [  --disable-ppm-test       Disable packet/rule performance monitor],
@@ -1320,7 +1320,7 @@ if test "x$enable_open_appid" = "xyes"; then
     AC_CHECK_HEADER(openssl/x509.h, [AC_CHECK_LIB(crypto, d2i_X509, openssl_x509=yes, openssl_x509=no)],openssl_x509=no)
     if test "x$openssl_x509" = "xno"; then
         echo
-        echo "   ERROR!  openssl/x509.h or openssl library not found." 
+        echo "   ERROR!  openssl/x509.h or openssl library not found."
         AC_MSG_ERROR("Fatal!")
     fi
 fi
@@ -1422,7 +1422,7 @@ fi
 echo $CFLAGS > cflags.out
 echo $CPPFLAGS > cppflags.out
 
-INCLUDES='-I$(top_srcdir) -I$(top_srcdir)/src -I$(top_srcdir)/src/sfutil $(extra_incl) -I$(top_srcdir)/src/output-plugins -I$(top_srcdir)/src/detection-plugins -I$(top_srcdir)/src/dynamic-plugins -I$(top_srcdir)/src/preprocessors -I$(top_srcdir)/src/preprocessors/portscan -I$(top_srcdir)/src/preprocessors/HttpInspect/include -I$(top_srcdir)/src/preprocessors/Session -I$(top_srcdir)/src/preprocessors/Stream6 -I$(top_srcdir)/src/target-based -I$(top_srcdir)/src/control -I$(top_srcdir)/src/file-process -I$(top_srcdir)/src/file-process/libs -I$(top_srcdir)/src/side-channel -I$(top_srcdir)/src/side-channel/plugins -I$(top_srcdir)/src/preprocessors/Profinet -I$(top_srcdir)/src/preprocessors/Profinet/dissectors'
+INCLUDES='-I$(top_srcdir) -I$(top_srcdir)/src -I$(top_srcdir)/src/sfutil $(extra_incl) -I$(top_srcdir)/src/output-plugins -I$(top_srcdir)/src/detection-plugins -I$(top_srcdir)/src/dynamic-plugins -I$(top_srcdir)/src/preprocessors -I$(top_srcdir)/src/preprocessors/portscan -I$(top_srcdir)/src/preprocessors/HttpInspect/include -I$(top_srcdir)/src/preprocessors/Session -I$(top_srcdir)/src/preprocessors/Stream6 -I$(top_srcdir)/src/target-based -I$(top_srcdir)/src/control -I$(top_srcdir)/src/file-process -I$(top_srcdir)/src/file-process/libs -I$(top_srcdir)/src/side-channel -I$(top_srcdir)/src/side-channel/plugins -I$(top_srcdir)/src/preprocessors/Profinet -I$(top_srcdir)/src/preprocessors/Profinet/dissect'
 
 AC_SUBST(INCLUDES)
 AC_SUBST(CONFIGFLAGS)
@@ -1490,7 +1490,7 @@ src/preprocessors/HttpInspect/user_interface/Makefile \
 src/preprocessors/Session/Makefile \
 src/preprocessors/Stream6/Makefile \
 src/preprocessors/Profinet/Makefile \
-src/preprocessors/Profinet/dissectors/Makefile \
+src/preprocessors/Profinet/dissect/Makefile \
 src/parser/Makefile \
 src/target-based/Makefile \
 doc/Makefile \

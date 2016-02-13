@@ -62,7 +62,7 @@
 
 #include "Dissector.h"
 #include "Dissector-int.h"
-#include "dissectors/PacketDissector.h"
+#include "PacketDissector.h"
 
 #include "ProtocolTree.h"
 #include "ProtocolTree-int.h"
