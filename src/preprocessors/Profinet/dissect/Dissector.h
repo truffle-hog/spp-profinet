@@ -18,7 +18,7 @@
 
 #include <stdint.h>
 
-#include "ProtocolTree.h"
+#include "tree/ProtocolTree.h"
 #include "Buffy.h"
 
 struct Dissector;

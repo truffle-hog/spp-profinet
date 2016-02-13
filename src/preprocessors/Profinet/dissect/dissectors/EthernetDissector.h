@@ -11,7 +11,7 @@
 
 #include "Dissector-int.h"
 #include "Dissector.h"
-#include "ProtocolTree.h"
+#include "tree/ProtocolTree.h"
 #include "Buffy.h"
 
 /**

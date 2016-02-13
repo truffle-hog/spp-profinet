@@ -9,8 +9,8 @@
 #include "PacketDissector.h"
 #include "EthernetDissector.h"
 
-#include "ProtocolTree.h"
-#include "ProtocolTree-int.h"
+#include "tree/ProtocolTree.h"
+#include "tree/ProtocolTree-int.h"
 
 #include "Buffy.h"
 #include "Buffy-int.h"

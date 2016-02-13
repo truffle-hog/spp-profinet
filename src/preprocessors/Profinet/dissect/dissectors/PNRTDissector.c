@@ -14,7 +14,7 @@
 #include "PNRTDissector.h"
 //#include "PNRTADissector.h"
 
-#include "ProtocolTree.h"
+#include "tree/ProtocolTree.h"
 #include "Buffy.h"
 #include "Buffy-int.h"
 
