@@ -12,8 +12,14 @@
 # Plugin specific
 !src/preprocessors/Profinet
 !src/preprocessors/Profinet/*
-!src/preprocessors/Profinet/dissectors
-!src/preprocessors/Profinet/dissectors/*
+!src/preprocessors/Profinet/dissect
+!src/preprocessors/Profinet/dissect/*
+!src/preprocessors/Profinet/dissect/buffer
+!src/preprocessors/Profinet/dissect/buffer/*
+!src/preprocessors/Profinet/dissect/tree
+!src/preprocessors/Profinet/dissect/tree/*
+!src/preprocessors/Profinet/dissect/dissectors
+!src/preprocessors/Profinet/dissect/dissectors/*
 !src/preprocessors/spp_profinet.c
 !src/preprocessors/spp_profinet.h
 !src/preprocessors/dbg.h
