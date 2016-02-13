@@ -9,20 +9,20 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "ProtocolTypes.h"
+#include "dissect/ProtocolTypes.h"
 
-#include "Dissector-int.h"
-#include "Dissector.h"
-#include "EthernetDissector.h"
-#include "PNRTDissector.h"
+#include "dissect/Dissector-int.h"
+#include "dissect/Dissector.h"
+#include "dissect/dissectors/EthernetDissector.h"
+#include "dissect/dissectors/PNRTDissector.h"
 
-#include "tree/ProtocolTree.h"
-#include "tree/ProtocolTree-int.h"
+#include "dissect/tree/ProtocolTree.h"
+#include "dissect/tree/ProtocolTree-int.h"
 
-#include "Buffy.h"
-#include "Buffy-int.h"
+#include "dissect/buffer/Buffy.h"
+#include "dissect/buffer/Buffy-int.h"
 
-#include "dbg.h"
+#include "Profinet/dbg.h"
 
 /**
  * @brief The Dissector for Profi Real Time IO 0x8892.
@@ -54,6 +54,9 @@ static const struct Dissector_ops EthernetDissectorOverride_ops = {
 
 
 void EthernetDissector_initializeSubDissectors(Dissector_t *this) {
+
+//	Buffy_t *buf = Buffy_new(NULL);
+//	buf->ops->Buffy_createVirtual(buf, 4);
 
     Dissector_t *pnrtDissector = PNRTDissector_new();
 
@@ -107,6 +110,10 @@ EthernetDissector_free(Dissector_t *dissector) {
 int
 EthernetDissector_dissect(Dissector_t *this, Buffy_t *buf, ProtocolTree_t *node) {
 
+    check(node != NULL, "The node must not be null.");
+    check(this != NULL, "The calling dissector must not be null");
+    check(buf != NULL, "The buffer must not be null");
+
     // TODO create a central NONE value for every dissector to access
     struct Value NONE;
 	NONE.val.character = '0';
@@ -138,7 +145,8 @@ EthernetDissector_dissect(Dissector_t *this, Buffy_t *buf, ProtocolTree_t *node)
 	ethertype.val.uint16 = htobe16(buf->p->eh->ether_type);
 	ethertype.type = is_uint16;
 
-	check_mem(node->ops->ProtocolTree_branch(node, "ether_type", ethertype));
+	ProtocolItem_t *child = node->ops->ProtocolTree_branch(node, "ether_type", ethertype);
+    check_mem(child);
 
     Dissector_t *nextDissector;
 
@@ -146,10 +154,12 @@ EthernetDissector_dissect(Dissector_t *this, Buffy_t *buf, ProtocolTree_t *node)
     check(nextDissector != NULL, "there has to be a next dissector");
   //  }
 
-    ProtocolItem_t *child = node->ops->ProtocolTree_branch(node, "pnrt", NONE);
-    check_mem(child);
+    // ProtocolItem_t *child = node->ops->ProtocolTree_branch(node, "pnrt", NONE);
+    // check_mem(child);
 
-    nextDissector->ops->Dissector_dissect(nextDissector, buf->ops->Buffy_createVirtual(buf, 14 * 8), child);
+	Buffy_t *virtual = buf->ops->Buffy_createVirtual(buf, 14 * 8);
+
+    nextDissector->ops->Dissector_dissect(nextDissector, virtual, child);
 
 
     // memcpy(&truffle.eh.sourceMacAddress, p->eh->ether_src, 6);

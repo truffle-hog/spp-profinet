@@ -5,17 +5,17 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "Dissector-int.h"
-#include "PacketDissector.h"
-#include "EthernetDissector.h"
+#include "dissect/Dissector-int.h"
+#include "dissect/dissectors/PacketDissector.h"
+#include "dissect/dissectors/EthernetDissector.h"
 
-#include "tree/ProtocolTree.h"
-#include "tree/ProtocolTree-int.h"
+#include "dissect/tree/ProtocolTree.h"
+#include "dissect/tree/ProtocolTree-int.h"
 
-#include "Buffy.h"
-#include "Buffy-int.h"
+#include "dissect/buffer/Buffy.h"
+#include "dissect/buffer/Buffy-int.h"
 
-#include "ProtocolTypes.h"
+#include "dissect/ProtocolTypes.h"
 
 #include "dbg.h"
 
@@ -102,18 +102,29 @@ PacketDissector_dissect(Dissector_t *this, Buffy_t *buf, struct ProtocolNode *no
     //debug("%04X", buf->p->eh->ether_type);
 
     struct Value frameLength;
-	frameLength.val.int32 = 0;
+	frameLength.val.int32 = buf->p->pkth->pktlen;
 	frameLength.length = 32;
 	frameLength.type = is_int32;
 
 	check_mem(node->ops->ProtocolTree_branch(node, "frame_length", frameLength));
 
-    struct Value timeDelta;
-    timeDelta.val.float32 = 0.00023;
-	timeDelta.length = 32;
-	timeDelta.type = is_float;
+		
 
-	check_mem(node->ops->ProtocolTree_branch(node, "frame_time_delta", timeDelta));
+//	sprintf("%ld.%06ld\n", buf->p->pkth->ts.tv_sec, buf->p->pkth->ts.tv_usec);
+
+    struct Value timeSec;
+    timeSec.val.int64 = (long) buf->p->pkth->ts.tv_sec;
+	timeSec.length = 64;
+	timeSec.type = is_int64;
+
+	check_mem(node->ops->ProtocolTree_branch(node, "frame_timestamp_sec", timeSec));
+
+	struct Value timeUSec;
+	timeUSec.val.int64 = (long) buf->p->pkth->ts.tv_usec;
+	timeUSec.length = 64;
+	timeUSec.type = is_int64;
+
+	check_mem(node->ops->ProtocolTree_branch(node, "frame_timestamp_usec", timeUSec));
 
     Dissector_t *nextDissector;
 

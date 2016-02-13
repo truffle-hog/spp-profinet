@@ -56,21 +56,21 @@
 #include <pthread.h>
 #include "dbg.h"
 
-#include "Sender-int.h"
-#include "Sender.h"
-#include "UnixSocketSender.h"
+#include "send/Sender-int.h"
+#include "send/Sender.h"
+#include "send/UnixSocketSender.h"
 
-#include "Dissector.h"
-#include "Dissector-int.h"
-#include "PacketDissector.h"
+#include "dissect/Dissector.h"
+#include "dissect/Dissector-int.h"
+#include "dissect/dissectors/PacketDissector.h"
 
-#include "tree/ProtocolTree.h"
-#include "tree/ProtocolTree-int.h"
+#include "dissect/tree/ProtocolTree.h"
+#include "dissect/tree/ProtocolTree-int.h"
 
-#include "Buffy.h"
-#include "Buffy-int.h"
+#include "dissect/buffer/Buffy.h"
+#include "dissect/buffer/Buffy-int.h"
 
-#include "Truffle.h"
+#include "send/Truffle.h"
 
 /*
  * put in other inculdes as necessary
@@ -202,8 +202,82 @@ static void ParseProfiNetArgs(char *args)
     //   for examples
 }
 */
+void printLabel(struct Value val) {
 
 
+	switch(val.type) {
+
+		case is_string:
+			printf("%s", val.val.string);
+			break;
+
+		case is_char:
+			printf("%c", val.val.character);
+			break;
+
+		case is_int8:
+			printf("%d", val.val.int8);
+			break;
+		case is_int16:
+			printf("%d", val.val.int16);
+			break;
+		case is_int32:
+			printf("%d", val.val.int32);
+			break;
+		case is_int64:
+			printf("%ld", val.val.int64);
+			break;
+
+		case is_uint8:
+			printf("%02X", val.val.uint8);
+			break;
+		case is_uint16:
+			printf("%04X", val.val.uint16);
+			break;
+		case is_uint32:
+			printf("%08X", val.val.uint32);
+			break;
+		case is_uint64:
+			printf("%016lX", val.val.uint64);
+			break;
+
+		case is_float:
+			printf("%f", val.val.float32);
+			break;
+		case is_double:
+			printf("%f", val.val.double64);
+			break;
+
+	}
+	return;
+}
+
+void ProtocolTree_printDot(struct ProtocolNode *tree) {
+
+//	char dot[tree->treeData->size * 20];
+
+    printf("digraph protocol\n{\n");
+    printf("node [shape=record];\n");
+
+    char *current;
+
+	int i = 0;
+	for (i = 0; i < tree->treeData->size; i++) {
+
+        current = tree->treeData->mappedNodePointers[i]->key;
+
+        printf("\t%s [label=\"{%s|", current, current);
+        printLabel(tree->treeData->mappedNodePointers[i]->value);
+        printf("}\"];\n");
+
+        int j = 0;
+		for (j = 0; j < tree->treeData->mappedNodePointers[i]->childCount; j++ ) {
+
+            printf("\t%s -> %s;\n", current, tree->treeData->mappedNodePointers[i]->children[j]->key);
+		}
+	}
+    printf("}\n");
+}
 
 
 /*
@@ -223,7 +297,7 @@ static void DetectProfiNetPackets(Packet *p, void *context)
 {
 	(void) context;
 
-	ProtocolTree_t *protoTree = ProtocolTree_new();
+	ProtocolTree_t *protoTree = ProtocolTree_new("frame");
     check_mem(protoTree);
 
 	Buffy_t *buffy = Buffy_new(p);
@@ -239,10 +313,12 @@ static void DetectProfiNetPackets(Packet *p, void *context)
 	if (truffle) {
 		sender->ops->Sender_send(sender, truffle);
 	}
+    ProtocolTree_printDot(protoTree);
+	//protoTree->ops->ProtocolTree_toString(protoTree);
 
-    protoTree->ops->ProtocolTree_free(protoTree);
+ //   protoTree->ops->ProtocolTree_free(protoTree);
     //buffy->ops->Buffy_freeChain(buffy); //TODO implement this function in Buffy
-    free(truffle);
+  //  free(truffle);
 
 error:
     return;
@@ -265,8 +341,8 @@ error:
  */
 static void ProfiNetCleanExit(int signal, void *datas)
 {
-    sender->ops->Sender_free(sender);
-    packetDissector->ops->Dissector_free(packetDissector);
+   // sender->ops->Sender_free(sender);
+   // packetDissector->ops->Dissector_free(packetDissector);
 	(void) signal;
 	(void) datas;
 

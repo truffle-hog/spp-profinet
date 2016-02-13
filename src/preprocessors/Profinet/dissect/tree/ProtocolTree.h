@@ -22,6 +22,10 @@ typedef struct ProtocolNode ProtocolItem_t;
  */
 void ProtocolTree_free(struct ProtocolNode *proto);
 
+// char *ProtocolItem_toString(struct ProtocolNode *node);
+//
+// char *ProtocolTree_toString(struct ProtocolNode *tree);
+
 /**
  * @brief Creates a new branch from the given ProtocolNode and returns a pointer to the newly created ProtocolNode.
  *

@@ -1,10 +1,10 @@
 
 #include <stdlib.h>
 
-#include "Truffle.h"
+#include "send/Truffle.h"
 
-#include "tree/ProtocolTree.h"
-#include "tree/ProtocolTree-int.h"
+#include "dissect/tree/ProtocolTree.h"
+#include "dissect/tree/ProtocolTree-int.h"
 
 #include "dbg.h"
 

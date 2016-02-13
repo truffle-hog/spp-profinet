@@ -11,7 +11,7 @@
 #include <sys/types.h>
 #include <stdint.h>
 #include <stdbool.h>
-#include "DissectorRegister.h"
+#include "dissect/DissectorRegister.h"
 
 struct DissectorRegister;
 
@@ -31,7 +31,7 @@ struct DissectorRegister_ops {
   /**
   * @brief Frees the given DissectorRegister.
   */
-  void *(*DissectorRegister_free)(DissectorRegister_t *this);
+  void (*DissectorRegister_free)(DissectorRegister_t *this);
 
 
   /**

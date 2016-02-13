@@ -8,9 +8,9 @@
 
 #include <stdbool.h>
 
-#include "Sender.h"
+#include "send/Sender.h"
 
-#include "Truffle.h"
+#include "send/Truffle.h"
 
 struct Sender;
 

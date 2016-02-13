@@ -10,7 +10,7 @@
 #ifndef __DISSECTOR_REGISTER_H__
 #define __DISSECTOR_REGISTER_H__
 
-#include "Dissector.h"
+#include "dissect/Dissector.h"
 
 
 struct DissectorRegister;

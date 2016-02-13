@@ -1,8 +1,8 @@
 #ifndef __UNIX_SOCKET_SENDER_H__
 #define __UNIX_SOCKET_SENDER_H__
 
-#include "Sender.h"
-#include "Truffle.h"
+#include "send/Sender.h"
+#include "send/Truffle.h"
 
 /**
  * @see Sender_new

@@ -16,15 +16,15 @@
 #include <stdlib.h>
 #include <stdint.h>
 
-#include "tree/ProtocolTree.h"
-#include "Buffy.h"
+#include "dissect/tree/ProtocolTree.h"
+#include "dissect/buffer/Buffy.h"
 
 
-#include "Dissector.h"
-#include "Dissector-int.h"
+#include "dissect/Dissector.h"
+#include "dissect/Dissector-int.h"
 
-#include "DissectorRegister-int.h"
-#include "DissectorRegister.h"
+#include "dissect/DissectorRegister-int.h"
+#include "dissect/DissectorRegister.h"
 
 #include "dbg.h"
 

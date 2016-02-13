@@ -19,9 +19,9 @@
 
 #include "dbg.h"
 
-#include "Sender.h"
-#include "Sender-int.h"
-#include "UnixSocketSender.h"
+#include "send/Sender.h"
+#include "send/Sender-int.h"
+#include "send/UnixSocketSender.h"
 
 typedef struct SocketData {
 	int server_sockfd;

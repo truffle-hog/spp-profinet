@@ -10,8 +10,8 @@
 
 #include "dbg.h"
 
-#include "ProtocolTree.h"
-#include "ProtocolTree-int.h"
+#include "dissect/tree/ProtocolTree.h"
+#include "dissect/tree/ProtocolTree-int.h"
 
 /**
  * @see ProtocolTree ops
@@ -47,10 +47,23 @@ void ProtocolTree_free(struct ProtocolNode *proto) {
 	free(proto);
 }
 
+// char *ProtocolItem_toString(struct ProtocolNode *node) {
+//
+// 	char *str = "";
+// 	//"%s [label=\"{%s|%s]"
+// 	int i = 0;
+// 	for (i = 0; i < node->childCount; i++) {
+// 		//strcat(str, "%s -> %s;\n", node->key, node->children[i]->key);
+// 	}
+// 	return str;
+// }
+//
+
+
 /**
  * @see ProtocolTree_new
  */
-struct ProtocolNode *ProtocolTree_new() {
+struct ProtocolNode *ProtocolTree_new(char *rootKey) {
 
 	struct ProtocolNode *node = malloc(sizeof(struct ProtocolNode));
 	check_mem(node);
@@ -58,10 +71,15 @@ struct ProtocolNode *ProtocolTree_new() {
 	struct TreeData *treeData = malloc(sizeof(struct TreeData));
 	check_mem(treeData);
 
-	treeData->size = 0;
+	treeData->size = 1;
 	treeData->root = node;
-	treeData->keys = NULL;
-	treeData->mappedNodePointers = NULL;
+	treeData->keys = malloc(sizeof(void*));
+	treeData->mappedNodePointers = malloc(sizeof(void*));
+
+	treeData->keys[0] = rootKey;
+	treeData->mappedNodePointers[0] = node;
+
+	node->key = rootKey;
 
 	node->ops = &ProtocolTreeOverride_ops;
 	node->childCount = 0;

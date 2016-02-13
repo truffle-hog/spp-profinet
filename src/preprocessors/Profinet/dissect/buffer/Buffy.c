@@ -6,8 +6,8 @@
 
 #include <stdint.h>
 
-#include "Buffy.h"
-#include "Buffy-int.h"
+#include "dissect/buffer/Buffy.h"
+#include "dissect/buffer/Buffy-int.h"
 
 #include "plugbase.h"
 

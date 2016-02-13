@@ -1,11 +1,11 @@
 
 #include <stdlib.h>
 
-#include "Dissector-int.h"
-#include "Dissector.h"
+#include "dissect/Dissector-int.h"
+#include "dissect/Dissector.h"
 
-#include "DissectorRegister-int.h"
-#include "DissectorRegister.h"
+#include "dissect/DissectorRegister-int.h"
+#include "dissect/DissectorRegister.h"
 
 #include "dbg.h"
 
@@ -64,8 +64,8 @@ void DissectorRegister_free(DissectorRegister_t *this) {
 Dissector_t * DissectorRegister_insert(DissectorRegister_t *this,
                            Dissector_t *dissector) {
 
-	printf("low insert: %016llX\n", dissector->ops->Dissector_lower);
-	printf("high insert: %016llX\n", dissector->ops->Dissector_upper);
+	printf("low insert: %016lX\n", dissector->ops->Dissector_lower);
+	printf("high insert: %016lX\n", dissector->ops->Dissector_upper);
 
 	this->lowList[this->size] = dissector->ops->Dissector_lower;
 	this->highList[this->size] = dissector->ops->Dissector_upper;

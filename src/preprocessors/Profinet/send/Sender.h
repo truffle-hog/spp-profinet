@@ -11,7 +11,7 @@
  * depending on the implementation.
  *
  */
-#include "Truffle.h"
+#include "send/Truffle.h"
 
 struct Sender;
 typedef struct Sender Sender_t;

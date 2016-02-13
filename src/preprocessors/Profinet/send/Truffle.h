@@ -10,7 +10,7 @@
 
 #include <stdint.h>
 
-#include "tree/ProtocolTree.h"
+#include "dissect/tree/ProtocolTree.h"
 /**
  * @brief Houses specific information about the ether header.
  *

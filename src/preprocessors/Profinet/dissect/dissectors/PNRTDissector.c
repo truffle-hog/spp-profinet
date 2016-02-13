@@ -9,14 +9,15 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "Dissector-int.h"
-#include "Dissector.h"
-#include "PNRTDissector.h"
+#include "dissect/Dissector-int.h"
+#include "dissect/Dissector.h"
+#include "dissect/dissectors/PNRTDissector.h"
 //#include "PNRTADissector.h"
 
-#include "tree/ProtocolTree.h"
-#include "Buffy.h"
-#include "Buffy-int.h"
+#include "dissect/tree/ProtocolTree.h"
+#include "dissect/tree/ProtocolTree-int.h"
+#include "dissect/buffer/Buffy.h"
+#include "dissect/buffer/Buffy-int.h"
 
 
 #include "dbg.h"
@@ -100,16 +101,31 @@ void PNRTDissector_free(Dissector_t *dissector) {
 /**
  * @see Dissector_dissect
  */
-int PNRTDissector_dissect(Dissector_t *this, Buffy_t *buf, ProtocolTree_t *tree) {
+int PNRTDissector_dissect(Dissector_t *this, Buffy_t *buf, struct ProtocolNode *node) {
 
     check(this != NULL, "The caller must not be null");
     check(buf != NULL, "The buffer must not be null");
-    check(tree != NULL, "The tree must not be null");
+    check(node != NULL, "The tree must not be null");
+
+	struct Value pnrtMain;
+	pnrtMain.type = is_string;
+	pnrtMain.val.string = "Profinet Realtime";
+
+	ProtocolItem_t *pnrtItem = node->ops->ProtocolTree_branch(node, "pnrt", pnrtMain);
+	check_mem(pnrtItem);
+
+	struct Value frameID;
+	frameID.type = is_uint16;
+	frameID.val.uint16 = buf->ops->Buffy_getBits16(buf, 0);
+	frameID.length = 16;
+
+	node->ops->ProtocolTree_branch(pnrtItem, "frame_id", frameID);
+
 
 
     //uint16_t frameID = buf->ops->Buffy_getBits16(buf, 0, 16, 0);
 
-    uint32_t offset;
+ //   uint32_t offset;
 
 	// debug("caplen: %d", buf->p->pkth->caplen);
 
@@ -123,11 +139,11 @@ int PNRTDissector_dissect(Dissector_t *this, Buffy_t *buf, ProtocolTree_t *tree)
     // printf("%02X", buf->ops->Buffy_getBits8(buf, 56, 8));
     // printf("%02X", buf->ops->Buffy_getBits8(buf, 64, 8));
 
-    for (offset = 0; offset < buf->p->pkth->caplen; offset ++) {
+/*    for (offset = 0; offset < buf->p->pkth->caplen; offset ++) {
         if (offset % 16 == 0) printf("\n");
     	printf("%02X", buf->ops->Buffy_getBits8(buf, offset));
     }
-    printf("\n");
+    printf("\n");*/
     //
 	// for (offset = 0; offset < buf->p->pkth->caplen; offset++) {
 	// 	if (offset % 16 == 0) printf("\n");
@@ -140,10 +156,10 @@ int PNRTDissector_dissect(Dissector_t *this, Buffy_t *buf, ProtocolTree_t *tree)
 	// 	if (offset % 16 == 0) printf("\n");
 	// 	printf("%02X", virt->ops->Buffy_getBits8(virt, offset));
 	// }
-
+/*
     debug("frameID: %02X", buf->ops->Buffy_getBits16(buf, 0));
     debug("%02X", buf->ops->Buffy_getNBits8(buf, 6, 2));
-
+*/
     //debug("%02X", buf->getBits8(buf, 0, 8));
     //debug("type: %016X", (uint16_t) etherType->value.val.uint16);
 	// TODO implement

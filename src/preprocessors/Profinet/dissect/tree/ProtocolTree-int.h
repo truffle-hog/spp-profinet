@@ -8,7 +8,7 @@
 
 #include <stdbool.h>
 
-#include "ProtocolTree.h"
+#include "dissect/tree/ProtocolTree.h"
 
 /**
  * @brief The operations that can be called by a ProtocolTree.
@@ -22,6 +22,10 @@ struct ProtocolTree_ops {
      * @param proto the ProtocolNode to be freed
      */
     void (*ProtocolTree_free)(struct ProtocolNode *proto);
+
+    // char *(*ProtocolItem_toString)(struct ProtocolNode *node);
+    //
+    // char *(*ProtocolTree_toString)(struct ProtocolNode *tree);
 
     /**
      * @brief Creates a new branch from the given ProtocolNode and returns a pointer to the newly created ProtocolNode.
@@ -167,7 +171,7 @@ struct ProtocolNode {
  *
  * @return the instantiated Node
  */
-struct ProtocolNode *ProtocolTree_new();
+struct ProtocolNode *ProtocolTree_new(char *rootKey);
 
 
 #endif

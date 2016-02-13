@@ -18,8 +18,8 @@
 
 #include <stdint.h>
 
-#include "tree/ProtocolTree.h"
-#include "Buffy.h"
+#include "dissect/tree/ProtocolTree.h"
+#include "dissect/buffer/Buffy.h"
 
 struct Dissector;
 typedef struct Dissector Dissector_t;

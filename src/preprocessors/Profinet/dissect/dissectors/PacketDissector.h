@@ -10,9 +10,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "Dissector.h"
-#include "tree/ProtocolTree.h"
-#include "Buffy.h"
+#include "dissect/Dissector.h"
+#include "dissect/tree/ProtocolTree.h"
+#include "dissect/buffer/Buffy.h"
 
 /**
  * @see Dissector_new

@@ -12,8 +12,8 @@
 #include <sys/types.h>
 #include <stdbool.h>
 
-#include "DissectorRegister.h"
-#include "Dissector.h"
+#include "dissect/DissectorRegister.h"
+#include "dissect/Dissector.h"
 
 struct Dissector;
 

@@ -11,7 +11,7 @@
 
 #include "plugbase.h"
 
-#include "Buffy.h"
+#include "dissect/buffer/Buffy.h"
 
 struct Buffy;
 
