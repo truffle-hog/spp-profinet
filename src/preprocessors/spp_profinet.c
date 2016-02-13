@@ -229,15 +229,22 @@ static void DetectProfiNetPackets(Packet *p, void *context)
 	(void) context;
 
 	ProtocolTree_t *protoTree = ProtocolTree_new();
+    check_mem(protoTree);
+
 	Buffy_t *buffy = Buffy_new(p);
+    check_mem(buffy);
 
 	packetDissector->ops->Dissector_dissect(packetDissector, buffy, protoTree);
 
 	Truffle_t *truffle = Truffle_new(protoTree);
+    check_mem(truffle);
 
 	if (truffle) {
 		sender->ops->Sender_send(sender, truffle);
 	}
+error:
+    return;
+
 }
 
 /*

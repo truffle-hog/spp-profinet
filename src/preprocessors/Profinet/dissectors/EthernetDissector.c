@@ -113,6 +113,8 @@ EthernetDissector_dissect(Dissector_t *this, Buffy_t *buf, ProtocolTree_t *node)
 	dest.val.uint64 = 0;
 	dest.type = is_uint64;
 
+    //debug("%04X", buf->p->eh->ether_type);
+
     memcpy(&dest.val.uint64, buf->p->eh->ether_dst, 6);
     dest.val.uint64 = (htobe64(dest.val.uint64)) >> 16;
 
@@ -144,7 +146,7 @@ EthernetDissector_dissect(Dissector_t *this, Buffy_t *buf, ProtocolTree_t *node)
     ProtocolItem_t *child = node->ops->ProtocolTree_branch(node, "pnrt", NONE);
     check_mem(child);
 
-    nextDissector->ops->Dissector_dissect(nextDissector, buf, child);
+    nextDissector->ops->Dissector_dissect(nextDissector, buf->ops->Buffy_createVirtual(buf, 14 * 8), child);
 
 
     // memcpy(&truffle.eh.sourceMacAddress, p->eh->ether_src, 6);

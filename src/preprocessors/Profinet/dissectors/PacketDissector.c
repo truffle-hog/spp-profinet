@@ -99,6 +99,8 @@ PacketDissector_dissect(Dissector_t *this, Buffy_t *buf, struct ProtocolNode *no
 	struct Value NONE;
 	NONE.val.character = '0';
 
+    //debug("%04X", buf->p->eh->ether_type);
+
     struct Value frameLength;
 	frameLength.val.int32 = 0;
 	frameLength.length = 32;

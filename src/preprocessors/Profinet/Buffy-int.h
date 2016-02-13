@@ -34,6 +34,22 @@ struct Buffy_ops {
   void (*Buffy_free)(Buffy_t *buffy);
 
   /**
+   * @brief Creates a new virtual buffer from the current buffer that starts at the given offset
+   *
+   * @param this the calling Buffer
+   * @param bitOffset the bit offset the new buffer starts at
+   */
+  Buffy_t *(*Buffy_createVirtual)(Buffy_t *this, unsigned int bitOffset);
+
+  uint8_t (*Buffy_getBits8)(Buffy_t *this, unsigned int byteOffset);
+
+  uint16_t (*Buffy_getBits16)(Buffy_t *this, unsigned int byteOffset);
+
+  uint32_t (*Buffy_getBits32)(Buffy_t *this, unsigned int byteOffset);
+
+  uint64_t (*Buffy_getBits64)(Buffy_t *this, unsigned int byteOffset);
+
+  /**
    * @brief Get 1 - 8 bits returned in a uint8.
    *
    * @param this the calling buffer
@@ -42,7 +58,7 @@ struct Buffy_ops {
    *
    * @return unsigned 8 bit value representing the specified bit range
    */
-  uint8_t (*Buffy_getBits8)(Buffy_t *this, unsigned int bitOffset,
+  uint8_t (*Buffy_getNBits8)(Buffy_t *this, unsigned int bitOffset,
       const int noOfBits);
 
   /**
@@ -54,7 +70,7 @@ struct Buffy_ops {
    *
    * @return unsigned 16 bit value representing the specified bit range
    */
-  uint16_t (*Buffy_getBits16)(Buffy_t *this, unsigned int bitOffset,
+  uint16_t (*Buffy_getNBits16)(Buffy_t *this, unsigned int bitOffset,
       const int noOfBits, const enum Encoding encoding);
 
   /**
@@ -66,7 +82,7 @@ struct Buffy_ops {
    Gu
    * @return unsigned 32 bit value representing the specified bit range
    */
-  uint32_t (*Buffy_getBits32)(Buffy_t *this, unsigned int bitOffset,
+  uint32_t (*Buffy_getNBits32)(Buffy_t *this, unsigned int bitOffset,
       const int noOfBits, const enum Encoding encoding);
 
   /**
@@ -78,13 +94,13 @@ struct Buffy_ops {
    *
    * @return unsigned 64 bit value representing the specified bit range
    */
-  uint64_t (*Buffy_getBits64)(Buffy_t *this, unsigned int bitOffset,
+  uint64_t (*Buffy_getNBits64)(Buffy_t *this, unsigned int bitOffset,
       const int noOfBits, const enum Encoding encoding);
 
 };
 
 //enum Encoding {
-  
+
 //};
 
 /**
@@ -92,17 +108,30 @@ struct Buffy_ops {
  *
  */
 struct Buffy {
-  /** Whether this buffer was initialized. **/
-  bool initialized;
 
-  /** Pointer to the snort package this buffer was created from **/
-  Packet *p;
+	/** The initial Buffer of this buffer chain. **/
+	struct Buffy *raw;
 
-  /** The pointer to the raw data of this package **/
-  const uint8_t *data;
+	/** The Buffer this buffer was created from **/
+	struct Buffy *parent;
 
-  /** The buffer operations. **/
-  const struct Buffy_ops *ops;
+	/** The buffer that is next in the virutal chain. **/
+	struct Buffy *next;
+
+	/** The position in the raw packet data of this buffer without any offset **/
+	uint64_t position;
+
+	/** Whether this buffer was initialized. **/
+	bool initialized;
+
+	/** Pointer to the snort package this buffer was created from **/
+	Packet *p;
+
+	/** The pointer to the raw data of this package **/
+	const uint8_t *data;
+
+	/** The buffer operations. **/
+	const struct Buffy_ops *ops;
 };
 
 

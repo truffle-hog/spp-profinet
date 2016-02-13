@@ -103,7 +103,42 @@ int PNRTDissector_dissect(Dissector_t *this, Buffy_t *buf, ProtocolTree_t *tree)
 
     //uint16_t frameID = buf->ops->Buffy_getBits16(buf, 0, 16, 0);
 
-	debug("dissecting very bigtime");
+    uint32_t offset;
+
+
+
+	debug("caplen: %d", buf->p->pkth->caplen);
+
+    // printf("%02X", buf->ops->Buffy_getBits8(buf, 0, 8));
+    // printf("%02X", buf->ops->Buffy_getBits8(buf, 8, 8));
+    // printf("%02X", buf->ops->Buffy_getBits8(buf, 16, 8));
+    // printf("%02X", buf->ops->Buffy_getBits8(buf, 24, 8));
+    // printf("%02X", buf->ops->Buffy_getBits8(buf, 32, 8));
+    // printf("%02X", buf->ops->Buffy_getBits8(buf, 40, 8));
+    // printf("%02X", buf->ops->Buffy_getBits8(buf, 48, 8));
+    // printf("%02X", buf->ops->Buffy_getBits8(buf, 56, 8));
+    // printf("%02X", buf->ops->Buffy_getBits8(buf, 64, 8));
+
+    for (offset = 0; offset < buf->p->pkth->caplen; offset ++) {
+        if (offset % 16 == 0) printf("\n");
+    	printf("%02X", buf->ops->Buffy_getBits8(buf, offset));
+    }
+    printf("\n");
+
+	for (offset = 0; offset < buf->p->pkth->caplen; offset++) {
+		if (offset % 16 == 0) printf("\n");
+		printf("%02X", buf->ops->Buffy_getBits8(buf, offset));
+	}
+
+	Buffy_t *virt = buf->ops->Buffy_createVirtual(buf, 14 * 8);
+
+	for (offset = 0; offset < buf->p->pkth->caplen; offset ++) {
+		if (offset % 16 == 0) printf("\n");
+		printf("%02X", virt->ops->Buffy_getBits8(virt, offset));
+	}
+
+    //debug("%02X", buf->getBits8(buf, 0, 8));
+    //debug("type: %016X", (uint16_t) etherType->value.val.uint16);
 	// TODO implement
 
 	return 0;
