@@ -62,6 +62,7 @@ void Buffy_free(Buffy_t *buffy) {
 
 Buffy_t *Buffy_createVirtual(Buffy_t *this, unsigned int bitOffset) {
 
+	check(this != NULL, "The calling buffer must not be null");
 	check(bitOffset % 8 == 0, "a bitoffset that is not 8 bit alligned is not supported yet");
 
 	unsigned int byteOffset = bitOffset / 8;
@@ -129,24 +130,33 @@ error:
 uint8_t Buffy_getNBits8(Buffy_t *this, unsigned int bitOffset,
     const int noOfBits) {
 
+	check(this != NULL, "The calling buffer must not be null.");
 	check(noOfBits <= 8, "number of bits has to be between 1 and 8 bits.");
 	check(noOfBits > 0, "number of bits has to be between 1 and 8 bits.");
 
+	// the byte offset from bit offset
 	unsigned int byteOffset = bitOffset / 8;
-	unsigned int bitCount = bitOffset % 8;
-	unsigned char zero = 0;
+	// the bitoffset from the byte
+	unsigned int bitOffsetFromByte = bitOffset % 8;
 
-	debug("%02X", (~zero >> noOfBits));
-	debug("%02X", ~(~zero >> noOfBits));
-	debug("%02X", ~(~zero >> noOfBits));
+	// create bitmask
+	unsigned char bitmask = -1;
 
-	uint8_t bitmask = ~(~zero >> noOfBits) >> bitCount;
+	// e.g. noofBits = 3 and bitcount = 2
+	// ~(1111 1111 >> 3) = ~(0001 1111) = 1110 0000
+	bitmask = (~(bitmask >> noOfBits));
+	// 1110 0000 >> 2 = 0011 1000
+	bitmask = bitmask >> bitOffsetFromByte;
 
-	debug("%02X", bitmask);
+	unsigned char value = (unsigned char) this->data[byteOffset] & bitmask;
 
-//	uint8_t bitmask = (1 << noOfBits) - 1;
-	return ((uint8_t)this->data[byteOffset]) & bitmask;
-	//return this->data[byteOffset];
+	// shift the extracted bits to the correct position
+	value = value >> (8 - noOfBits - bitOffsetFromByte);
+
+	return value;
+
+	//return (((unsigned char)this->data[byteOffset]) & bitmask) >> (8 - noOfBits - bitOffsetFromByte);
+
 error:
 	return -1;
 }
@@ -160,11 +170,16 @@ uint16_t Buffy_getNBits16(Buffy_t *this, unsigned int bitOffset,
 	check(noOfBits <= 16, "number of bits has to be smaller or equally to 16 bits.");
 	check(noOfBits > 0, "number of bits cannot be zero. needs to be positive");
 
+	check(bitOffset % 8 == 0, "a bitoffset that is not 8 bit alligned is not supported yet");
+	//TODO Check this function for errors!!!!
+
+
+
 	unsigned int byteOffset = bitOffset / 8;
 	unsigned int bitCount = bitOffset % 8;
 
-	// cast the datapointer to 16 bit unsigned integer Pointer
-	uint16_t value = (uint16_t*) (this->data + byteOffset);
+	// cast the datapointer to 16 bit unsigned integer Pointer and dereference it
+	uint16_t value = *((uint16_t*) (this->data + byteOffset));
 
 	// then care about the encoding
 	if (encoding == ENC_LITTLE_ENDIAN) {
@@ -189,6 +204,8 @@ error:
 uint32_t Buffy_getNBits32(Buffy_t *this, unsigned int bitOffset,
     const int noOfBits, const enum Encoding encoding) {
 
+	check(bitOffset % 8 == 0, "a bitoffset that is not 8 bit alligned is not supported yet");
+
 	check(noOfBits <= 16, "number of bits has to be smaller or equally to 16 bits.");
 	check(noOfBits > 0, "number of bits cannot be zero. needs to be positive");
 
@@ -203,6 +220,8 @@ error:
  */
 uint64_t Buffy_getNBits64(Buffy_t *this, unsigned int bitOffset,
     const int noOfBits, const enum Encoding encoding) {
+
+	check(bitOffset % 8 == 0, "a bitoffset that is not 8 bit alligned is not supported yet");
 
 	check(noOfBits <= 16, "number of bits has to be smaller or equally to 16 bits.");
 	check(noOfBits > 0, "number of bits cannot be zero. needs to be positive");

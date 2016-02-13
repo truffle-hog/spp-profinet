@@ -141,6 +141,7 @@ int PNRTDissector_dissect(Dissector_t *this, Buffy_t *buf, ProtocolTree_t *tree)
 	// }
 
     debug("frameID: %02X", buf->ops->Buffy_getBits16(buf, 0));
+    debug("%02X", buf->ops->Buffy_getNBits8(buf, 6, 2));
 
     //debug("%02X", buf->getBits8(buf, 0, 8));
     //debug("type: %016X", (uint16_t) etherType->value.val.uint16);
