@@ -259,7 +259,7 @@ void ProtocolTree_printDot(struct ProtocolNode *tree) {
 //	char dot[tree->treeData->size * 20];
 
     printf("digraph protocol\n{\n");
-    printf("node [shape=record];\n");
+    printf("\tnode [shape=record];\n");
 
     char *current;
 
