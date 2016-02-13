@@ -64,16 +64,19 @@ Buffy_t *Buffy_createVirtual(Buffy_t *this, unsigned int bitOffset) {
 
 	check(bitOffset % 8 == 0, "a bitoffset that is not 8 bit alligned is not supported yet");
 
-	Buffy_t *buffy = Buffy_new(this->p);
-	check_mem(buffy);
-
 	unsigned int byteOffset = bitOffset / 8;
 
-	this->next = buffy;
+	Buffy_t *buffy = malloc(sizeof(Buffy_t));
+	check_mem(buffy);
+
+	buffy->p = this->p;
+	buffy->ops = this->ops;
 	buffy->data = this->data + byteOffset;
 	buffy->parent = this;
 	buffy->raw = this->raw;
 	buffy->position = bitOffset;
+
+	this->next = buffy;
 
 	return buffy;
 
@@ -83,25 +86,41 @@ error:
 
 uint8_t Buffy_getBits8(Buffy_t *this, unsigned int byteOffset) {
 
+	check(this != NULL, "calling buffer must not be null");
+
 	return ((uint8_t)this->data[byteOffset]);
+error:
+	return -1;
 }
 
 uint16_t Buffy_getBits16(Buffy_t *this, unsigned int byteOffset) {
 
-	uint16_t value = (uint16_t*) (this->data + byteOffset);
+	check(this != NULL, "calling buffer must not be null");
+
+	uint16_t value = *((uint16_t*) (this->data + byteOffset));
 	return htobe16(value);
+error:
+	return -1;
 }
 
 uint32_t Buffy_getBits32(Buffy_t *this, unsigned int byteOffset) {
 
-	uint32_t value = (uint32_t*) (this->data + byteOffset);
+	check(this != NULL, "The calling buffer must not be null.");
+
+	uint32_t value = *((uint32_t*) (this->data + byteOffset));
 	return htobe32(value);
+error:
+	return -1;
 }
 
 uint64_t Buffy_getBits64(Buffy_t *this, unsigned int byteOffset) {
 
-	uint64_t value = (uint64_t*) (this->data + byteOffset);
+	check(this != NULL, "The calling buffer must not be null.");
+
+	uint64_t value = *((uint64_t*) (this->data + byteOffset));
 	return htobe64(value);
+error:
+	return -1;
 }
 
 /**

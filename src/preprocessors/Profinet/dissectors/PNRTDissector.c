@@ -101,13 +101,16 @@ void PNRTDissector_free(Dissector_t *dissector) {
  */
 int PNRTDissector_dissect(Dissector_t *this, Buffy_t *buf, ProtocolTree_t *tree) {
 
+    check(this != NULL, "The caller must not be null");
+    check(buf != NULL, "The buffer must not be null");
+    check(tree != NULL, "The tree must not be null");
+
+
     //uint16_t frameID = buf->ops->Buffy_getBits16(buf, 0, 16, 0);
 
     uint32_t offset;
 
-
-
-	debug("caplen: %d", buf->p->pkth->caplen);
+	// debug("caplen: %d", buf->p->pkth->caplen);
 
     // printf("%02X", buf->ops->Buffy_getBits8(buf, 0, 8));
     // printf("%02X", buf->ops->Buffy_getBits8(buf, 8, 8));
@@ -124,22 +127,27 @@ int PNRTDissector_dissect(Dissector_t *this, Buffy_t *buf, ProtocolTree_t *tree)
     	printf("%02X", buf->ops->Buffy_getBits8(buf, offset));
     }
     printf("\n");
+    //
+	// for (offset = 0; offset < buf->p->pkth->caplen; offset++) {
+	// 	if (offset % 16 == 0) printf("\n");
+	// 	printf("%02X", buf->ops->Buffy_getBits8(buf, offset));
+	// }
+    //
+	//Buffy_t *virt = buf->ops->Buffy_createVirtual(buf, 14 * 8);
+    //
+	// for (offset = 0; offset < buf->p->pkth->caplen; offset ++) {
+	// 	if (offset % 16 == 0) printf("\n");
+	// 	printf("%02X", virt->ops->Buffy_getBits8(virt, offset));
+	// }
 
-	for (offset = 0; offset < buf->p->pkth->caplen; offset++) {
-		if (offset % 16 == 0) printf("\n");
-		printf("%02X", buf->ops->Buffy_getBits8(buf, offset));
-	}
-
-	Buffy_t *virt = buf->ops->Buffy_createVirtual(buf, 14 * 8);
-
-	for (offset = 0; offset < buf->p->pkth->caplen; offset ++) {
-		if (offset % 16 == 0) printf("\n");
-		printf("%02X", virt->ops->Buffy_getBits8(virt, offset));
-	}
+    debug("frameID: %02X", buf->ops->Buffy_getBits16(buf, 0));
 
     //debug("%02X", buf->getBits8(buf, 0, 8));
     //debug("type: %016X", (uint16_t) etherType->value.val.uint16);
 	// TODO implement
 
 	return 0;
+
+error:
+    return -1;
 }
