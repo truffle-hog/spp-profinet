@@ -167,13 +167,8 @@ static void ProfiNetInit(struct _SnortConfig * sc, char *args)
 	sender = UnixSocketSender_new();
 	check_mem(sender);
 
-	//topLevelDissectorRegister = DissectorRegister_new();
-	//check_mem(topLevelDissectorRegister);
-
 	packetDissector = PacketDissector_new();
 	check_mem(packetDissector);
-
-	//DissectorInit(topLevelDissectorRegister);
 
  	DEBUG_WRAP(DebugMessage(DEBUG_PLUGIN, "Preprocessor: ProfiNet Initialized\n"));
 
@@ -236,12 +231,19 @@ static void DetectProfiNetPackets(Packet *p, void *context)
 
 	packetDissector->ops->Dissector_dissect(packetDissector, buffy, protoTree);
 
+    //TODO implement to check if the protoTree built a Profinet package or not here if not just discard everything
+
 	Truffle_t *truffle = Truffle_new(protoTree);
     check_mem(truffle);
 
 	if (truffle) {
 		sender->ops->Sender_send(sender, truffle);
 	}
+
+    protoTree->ops->ProtocolTree_free(protoTree);
+    //buffy->ops->Buffy_freeChain(buffy); //TODO implement this function in Buffy
+    free(truffle);
+
 error:
     return;
 
@@ -263,6 +265,8 @@ error:
  */
 static void ProfiNetCleanExit(int signal, void *datas)
 {
+    sender->ops->Sender_free(sender);
+    packetDissector->ops->Dissector_free(packetDissector);
 	(void) signal;
 	(void) datas;
 
