@@ -114,6 +114,12 @@ EthernetDissector_dissect(Dissector_t *this, Buffy_t *buf, ProtocolTree_t *node)
     check(this != NULL, "The calling dissector must not be null");
     check(buf != NULL, "The buffer must not be null");
 
+	struct Value ethernet;
+	ethernet.type = is_string;
+	ethernet.val.string = "Ethernet";
+
+	ProtocolItem_t *etherNode = node->ops->ProtocolTree_branch(node, "ethernet", ethernet);
+
     // TODO create a central NONE value for every dissector to access
     struct Value NONE;
 	NONE.val.character = '0';
@@ -128,7 +134,7 @@ EthernetDissector_dissect(Dissector_t *this, Buffy_t *buf, ProtocolTree_t *node)
     memcpy(&dest.val.uint64, buf->p->eh->ether_dst, 6);
     dest.val.uint64 = (htobe64(dest.val.uint64)) >> 16;
 
-	check_mem(node->ops->ProtocolTree_branch(node, "ether_dest", dest));
+	check_mem(etherNode->ops->ProtocolTree_branch(etherNode, "ether_dest", dest));
 
 	struct Value source;
 	source.length = 48;
@@ -138,15 +144,14 @@ EthernetDissector_dissect(Dissector_t *this, Buffy_t *buf, ProtocolTree_t *node)
 	memcpy(&source.val.uint64, buf->p->eh->ether_src, 6);
 	source.val.uint64 = (htobe64(source.val.uint64)) >> 16;
 
-    check_mem(node->ops->ProtocolTree_branch(node, "ether_source", source));
+    check_mem(etherNode->ops->ProtocolTree_branch(etherNode, "ether_source", source));
 
 	struct Value ethertype;
 	ethertype.length = 16;
 	ethertype.val.uint16 = htobe16(buf->p->eh->ether_type);
 	ethertype.type = is_uint16;
 
-	ProtocolItem_t *child = node->ops->ProtocolTree_branch(node, "ether_type", ethertype);
-    check_mem(child);
+	check_mem(etherNode->ops->ProtocolTree_branch(etherNode, "ether_type", ethertype));
 
     Dissector_t *nextDissector;
 
@@ -159,7 +164,7 @@ EthernetDissector_dissect(Dissector_t *this, Buffy_t *buf, ProtocolTree_t *node)
 
 	Buffy_t *virtual = buf->ops->Buffy_createVirtual(buf, 14 * 8);
 
-    nextDissector->ops->Dissector_dissect(nextDissector, virtual, child);
+    nextDissector->ops->Dissector_dissect(nextDissector, virtual, etherNode);
 
 
     // memcpy(&truffle.eh.sourceMacAddress, p->eh->ether_src, 6);

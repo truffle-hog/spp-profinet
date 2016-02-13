@@ -20,13 +20,17 @@
 #include "dbg.h"
 
 
+
 /**
  * @brief The Dissector for Profi Real Time IO 0x8892.
  *
  */
 struct PacketDissector {
     /** @brief Houses a Dissector internally for safe type casting. **/
-    struct Dissector dissector;
+	struct Dissector dissector;
+	long lastTimeSec;
+	long lastTimeUSec;
+	long packageCount;
 
 };
 
@@ -69,6 +73,11 @@ Dissector_t *PacketDissector_new() {
 
     PacketDissector_initializeSubDissectors(&packetDissector->dissector);
 
+	packetDissector->lastTimeSec = 0;
+	packetDissector->lastTimeUSec = 0;
+
+	packetDissector->packageCount = 0;
+
     return (Dissector_t*) packetDissector;
 
 error:
@@ -95,9 +104,12 @@ PacketDissector_free(Dissector_t *dissector) {
 int
 PacketDissector_dissect(Dissector_t *this, Buffy_t *buf, struct ProtocolNode *node) {
 
+	struct PacketDissector* thisAsPacketDissector = (struct PacketDissector*) this;
 	// TODO create a proper EMPTY value in the header that can be used as empty labels
-	struct Value NONE;
-	NONE.val.character = '0';
+	thisAsPacketDissector->packageCount++;
+
+	node->value.val.int64 = thisAsPacketDissector->packageCount;
+	node->value.type = is_int64;
 
     //debug("%04X", buf->p->eh->ether_type);
 
@@ -126,6 +138,20 @@ PacketDissector_dissect(Dissector_t *this, Buffy_t *buf, struct ProtocolNode *no
 
 	check_mem(node->ops->ProtocolTree_branch(node, "frame_timestamp_usec", timeUSec));
 
+	struct Value deltaSecVal;
+	deltaSecVal.val.int64 = timeSec.val.int64 - thisAsPacketDissector->lastTimeSec;
+	deltaSecVal.type = is_int64;
+	
+	struct Value deltaUSecVal;
+	deltaUSecVal.val.int64 = timeUSec.val.int64 - thisAsPacketDissector->lastTimeUSec;
+	deltaUSecVal.type = is_int64;
+
+	thisAsPacketDissector->lastTimeSec = timeSec.val.int64;
+	thisAsPacketDissector->lastTimeUSec = timeUSec.val.int64;
+
+	check_mem(node->ops->ProtocolTree_branch(node, "frame_delta_last_sec", deltaSecVal));
+	check_mem(node->ops->ProtocolTree_branch(node, "frame_delta_last_usec", deltaUSecVal));
+
     Dissector_t *nextDissector;
 
 	// TODO check for the next package to be used
@@ -134,10 +160,8 @@ PacketDissector_dissect(Dissector_t *this, Buffy_t *buf, struct ProtocolNode *no
     check(nextDissector != NULL, "there has to be a next dissector");
   //  }
 
-    ProtocolItem_t *child = node->ops->ProtocolTree_branch(node, "ethernet", NONE);
-    check_mem(child);
 
-    nextDissector->ops->Dissector_dissect(nextDissector, buf, child);
+    nextDissector->ops->Dissector_dissect(nextDissector, buf, node);
 
 	// TODO implement
 

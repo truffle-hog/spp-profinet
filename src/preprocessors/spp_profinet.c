@@ -91,8 +91,10 @@
 Sender_t *sender;
 Dissector_t *packetDissector;
 
-long long n = 0;
+long long n = 1;
 
+long last_time_sec = 0;
+long last_time_usec = 0;
 
 /*
  * function prototypes go here
@@ -304,6 +306,8 @@ static void DetectProfiNetPackets(Packet *p, void *context)
     check_mem(buffy);
 
 	packetDissector->ops->Dissector_dissect(packetDissector, buffy, protoTree);
+
+
 
     //TODO implement to check if the protoTree built a Profinet package or not here if not just discard everything
 
