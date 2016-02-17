@@ -31,7 +31,8 @@ Truffle_t *Truffle_new(const struct ProtocolNode *protoTree) {
 
 	//truffle->frame.cycleCounter
 
-
+	truffle->eh.destMacAddress = etherDest->value.val.uint64;
+	truffle->eh.sourceMacAddress = etherSrc->value.val.uint64;
 
 	return truffle;
 }
