@@ -23,6 +23,11 @@
 #include "send/Sender-int.h"
 #include "send/UnixSocketSender.h"
 
+const int TRUFFLEHOG_CONNECT_REQUEST = 0x0;
+const int TRUFFLEHOG_DISCONNECT_REQUEST = 0x1;
+const int SNORT_CONNECT_RESPONSE = 0x2;
+const int SNORT_DISCONNECT_RESPONSE = 0x3;
+
 typedef struct SocketData {
 	int server_sockfd;
 	int client_sockfd;
@@ -94,25 +99,49 @@ void * await_request( void* args) {
 	(void) args;
 	SocketData_t *data = (SocketData_t*) args;
 	int n;
-	char buffer[256];
+	int buffer = -1;
+
 	data->client_sockfd = accept (data->server_sockfd, (struct sockaddr *) &(data->cli_addr), &(data->clilen));
 	check(data->client_sockfd >= 0, "error on accept");
 
+//	memset(buffer, 0, 256);
 
-	memset(buffer, 0, 256);
+
 
 	// TODO implement a valid chancel condition
 	while(true) {
 
-		n = read(data->client_sockfd,buffer,255);
+		n = read(data->client_sockfd ,&buffer, sizeof(int));
 		check(n >= 0, "error reading from socket");
+		int response = -1;
+
+		switch(buffer) {
+
+			case TRUFFLEHOG_CONNECT_REQUEST:
+				data->client_detected = true;
+				debug("TruffleHog wants to connect...");
+				response = SNORT_CONNECT_RESPONSE;	
+				break;
+
+			case TRUFFLEHOG_DISCONNECT_REQUEST:
+				data->client_detected = false;
+				debug("TruffleHog wants to disconnect...");
+				response = SNORT_DISCONNECT_RESPONSE;
+				break;
+			default:
+				sentinel("there is no allowed default case yet");
+				break;
+
+		}
+		n = write(data->client_sockfd, (void*) &response, sizeof(int));
+		check (n >= 0, "error writing to socket");
 
 	//	DEBUG_WRAP(DebugMessage(DEBUG_PLUGIN, "Received message: %s\n",buffer));
 
 		// TODO instead of toggling request a specific ID from the client
 		// something secure
 
-		data->client_detected = !data->client_detected;;
+	//	data->client_detected = !data->client_detected;;
 	}
 
 	return NULL;
