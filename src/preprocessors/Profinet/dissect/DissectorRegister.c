@@ -64,8 +64,11 @@ void DissectorRegister_free(DissectorRegister_t *this) {
 Dissector_t * DissectorRegister_insert(DissectorRegister_t *this,
                            Dissector_t *dissector) {
 
-	printf("low insert: %016lX\n", dissector->ops->Dissector_lower);
-	printf("high insert: %016lX\n", dissector->ops->Dissector_upper);
+	check(this != NULL, "the caller must not be null");
+	check(dissector != NULL, "the dissector to be inserted must not be null");
+
+	debug("low insert: %016lX", dissector->ops->Dissector_lower);
+	debug("high insert: %016lX", dissector->ops->Dissector_upper);
 
 	this->lowList[this->size] = dissector->ops->Dissector_lower;
 	this->highList[this->size] = dissector->ops->Dissector_upper;
@@ -74,6 +77,10 @@ Dissector_t * DissectorRegister_insert(DissectorRegister_t *this,
 	this->size++;
 
 	return NULL;
+
+error:
+	return NULL;
+
 }
 
 /**

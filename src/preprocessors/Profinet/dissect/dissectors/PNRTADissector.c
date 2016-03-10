@@ -12,6 +12,7 @@
 #include "dissect/Dissector-int.h"
 #include "dissect/Dissector.h"
 #include "dissect/dissectors/PNRTADissector.h"
+#include "dissect/dissectors/DCPDissector.h"
 
 #include "dissect/tree/ProtocolTree.h"
 #include "dissect/tree/ProtocolTree-int.h"
@@ -53,24 +54,25 @@ static const struct Dissector_ops PNRTADissectorOverride_ops = {
   PNRTADissector_dissect
 };
 
+void PNRTADissector_initializeSubDissectors(Dissector_t *this) {
+
+    Dissector_t *dcpDissector = DCPDissector_new();
+
+    this->ops->Dissector_registerSub(this, dcpDissector);
+}
+
 /**
  * @see Dissector_new
  */
 Dissector_t *
 PNRTADissector_new() {
 
+    struct PNRTADissector *pnrtaDissector = (struct PNRTADissector *) Dissector_new(&PNRTADissectorOverride_ops);
+    check_mem(pnrtaDissector);
 
-    struct PNRTADissector *PNRTADissector;
+    PNRTADissector_initializeSubDissectors(&pnrtaDissector->dissector);
 
-    PNRTADissector = malloc(sizeof(struct PNRTADissector));
-    check_mem(PNRTADissector);
-
-    Dissector_t *disser = Dissector_new(&PNRTADissectorOverride_ops);
-    check_mem(disser);
-
-    PNRTADissector->dissector = *disser;
-
-    return (Dissector_t*) PNRTADissector;
+    return (Dissector_t*) pnrtaDissector;
 
 error:
     return NULL;
@@ -105,17 +107,19 @@ int PNRTADissector_dissect(Dissector_t *this, Buffy_t *buf, struct ProtocolNode 
 	pnrta.val.string = "Acyclic Realtime";
 	pnrta.length = strlen(pnrta.val.string);
 
-    ProtocolItem_t *pnrtaItem = node->ops->ProtocolTree_branch(node, "frame", pnrta);
+    ProtocolItem_t *pnrtaItem = node->ops->ProtocolTree_branch(node, "pn_frame", pnrta);
     check_mem(pnrtaItem);
 
     uint16_t u16FrameID = buf->ops->Buffy_getBits16(buf, 0);
+
+
 
     Dissector_t *nextDissector = this->ops->Dissector_getSub(this, u16FrameID);
     check(
 			nextDissector != NULL, "there is no acyclic dissector registered for frameID: 0x%04X",
 			u16FrameID);
 
-    return nextDissector->ops->Dissector_dissect(nextDissector, buf->ops->Buffy_createVirtual(buf, 16), pnrtaItem);
+    return nextDissector->ops->Dissector_dissect(nextDissector, buf, pnrtaItem);
 
 error:
 	return -1;

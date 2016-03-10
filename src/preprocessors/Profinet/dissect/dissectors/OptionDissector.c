@@ -1,9 +1,8 @@
 /**
  * @file
- * @brief DCPDissetor implementation.
+ * @brief OptionDissector implementation.
  *
- * This Dissector is the 0x8892 toplevel dissector, which will be followed by frame
- * and block dissectors.
+ * This Dissector dissects pn blocks
  *
  */
 #include <stdlib.h>
@@ -11,10 +10,6 @@
 
 #include "dissect/Dissector-int.h"
 #include "dissect/Dissector.h"
-#include "dissect/dissectors/DCPDissector.h"
-
-// subdissectors
-#include "dissect/dissectors/BlockDissector.h"
 #include "dissect/dissectors/OptionDissector.h"
 
 #include "dissect/tree/ProtocolTree.h"
@@ -25,6 +20,8 @@
 #include "dissect/DissectionUtils.h"
 
 #include "dbg.h"
+
+
 
 #define FRAME_ID_DCP_HELLO      0xfefc
 #define FRAME_ID_DCP_GETORSET   0xfefd
@@ -296,74 +293,42 @@ static const value_string pn_dcp_suboption_manuf[] = {
  * @brief The Dissector for Profi Real Time IO 0x8892.
  *
  */
-struct DCPDissector {
+struct OptionDissector {
   /** @brief Houses a Dissector internally for safe type casting. **/
   struct Dissector dissector;
 };
 
-void DCPDissector_free(Dissector_t *dissector);
+void OptionDissector_free(Dissector_t *dissector);
 
-int DCPDissector_dissect(Dissector_t *this, Buffy_t *buf, ProtocolTree_t *tree);
+int OptionDissector_dissect(Dissector_t *this, Buffy_t *buf, ProtocolTree_t *tree);
 
 /**
  * @see Dissector_ops
  */
-static const struct Dissector_ops DCPDissectorOverride_ops = {
+static const struct Dissector_ops OptionDissectorOverride_ops = {
 
-  sizeof(struct DCPDissector), /* size */
-  (uint64_t) FRAME_ID_DCP_HELLO,
-  (uint64_t) FRAME_ID_DCP_IDENT_RES,
-  DCPDissector_free,
+  sizeof(struct OptionDissector), /* size */
+  (uint64_t) OPTION_DISSECTOR_ID,
+  (uint64_t) OPTION_DISSECTOR_ID,
+  OptionDissector_free,
   Dissector_registerSub,
   Dissector_getSub,
-  DCPDissector_dissect
+  OptionDissector_dissect
 };
-
-int DCPDissector_initializeSubDissectors(Dissector_t *this) {
-
-    Dissector_t *blockDissector = BlockDissector_new();
-    check_mem(blockDissector); // TODO check that this check is done everywhere
-
-    this->ops->Dissector_registerSub(this, blockDissector);
-
-    Dissector_t *optionDissector = OptionDissector_new();
-    check_mem(optionDissector); // TODO check that this check is done everywhere
-
-    this->ops->Dissector_registerSub(this, optionDissector);
-
-    return 0;
-
-error:
-    return -1;
-
-}
 
 /**
  * @see Dissector_new
  */
 Dissector_t *
-DCPDissector_new() {
+OptionDissector_new() {
 
 
-    struct DCPDissector *dcpDissector;
+    struct OptionDissector *OptionDissector;
 
-    dcpDissector = (struct DCPDissector *) Dissector_new(&DCPDissectorOverride_ops);
-    check_mem(dcpDissector);
+    OptionDissector = (struct OptionDissector *) Dissector_new(&OptionDissectorOverride_ops);
+    check_mem(OptionDissector);
 
-    check(
-        DCPDissector_initializeSubDissectors(&dcpDissector->dissector) == 0,
-        "the subdissectors could not be registered successfully");
-
-    return (Dissector_t*) dcpDissector;
-    // dcpDissector = malloc(sizeof(struct DCPDissector));
-    // check_mem(dcpDissector);
-    //
-    // Dissector_t *dissector = Dissector_new(&DCPDissectorOverride_ops);
-    // check_mem(dissector);
-    //
-    // dcpDissector->dissector = dissector;
-    //
-    // return (Dissector_t*) dcpDissector;
+    return (Dissector_t*) OptionDissector;
 
 error:
     return NULL;
@@ -374,9 +339,9 @@ error:
  * @see Dissector_free
  */
 void
-DCPDissector_free(Dissector_t *dissector) {
+OptionDissector_free(Dissector_t *dissector) {
 
-	struct DCPDissector *this = (struct DCPDissector*) dissector;
+	struct OptionDissector *this = (struct OptionDissector*) dissector;
 
 	free(this);
 //	this->dissector.ops->Dissector_free(&this->dissector);
@@ -385,197 +350,137 @@ DCPDissector_free(Dissector_t *dissector) {
 	// TODO implement
 }
 
-int _dissectPNDCP_PDU(Dissector_t *this, Buffy_t *buf, struct ProtocolNode *node) {
+/* dissect the option field */
+/*static int
+dissect_PNDCP_Option(Dissector_t *this, Buffy_t *buf, struct ProtocolNode *node)
+{
+    uint8_t option;
+    uint8_t suboption;
+    const value_string *val_str;
 
-    check(this != NULL, "dissector must not be null");
-    check(buf != NULL, "buffer must not be null");
-    check(node != NULL, "node must not be null");
+    offset = dissect_pn_uint8 (tvb, offset, pinfo, tree, hfindex, &option);
+    switch (option) {
+    case PNDCP_OPTION_IP:
+        offset  = dissect_pn_uint8(tvb, offset, pinfo, tree, hf_pn_dcp_suboption_ip, &suboption);
+        val_str = pn_dcp_suboption_ip;
+        break;
+    case PNDCP_OPTION_DEVICE:
+        offset  = dissect_pn_uint8(tvb, offset, pinfo, tree, hf_pn_dcp_suboption_device, &suboption);
+        val_str = pn_dcp_suboption_device;
+        break;
+    case PNDCP_OPTION_DHCP:
+        offset  = dissect_pn_uint8(tvb, offset, pinfo, tree, hf_pn_dcp_suboption_dhcp, &suboption);
+        val_str = pn_dcp_suboption_dhcp;
+        break;
+    case PNDCP_OPTION_CONTROL:
+        offset  = dissect_pn_uint8(tvb, offset, pinfo, tree, hf_pn_dcp_suboption_control, &suboption);
+        val_str = pn_dcp_suboption_control;
+        break;
+    case PNDCP_OPTION_DEVICEINITIATIVE:
+        offset  = dissect_pn_uint8(tvb, offset, pinfo, tree, hf_pn_dcp_suboption_deviceinitiative, &suboption);
+        val_str = pn_dcp_suboption_deviceinitiative;
+        break;
+    case PNDCP_OPTION_ALLSELECTOR:
+        offset  = dissect_pn_uint8(tvb, offset, pinfo, tree, hf_pn_dcp_suboption_all, &suboption);
+        val_str = pn_dcp_suboption_all;
+        break;
+    default:
+        offset  = dissect_pn_uint8(tvb, offset, pinfo, tree, hf_pn_dcp_suboption_manuf, &suboption);
+        val_str = pn_dcp_suboption_manuf;
+    }
 
-    int offset = 0;
-	uint16_t dataLength;
+    proto_item_append_text(block_item, ", Status from %s - %s",
+        val_to_str(option, pn_dcp_option, "Unknown"), val_to_str(suboption, val_str, "Unknown"));
 
-	struct Value serviceID;
-	serviceID.type = is_uint8;
-	serviceID.length = 8;
+    if (append_col) {
+        col_append_fstr(pinfo->cinfo, COL_INFO, ", %s", val_to_str(suboption, val_str, "Unknown"));
+    }
 
-	ProtocolItem_t *serviceIDItem = node->ops->ProtocolTree_branch(node, "service_id", serviceID);
-	check_mem(serviceIDItem);
-
-	struct Value serviceType;
-	serviceType.type = is_uint8;
-	serviceType.length = 8;
-
-	ProtocolItem_t *serviceTypeItem = node->ops->ProtocolTree_branch(node, "service_type", serviceType);
-	check_mem(serviceTypeItem);
-
-
-	struct Value xid;
-	xid.type = is_uint32;
-	xid.length = 32;
-
-	ProtocolItem_t *xidItem = node->ops->ProtocolTree_branch(node, "xid", xid);
-	check_mem(xidItem);
-
-
-	struct Value responseDelay;
-	responseDelay.type = is_uint16;
-	responseDelay.length = 16;
-
-	ProtocolItem_t *responseDelayItem = node->ops->ProtocolTree_branch(node, "response_delay", responseDelay);
-	check_mem(responseDelayItem);
-
-
-//    char *xidStr;
-    bool isResponse = FALSE;
-
-    serviceID.val.uint8 = buf->ops->Buffy_getBits8(buf, offset++);
-    serviceType.val.uint8 = buf->ops->Buffy_getBits8(buf, offset++);
-	xid.val.uint32 = buf->ops->Buffy_getBits32(buf, offset);
-	offset += 4;
-
-	if (serviceID.val.uint8 == PNDCP_SERVICE_ID_IDENTIFY && serviceType.val.uint8 == PNDCP_SERVICE_TYPE_REQUEST) {
-
-		/* multicast header */
-		responseDelay.val.uint16 = buf->ops->Buffy_getBits16(buf, offset);
-		offset += 2;
-	} else {
-		/* unicast header -- just 16 reserved bits*/
-		offset += 2;
-	}
-
-	dataLength = buf->ops->Buffy_getBits16(buf, offset);
-
-	struct Value serviceIDName;
-	serviceIDName.type = is_string;
-
-	switch (serviceID.val.uint8) {
-	case PNDCP_SERVICE_ID_GET:
-		serviceIDName.val.string = "Get";
-		break;
-
-	case PNDCP_SERVICE_ID_SET:
-		serviceIDName.val.string = "Set";
-		break;
-
-	case PNDCP_SERVICE_ID_IDENTIFY:
-		serviceIDName.val.string = "Identify";
-		break;
-
-	case PNDCP_SERVICE_ID_HELLO:
-		serviceIDName.val.string = "Hello";
-		break;
-
-	default:
-		// TODO potential alarm / malformed??
-		serviceIDName.val.string = "Unknown";
-		break;
-	}
-
-	ProtocolItem_t *serviceIDStringItem = serviceIDItem->ops->ProtocolTree_branch(serviceIDItem, "service_id.name", serviceIDName);
-	check_mem(serviceIDStringItem);
-
-
-	struct Value serviceTypeName;
-	serviceTypeName.type = is_string;
-
-	switch (serviceType.val.uint8) {
-	case PNDCP_SERVICE_TYPE_REQUEST:
-		serviceTypeName.val.string = "Request";
-		break;
-
-	case PNDCP_SERVICE_TYPE_RESPONSE_SUCCESS:
-		serviceTypeName.val.string = "Resonse OK";
-		break;
-
-	case PNDCP_SERVICE_TYPE_RESPONSE_UNSUPPORTED:
-		serviceTypeName.val.string = "Response Unsupported";
-		break;
-
-	default:
-		// TODO potential alarm / malformed??
-		serviceTypeName.val.string = "Unknown";
-		break;
-	}
-
-	ProtocolItem_t *serviceTypeNameItem = serviceTypeItem->ops->ProtocolTree_branch(serviceTypeItem, "service.type_name", serviceTypeName);
-	check_mem(serviceTypeNameItem);
-
-	struct Value options;
-	options.type = is_string;
-	options.val.string = "Options";
-
-	struct Value blocks;
-	blocks.type = is_string;
-	blocks.val.string = "Blocks";
-
-	ProtocolItem_t *optionsItem = node->ops->ProtocolTree_branch(node, "options", options);
-	check_mem(optionsItem);
-
-	ProtocolItem_t * blocksItem = node->ops->ProtocolTree_branch(node, "blocks", blocks);
-	check_mem(blocksItem);
-
-	Buffy_t *loopBuffer; // = buf->ops->Buffy_createVirtual(buf, offset);
-
-	while (dataLength) {
-
-		loopBuffer = buf->ops->Buffy_createVirtual(buf, offset);
-		check_mem(loopBuffer);
-
-		int originalOffset = offset;
-        int bitsDissected;
-
-		Dissector_t *nextDissector;
-
-		if (serviceID.val.uint8 == PNDCP_SERVICE_ID_GET && serviceType.val.uint8 == PNDCP_SERVICE_TYPE_REQUEST) {
-
-			nextDissector = this->ops->Dissector_getSub(this, OPTION_DISSECTOR_ID);
-            check(nextDissector != NULL, "there exists not subdissector for the dcp options");
-            bitsDissected = nextDissector->ops->Dissector_dissect(nextDissector, loopBuffer, optionsItem);
-
-		} else {
-
-			nextDissector = this->ops->Dissector_getSub(this, BLOCK_DISSECTOR_ID);
-            check(nextDissector != NULL, "there exists not subdissector for the dcp blocks");
-            bitsDissected = nextDissector->ops->Dissector_dissect(nextDissector, loopBuffer, blocksItem);
-		}
-
-		check (bitsDissected >= 0, "dissecting the block or option failed");
-
-		offset += bitsDissected;
-
-		loopBuffer->ops->Buffy_free(loopBuffer);
-
-		check(offset > originalOffset || dataLength >= (offset - originalOffset), "Bounds Error");
-
-		dataLength -= (offset - originalOffset);
-	}
-
-	//struct Value xidName;
-	//xidName.type = is_string;
-	//xidName.val.string = "Xid:0x%x", xid.val.uint32;
-
-
-	//ProtocolItem_t *xidStringItem = xidItem->ops->ProtocolTree_branch(xidItem, "name", xid
-
-
-
-  //  debug("%d", serviceID);
-  //  debug("%d", serviceType);
-
-error:
-
-    return -1;
-}
+    return offset;
+}*/
 
 /**
  * @see Dissector_dissect
  */
-int DCPDissector_dissect(Dissector_t *this, Buffy_t *buf, struct ProtocolNode *node) {
+int OptionDissector_dissect(Dissector_t *this, Buffy_t *buf, struct ProtocolNode *node) {
 
 	(void) this;
 	(void) buf;
 	(void) node;
 
+	int bytesDissected = 0;
+
+    const value_string *val_str;
+
+	struct Value option;
+	option.type = is_uint8;
+	option.val.uint8 = buf->ops->Buffy_getBits8(buf, bytesDissected++);
+	option.length = 8;
+
+	struct Value suboption;
+	suboption.type = is_uint8;
+	suboption.val.uint8 = buf->ops->Buffy_getBits8(buf, bytesDissected++);
+	suboption.length = 8;
+
+	ProtocolItem_t *optionItem;
+
+    switch (option.val.uint8) {
+    case PNDCP_OPTION_IP:
+		
+		optionItem = node->ops->ProtocolTree_branch(node, "options.ip_option", option);
+		val_str = pn_dcp_suboption_ip;
+        break;
+    case PNDCP_OPTION_DEVICE:
+
+		optionItem = node->ops->ProtocolTree_branch(node, "options.device_option", option);
+        val_str = pn_dcp_suboption_device;
+        break;
+    case PNDCP_OPTION_DHCP:
+        
+		optionItem = node->ops->ProtocolTree_branch(node, "options.dhcp_option", option);
+        val_str = pn_dcp_suboption_dhcp;
+        break;
+    case PNDCP_OPTION_CONTROL:
+        optionItem = node->ops->ProtocolTree_branch(node, "options.control_option", option);
+        val_str = pn_dcp_suboption_control;
+        break;
+    case PNDCP_OPTION_DEVICEINITIATIVE:
+
+		optionItem = node->ops->ProtocolTree_branch(node, "options.deviceinitiative_option", option);
+        val_str = pn_dcp_suboption_deviceinitiative;
+        break;
+    case PNDCP_OPTION_ALLSELECTOR:
+        
+		optionItem = node->ops->ProtocolTree_branch(node, "options.allselector_option", option);
+        val_str = pn_dcp_suboption_all;
+        break;
+    default:	
+		optionItem = node->ops->ProtocolTree_branch(node, "options.manufacturer_option", option);
+        val_str = pn_dcp_suboption_manuf;
+    }
+
+	check_mem(optionItem);
+
+	struct Value suboptionValue;
+	suboptionValue.type = is_string;
+
+	suboptionValue.val.string = valueToString(suboption.val.uint8, val_str, "Unknown");
+
+	ProtocolItem_t *suboptionItem = optionItem->ops->ProtocolTree_branch(optionItem, "suboption", suboptionValue);
+	check_mem(suboptionItem);
+
+	return bytesDissected * 8;
+	/*
+    proto_item_append_text(block_item, ", Status from %s - %s",
+        val_to_str(option, pn_dcp_option, "Unknown"), val_to_str(suboption, val_str, "Unknown"));
+
+    if (append_col) {
+        col_append_fstr(pinfo->cinfo, COL_INFO, ", %s", val_to_str(suboption, val_str, "Unknown"));
+    }
+
+    return offset;
+*/
+	/*
     uint16_t u16FrameID = buf->ops->Buffy_getBits16(buf, 0);
     check (u16FrameID >= FRAME_ID_DCP_HELLO || u16FrameID <= FRAME_ID_DCP_IDENT_RES, "no valid frame id for dcp");
 
@@ -587,6 +492,7 @@ int DCPDissector_dissect(Dissector_t *this, Buffy_t *buf, struct ProtocolNode *n
 
     return _dissectPNDCP_PDU(this, buf->ops->Buffy_createVirtual(buf, 16), dcpItem);
 
+	*/
 error:
 	return -1;
 }

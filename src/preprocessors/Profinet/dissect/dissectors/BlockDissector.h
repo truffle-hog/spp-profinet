@@ -1,9 +1,9 @@
-#ifndef __DCP_DISSECTOR_H__
-#define __DCP_DISSECTOR_H__
+#ifndef __BLOCK_DISSECTOR_H__
+#define __BLOCK_DISSECTOR_H__
 
 /**
  * @file
- * @brief DCPDissector header.
+ * @brief BlockDissector header.
  *
  * This Dissector ist the dissector for asynchronous real time
  *
@@ -18,19 +18,21 @@
 #include "dissect/tree/ProtocolTree.h"
 #include "dissect/buffer/Buffy.h"
 
+#define BLOCK_DISSECTOR_ID      0xffffffffffffffff
+
 /**
  * @see Dissector_new
  */
-Dissector_t *DCPDissector_new();
+Dissector_t *BlockDissector_new();
 
 /**
  * @see Dissector_free
  */
-void DCPDissector_free(Dissector_t *dissector);
+void BlockDissector_free(Dissector_t *dissector);
 
 /**
  * @see Dissector_dissect
  */
-int DCPDissector_dissect(Dissector_t *this, Buffy_t *buf, ProtocolTree_t *tree);
+int BlockDissector_dissect(Dissector_t *this, Buffy_t *buf, ProtocolTree_t *tree);
 
 #endif

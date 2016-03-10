@@ -116,7 +116,7 @@ struct Value {
         float float32;
         double double64;
         char character;
-        char *string;
+        const char *string;
     } val;
 };
 

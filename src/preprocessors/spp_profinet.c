@@ -231,16 +231,16 @@ void printLabel(struct Value val) {
 			break;
 
 		case is_uint8:
-			printf("%02X", val.val.uint8);
+			printf("0x%02X", val.val.uint8);
 			break;
 		case is_uint16:
-			printf("%04X", val.val.uint16);
+			printf("0x%04X", val.val.uint16);
 			break;
 		case is_uint32:
-			printf("%08X", val.val.uint32);
+			printf("0x%08X", val.val.uint32);
 			break;
 		case is_uint64:
-			printf("%016lX", val.val.uint64);
+			printf("0x%016lX", val.val.uint64);
 			break;
 
 		case is_float:

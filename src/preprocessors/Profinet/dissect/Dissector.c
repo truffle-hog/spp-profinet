@@ -55,6 +55,9 @@ void Dissector_free(Dissector_t *dissector) {
 Dissector_t * Dissector_registerSub(Dissector_t *this,
                            Dissector_t *subDissector) {
 
+	check(this != NULL, "the caller must not be null");
+	check(subDissector != NULL, "the subdissector must not be null");
+
 	DissectorRegister_t *thisRegister = this->dissectorRegister;
 
 	Dissector_t *existing = this->dissectorRegister->ops->DissectorRegister_insert(thisRegister, subDissector);
@@ -62,6 +65,9 @@ Dissector_t * Dissector_registerSub(Dissector_t *this,
 	// TODO implement proper error testing and duplicates with insertion
 
 	return existing;
+
+error:
+	return NULL;
 }
 
 Dissector_t * Dissector_getSub(Dissector_t *this, uint64_t data) {

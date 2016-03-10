@@ -22,10 +22,10 @@ typedef struct Buffy Buffy_t;
 void Buffy_free(Buffy_t *buffy);
 
 /**
- * @brief Creates a new virtual buffer from the current buffer that starts at the given byte offset
+ * @brief Creates a new virtual buffer from the current buffer that starts at the given bit offset
  *
  * @param this the calling Buffer
- * @param byteOffset the byte offset the new buffer starts at
+ * @param bitOffset the bit offset the new buffer starts at
  */
 Buffy_t *Buffy_createVirtual(Buffy_t *this, unsigned int bitOffset);
 
