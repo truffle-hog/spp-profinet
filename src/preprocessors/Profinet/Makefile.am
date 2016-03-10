@@ -13,6 +13,7 @@ dissect/DissectorRegister.o \
 dissect/dissectors/PacketDissector.o \
 dissect/dissectors/EthernetDissector.o \
 dissect/dissectors/PNRTDissector.o \
+dissect/dissectors/PNRTADissector.o \
 dissect/buffer/Buffy.o \
 dissect/tree/ProtocolTree.o \
 send/Sender.o \

@@ -13,6 +13,7 @@ libprofinet_a_LIBADD = \
 dissectors/PacketDissector.o \
 dissectors/EthernetDissector.o \
 dissectors/PNRTDissector.o \
+dissectors/PNRTADissector.o \
 buffer/Buffy.o \
 tree/ProtocolTree.o
 
