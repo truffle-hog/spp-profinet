@@ -27,7 +27,6 @@
 static const int TRUFFLEHOG_CONNECT_REQUEST = 0x0;
 static const int TRUFFLEHOG_DISCONNECT_REQUEST = 0x1;
 static const int SNORT_CONNECT_RESPONSE = 0x2;
-static const int SNORT_DISCONNECT_RESPONSE = 0x3;
 
 typedef struct SocketData {
 	int server_sockfd;
@@ -116,34 +115,23 @@ void * await_request( void* args) {
 		check(n >= 0, "error reading from socket");
 		int response = -1;
 
-//		switch(buffer) {
-
 		if (buffer == TRUFFLEHOG_CONNECT_REQUEST) {
 
 			data->client_detected = true;
 			debug("TruffleHog wants to connect...");
 			response = SNORT_CONNECT_RESPONSE;
+			n = write(data->client_sockfd, (void*) &response, sizeof(int));
+			check (n >= 0, "error writing to socket");
 
 		} else if (buffer == TRUFFLEHOG_DISCONNECT_REQUEST) {
 
 			data->client_detected = false;
 			debug("TruffleHog wants to disconnect...");
-			response = SNORT_DISCONNECT_RESPONSE;
 
 		} else {
 
 			sentinel("there is no allowed default case yet");
 		}
-//		}
-		n = write(data->client_sockfd, (void*) &response, sizeof(int));
-		check (n >= 0, "error writing to socket");
-
-	//	DEBUG_WRAP(DebugMessage(DEBUG_PLUGIN, "Received message: %s\n",buffer));
-
-		// TODO instead of toggling request a specific ID from the client
-		// something secure
-
-	//	data->client_detected = !data->client_detected;;
 	}
 
 	return NULL;
