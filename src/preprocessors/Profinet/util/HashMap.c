@@ -3,7 +3,6 @@
 
 #include "dbg.h"
 
-#include "util/DArray_Entry.h"
 #include "util/HashMap.h"
 #include "dissect/DissectionUtils.h"
 
@@ -156,8 +155,6 @@ struct Value *HashMap_remove(struct HashMap *this, char *key) {
 	(void) key;
 
 	sentinel("Not implemented exception");
-
-
 
 error:
     return NULL;

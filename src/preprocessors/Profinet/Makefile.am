@@ -24,7 +24,6 @@ send/Sender.o \
 send/UnixSocketSender.o \
 send/Truffle.o \
 util/DArray.o \
-util/DArray_Entry.o \
 util/HashMap.o \
 util/ScopeAlloc.o
 

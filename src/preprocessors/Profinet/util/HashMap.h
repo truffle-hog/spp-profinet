@@ -1,8 +1,6 @@
 #ifndef __HASH_MAP_H__
 #define __HASH_MAP_H__
 
-#include "util/DArray_Entry.h"
-
 #include "dissect/DissectionUtils.h"
 
 struct Entry {
