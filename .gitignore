@@ -22,6 +22,8 @@
 !src/preprocessors/Profinet/dissect/dissectors/*
 !src/preprocessors/Profinet/send
 !src/preprocessors/Profinet/send/*
+!src/preprocessors/Profinet/util
+!src/preprocessors/Profinet/util/*
 !src/preprocessors/spp_profinet.c
 !src/preprocessors/spp_profinet.h
 !src/preprocessors/dbg.h

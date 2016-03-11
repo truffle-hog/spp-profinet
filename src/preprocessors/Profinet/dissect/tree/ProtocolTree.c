@@ -22,6 +22,8 @@ static const struct ProtocolTree_ops ProtocolTreeOverride_ops = {
 	ProtocolTree_branch,
 	ProtocolTree_setValue,
 	ProtocolTree_getValue,
+	ProtocolTree_insertImportantValue,
+	ProtocolTree_getImportantValue,
 	ProtocolTree_getRoot,
 	ProtocolTree_getParent,
 	ProtocolTree_getChild,
@@ -79,6 +81,9 @@ struct ProtocolNode *ProtocolTree_new(char *rootKey) {
 	treeData->keys[0] = rootKey;
 	treeData->mappedNodePointers[0] = node;
 
+	treeData->map = HashMap_new(10);
+	check_mem(treeData->map);
+
 	node->key = rootKey;
 
 	node->ops = &ProtocolTreeOverride_ops;
@@ -97,19 +102,20 @@ error:
 /**
  * @see ProtocolNode_branch
  */
-struct ProtocolNode *ProtocolTree_branch(struct ProtocolNode *this, char *key, struct Value value) {
+struct ProtocolNode *ProtocolTree_branch(struct ProtocolNode *this, char *name, struct Value value) {
 
 	struct ProtocolNode *child = malloc(sizeof(struct ProtocolNode));
 	check_mem(child);
 
 	child->treeData = this->treeData;
 
-	child->key = key;
+	child->name = name;
 	child->value = value;
 	child->ops = this->ops;
 	child->childCount = 0;
 	child->parent = this;
 	child->children = NULL;
+	child->id = child->treeData->nextID++;
 
 	// TODO implement dynamic growing
 	this->children = realloc(this->children, (this->childCount + 1) * sizeof(void*));
@@ -152,6 +158,15 @@ struct Value ProtocolTree_getValue(const struct ProtocolNode *this) {
 	return this->value;
 }
 
+int ProtocolTree_insertImportantValue(struct ProtocolNode *this, char *key, struct Value value) {
+
+	return HashMap_insert(this->treeData->map, key, value, NULL);
+}
+
+struct Value *ProtocolTree_getImportantValue(struct ProtocolNode *this, char *key) {
+
+	return HashMap_find(this->treeData->map, key);
+}
 
 
 /**

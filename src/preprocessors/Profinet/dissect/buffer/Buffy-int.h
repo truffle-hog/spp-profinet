@@ -41,6 +41,8 @@ struct Buffy_ops {
    */
   Buffy_t *(*Buffy_createVirtual)(Buffy_t *this, unsigned int bitOffset);
 
+  uint8_t *(*Buffy_copyNBytes)(Buffy_t *this, uint8_t *dest, unsigned int byteCount, unsigned int byteOffset);
+
   uint8_t (*Buffy_getBits8)(Buffy_t *this, unsigned int byteOffset);
 
   uint16_t (*Buffy_getBits16)(Buffy_t *this, unsigned int byteOffset);
@@ -48,6 +50,14 @@ struct Buffy_ops {
   uint32_t (*Buffy_getBits32)(Buffy_t *this, unsigned int byteOffset);
 
   uint64_t (*Buffy_getBits64)(Buffy_t *this, unsigned int byteOffset);
+
+  uint8_t (*Buffy_getBitsWalk8)(Buffy_t *this, unsigned int *byteOffset);
+
+  uint16_t (*Buffy_getBitsWalk16)(Buffy_t *this, unsigned int *byteOffset);
+
+  uint32_t (*Buffy_getBitsWalk32)(Buffy_t *this, unsigned int *byteOffset);
+
+  uint64_t (*Buffy_getBitsWalk64)(Buffy_t *this, unsigned int *byteOffset);
 
   /**
    * @brief Get 1 - 8 bits returned in a uint8.

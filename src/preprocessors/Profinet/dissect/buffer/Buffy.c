@@ -5,6 +5,7 @@
 
 
 #include <stdint.h>
+#include <assert.h>
 
 #include "dissect/buffer/Buffy.h"
 #include "dissect/buffer/Buffy-int.h"
@@ -17,10 +18,15 @@ static const struct Buffy_ops BuffyOverride_ops = {
 
 	Buffy_free,
 	Buffy_createVirtual,
+	Buffy_copyNBytes,
 	Buffy_getBits8,
 	Buffy_getBits16,
 	Buffy_getBits32,
 	Buffy_getBits64,
+	Buffy_getBitsWalk8,
+	Buffy_getBitsWalk16,
+	Buffy_getBitsWalk32,
+	Buffy_getBitsWalk64,
 	Buffy_getNBits8,
 	Buffy_getNBits16,
 	Buffy_getNBits32,
@@ -85,6 +91,16 @@ error:
 	return NULL;
 }
 
+uint8_t *Buffy_copyNBytes(Buffy_t *this, uint8_t *dest, unsigned int byteCount, unsigned int byteOffset) {
+
+	check(this != NULL, "calling buffer must not be null");
+	memcpy(dest, this->data + byteOffset, byteCount);
+	return dest;
+
+error:
+	return NULL;
+}
+
 uint8_t Buffy_getBits8(Buffy_t *this, unsigned int byteOffset) {
 
 	check(this != NULL, "calling buffer must not be null");
@@ -121,14 +137,43 @@ uint64_t Buffy_getBits64(Buffy_t *this, unsigned int byteOffset) {
 	uint64_t value = *((uint64_t*) (this->data + byteOffset));
 	return htobe64(value);
 error:
+// TODO change to buffy->hadError = true
 	return -1;
+}
+
+uint8_t Buffy_getBitsWalk8(Buffy_t *this, unsigned int *byteOffset) {
+
+	uint8_t value = Buffy_getBits8(this, *byteOffset);
+	*byteOffset += 1;
+	return value;
+}
+
+uint16_t Buffy_getBitsWalk16(Buffy_t *this, unsigned int *byteOffset) {
+
+	uint16_t value = this->ops->Buffy_getBits16(this, *byteOffset);
+	*byteOffset += 2;
+	return value;
+}
+
+uint32_t Buffy_getBitsWalk32(Buffy_t *this, unsigned int *byteOffset) {
+
+	uint32_t value = Buffy_getBits32(this, *byteOffset);
+	*byteOffset += 4;
+	return value;
+}
+
+uint64_t Buffy_getBitsWalk64(Buffy_t *this, unsigned int *byteOffset) {
+
+	uint64_t value = Buffy_getBits64(this, *byteOffset);
+	*byteOffset += 8;
+	return value;
 }
 
 /**
  * @see Buffy_getBits8
  */
 uint8_t Buffy_getNBits8(Buffy_t *this, unsigned int bitOffset,
-    const int noOfBits) {
+	const int noOfBits) {
 
 	check(this != NULL, "The calling buffer must not be null.");
 	check(noOfBits <= 8, "number of bits has to be between 1 and 8 bits.");

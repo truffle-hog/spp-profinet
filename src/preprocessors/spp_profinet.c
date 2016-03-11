@@ -72,6 +72,8 @@
 
 #include "send/Truffle.h"
 
+#include "util/ScopeAlloc.h"
+
 /*
  * put in other inculdes as necessary
  */
@@ -320,9 +322,11 @@ static void DetectProfiNetPackets(Packet *p, void *context)
     ProtocolTree_printDot(protoTree);
 	//protoTree->ops->ProtocolTree_toString(protoTree);
 
- //   protoTree->ops->ProtocolTree_free(protoTree);
+    protoTree->ops->ProtocolTree_free(protoTree);
     //buffy->ops->Buffy_freeChain(buffy); //TODO implement this function in Buffy
-  //  free(truffle);
+    free(truffle);
+
+    packetScopeFree();
 
 error:
     return;

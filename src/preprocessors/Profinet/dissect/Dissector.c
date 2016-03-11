@@ -44,6 +44,22 @@ error:
 	return NULL;
 }
 
+Dissector_t * Dissector_ScopedNew(const struct Dissector_ops *ops, void *(*scopeMalloc)(size_t size)) {
+
+	Dissector_t *dissector = scopeMalloc(sizeof(Dissector_t));
+	check_mem(dissector);
+
+	dissector->dissectorRegister = DissectorRegister_new();
+	check_mem(dissector->dissectorRegister);
+
+	dissector->ops = ops;
+
+	return dissector;
+
+error:
+	return NULL;
+}
+
 void Dissector_free(Dissector_t *dissector) {
 
 	dissector->dissectorRegister->ops->DissectorRegister_free(dissector->dissectorRegister);

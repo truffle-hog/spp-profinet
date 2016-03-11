@@ -3,7 +3,7 @@ AUTOMAKE_OPTIONS=foreign no-dependencies
 
 noinst_LIBRARIES = libprofinet.a
 
-SUBDIRS = dissect send
+SUBDIRS = dissect send util
 
 libprofinet_a_SOURCES =
 
@@ -22,6 +22,10 @@ dissect/buffer/Buffy.o \
 dissect/tree/ProtocolTree.o \
 send/Sender.o \
 send/UnixSocketSender.o \
-send/Truffle.o
+send/Truffle.o \
+util/DArray.o \
+util/DArray_Entry.o \
+util/HashMap.o \
+util/ScopeAlloc.o
 
 INCLUDES = @INCLUDES@

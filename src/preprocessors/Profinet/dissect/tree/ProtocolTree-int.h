@@ -9,6 +9,8 @@
 #include <stdbool.h>
 
 #include "dissect/tree/ProtocolTree.h"
+#include "util/HashMap.h"
+#include "dissect/DissectionUtils.h"
 
 /**
  * @brief The operations that can be called by a ProtocolTree.
@@ -55,6 +57,14 @@ struct ProtocolTree_ops {
      */
     struct Value (*ProtocolTree_getValue)(const struct ProtocolNode *this);
 
+    /** TODO DOC
+     */
+    int (*ProtocolTree_insertImportantValue)(struct ProtocolNode *this, char *key, struct Value value);
+
+    /** TODO DOC
+     */
+    struct Value *(*ProtocolTree_getImportantValue)(struct ProtocolNode *this, char *key);
+
     /**
      * @brief Returns this Tree's root Node that this ProtocolNode belongs to.
      * @param this the calling ProtocolNode
@@ -90,35 +100,7 @@ struct ProtocolTree_ops {
 
 };
 
-struct Value {
 
-    /** The length of this value. **/
-    int length;
-    /** The different types this value can be. **/
-    enum {  is_int8, is_uint8,
-            is_int16, is_uint16,
-            is_int32, is_uint32,
-            is_int64, is_uint64,
-            is_float, is_double,
-            is_char, is_string
-        } type;
-
-    /** Union of all data types that can be inserted for a Value. **/
-    union {
-        int8_t int8;
-        uint8_t uint8;
-        int16_t int16;
-        uint16_t uint16;
-        int32_t int32;
-        uint32_t uint32;
-        int64_t int64;
-        uint64_t uint64;
-        float float32;
-        double double64;
-        char character;
-        const char *string;
-    } val;
-};
 
 struct TreeData {
 
@@ -127,11 +109,17 @@ struct TreeData {
     struct ProtocolNode **mappedNodePointers;
     /** -------------------  **/
 
+    /** ANOTHER FAKE HASHMAP ;) **/
+    struct HashMap *map;
+
     /** The root Node of this ProtocolTree. **/
     struct ProtocolNode *root;
 
 	/** The number of Nodes in this ProtocolTree. **/
 	int         size;
+
+    /** The id that the next node will get that is added to the tree **/
+    int nextID;
 };
 
 /** Each proto_tree, proto_item is one of these. */
@@ -144,6 +132,9 @@ struct ProtocolNode {
 
 	/** The unique key identifying this ProtocolNode. **/
 	char *key;
+
+    /** unique ID identifying this ProtocolNode. **/
+    int id;
 
     /** The value this ProtocolNode has. **/
     struct Value value;

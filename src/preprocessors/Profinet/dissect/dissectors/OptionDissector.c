@@ -296,6 +296,7 @@ static const value_string pn_dcp_suboption_manuf[] = {
 struct OptionDissector {
   /** @brief Houses a Dissector internally for safe type casting. **/
   struct Dissector dissector;
+  bool isResponse;
 };
 
 void OptionDissector_free(Dissector_t *dissector);
@@ -350,55 +351,6 @@ OptionDissector_free(Dissector_t *dissector) {
 	// TODO implement
 }
 
-/* dissect the option field */
-/*static int
-dissect_PNDCP_Option(Dissector_t *this, Buffy_t *buf, struct ProtocolNode *node)
-{
-    uint8_t option;
-    uint8_t suboption;
-    const value_string *val_str;
-
-    offset = dissect_pn_uint8 (tvb, offset, pinfo, tree, hfindex, &option);
-    switch (option) {
-    case PNDCP_OPTION_IP:
-        offset  = dissect_pn_uint8(tvb, offset, pinfo, tree, hf_pn_dcp_suboption_ip, &suboption);
-        val_str = pn_dcp_suboption_ip;
-        break;
-    case PNDCP_OPTION_DEVICE:
-        offset  = dissect_pn_uint8(tvb, offset, pinfo, tree, hf_pn_dcp_suboption_device, &suboption);
-        val_str = pn_dcp_suboption_device;
-        break;
-    case PNDCP_OPTION_DHCP:
-        offset  = dissect_pn_uint8(tvb, offset, pinfo, tree, hf_pn_dcp_suboption_dhcp, &suboption);
-        val_str = pn_dcp_suboption_dhcp;
-        break;
-    case PNDCP_OPTION_CONTROL:
-        offset  = dissect_pn_uint8(tvb, offset, pinfo, tree, hf_pn_dcp_suboption_control, &suboption);
-        val_str = pn_dcp_suboption_control;
-        break;
-    case PNDCP_OPTION_DEVICEINITIATIVE:
-        offset  = dissect_pn_uint8(tvb, offset, pinfo, tree, hf_pn_dcp_suboption_deviceinitiative, &suboption);
-        val_str = pn_dcp_suboption_deviceinitiative;
-        break;
-    case PNDCP_OPTION_ALLSELECTOR:
-        offset  = dissect_pn_uint8(tvb, offset, pinfo, tree, hf_pn_dcp_suboption_all, &suboption);
-        val_str = pn_dcp_suboption_all;
-        break;
-    default:
-        offset  = dissect_pn_uint8(tvb, offset, pinfo, tree, hf_pn_dcp_suboption_manuf, &suboption);
-        val_str = pn_dcp_suboption_manuf;
-    }
-
-    proto_item_append_text(block_item, ", Status from %s - %s",
-        val_to_str(option, pn_dcp_option, "Unknown"), val_to_str(suboption, val_str, "Unknown"));
-
-    if (append_col) {
-        col_append_fstr(pinfo->cinfo, COL_INFO, ", %s", val_to_str(suboption, val_str, "Unknown"));
-    }
-
-    return offset;
-}*/
-
 /**
  * @see Dissector_dissect
  */
@@ -426,7 +378,7 @@ int OptionDissector_dissect(Dissector_t *this, Buffy_t *buf, struct ProtocolNode
 
     switch (option.val.uint8) {
     case PNDCP_OPTION_IP:
-		
+
 		optionItem = node->ops->ProtocolTree_branch(node, "options.ip_option", option);
 		val_str = pn_dcp_suboption_ip;
         break;
@@ -436,7 +388,7 @@ int OptionDissector_dissect(Dissector_t *this, Buffy_t *buf, struct ProtocolNode
         val_str = pn_dcp_suboption_device;
         break;
     case PNDCP_OPTION_DHCP:
-        
+
 		optionItem = node->ops->ProtocolTree_branch(node, "options.dhcp_option", option);
         val_str = pn_dcp_suboption_dhcp;
         break;
@@ -450,11 +402,11 @@ int OptionDissector_dissect(Dissector_t *this, Buffy_t *buf, struct ProtocolNode
         val_str = pn_dcp_suboption_deviceinitiative;
         break;
     case PNDCP_OPTION_ALLSELECTOR:
-        
+
 		optionItem = node->ops->ProtocolTree_branch(node, "options.allselector_option", option);
         val_str = pn_dcp_suboption_all;
         break;
-    default:	
+    default:
 		optionItem = node->ops->ProtocolTree_branch(node, "options.manufacturer_option", option);
         val_str = pn_dcp_suboption_manuf;
     }
@@ -469,7 +421,7 @@ int OptionDissector_dissect(Dissector_t *this, Buffy_t *buf, struct ProtocolNode
 	ProtocolItem_t *suboptionItem = optionItem->ops->ProtocolTree_branch(optionItem, "suboption", suboptionValue);
 	check_mem(suboptionItem);
 
-	return bytesDissected * 8;
+	return bytesDissected;
 	/*
     proto_item_append_text(block_item, ", Status from %s - %s",
         val_to_str(option, pn_dcp_option, "Unknown"), val_to_str(suboption, val_str, "Unknown"));

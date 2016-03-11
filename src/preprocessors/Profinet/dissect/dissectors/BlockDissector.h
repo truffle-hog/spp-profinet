@@ -21,6 +21,18 @@
 #define BLOCK_DISSECTOR_ID      0xffffffffffffffff
 
 /**
+ * @brief The Dissector for Profi Real Time IO 0x8892.
+ *
+ */
+struct BlockDissector {
+	/** @brief Houses a Dissector internally for safe type casting. **/
+	struct Dissector dissector;
+	bool isResponse;
+	uint8_t serviceID;
+
+};
+
+/**
  * @see Dissector_new
  */
 Dissector_t *BlockDissector_new();
