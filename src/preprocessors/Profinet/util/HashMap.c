@@ -5,6 +5,7 @@
 
 #include "util/DArray_Entry.h"
 #include "util/HashMap.h"
+#include "dissect/DissectionUtils.h"
 
 static int
 _forEachRehash(struct Entry entry, void *args, void *ret) {
@@ -28,14 +29,26 @@ error:
 static void
 *_reallocate(struct HashMap *this, size_t newSize) {
 
+	debug("reallocation");
+
+	size_t allocated = this->allocated;
+
+	struct Entry *copiedTable = malloc(sizeof(struct Entry) * this->allocated);
+	check_mem(copiedTable);
+
+	memcpy(copiedTable, this->table, this->allocated * sizeof(struct Entry));
     this->allocated = newSize;
 
     free(this->table);
     this->table = malloc(this->allocated * sizeof(struct Entry));
+
     check_mem(this->table);
 	memset(this->table, 0, sizeof(struct Entry) * this->allocated);
 
-    DArray_Entry_forEach(this->entries, _forEachRehash, this, NULL);
+	int i;
+	for (i = 0; i < allocated; i++) {
+		HashMap_insert(this, copiedTable[i].key, copiedTable[i].value, NULL);
+	}
 
     return this->table;
 
@@ -52,9 +65,6 @@ struct HashMap
 
     hashMap->size = 0;
     hashMap->allocated = initial;
-
-    hashMap->entries = DArray_Entry_new(1);
-    check_mem(hashMap->entries);
 
     hashMap->table = malloc(sizeof(struct Entry) * hashMap->allocated);
 	check_mem(hashMap->table);
@@ -111,10 +121,16 @@ HashMap_insert(struct HashMap *this, char *key, struct Value value, struct Value
 				memcpy(existing, &this->table[i].value, sizeof(struct Value));
             }
             this->table[i] = (struct Entry) {.key = key, .value = value};
-            return 1;
+			this->size++;
+			return 1;
         }
     }
     this->table[i] = (struct Entry) {.key = key, .value = value, .valid = 1};
+	debug("table %d : (key=%s, valid=%d)", i, this->table[i].key, this->table[i].valid);
+	printValue(this->table[i].value);
+	printf("\n");
+	this->size++;
+
     return 0;
 error:
     return -1;
@@ -123,7 +139,10 @@ error:
 struct Value *HashMap_find(struct HashMap *this, char *key) {
 
     int i;
-    for (i = _hashMe(this->allocated, key); !(this->table + i)->valid; i++) {
+    for (i = _hashMe(this->allocated, key); (this->table + i)->valid; i++) {
+
+		debug("hash=%d, haystack=%s, needle=%s", i, this->table[i].key, key);
+
         if (!strcmp(this->table[i].key, key)) {
             return &(this->table + i)->value;
         }
@@ -162,7 +181,6 @@ void HashMap_free(struct HashMap *hashMap) {
     hashMap->size = 0;
     hashMap->allocated = 10;
     free(hashMap->table);
-    free(hashMap->entries);
     free(hashMap);
 
     hashMap = NULL;

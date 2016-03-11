@@ -16,7 +16,6 @@ struct HashMap {
     size_t size;
     size_t allocated;
     struct Entry *table;
-    struct DArray_Entry *entries;
 };
 
 struct HashMap *HashMap_new(size_t initial);

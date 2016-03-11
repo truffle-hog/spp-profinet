@@ -26,3 +26,53 @@ const char
 error:
     return defaultValue;
 }
+
+void printValue(struct Value val) {
+
+
+	switch(val.type) {
+
+		case is_string:
+			printf("%s", val.val.string);
+			break;
+
+		case is_char:
+			printf("%c", val.val.character);
+			break;
+
+		case is_int8:
+			printf("%d", val.val.int8);
+			break;
+		case is_int16:
+			printf("%d", val.val.int16);
+			break;
+		case is_int32:
+			printf("%d", val.val.int32);
+			break;
+		case is_int64:
+			printf("%ld", val.val.int64);
+			break;
+
+		case is_uint8:
+			printf("0x%02X", val.val.uint8);
+			break;
+		case is_uint16:
+			printf("0x%04X", val.val.uint16);
+			break;
+		case is_uint32:
+			printf("0x%08X", val.val.uint32);
+			break;
+		case is_uint64:
+			printf("0x%016lX", val.val.uint64);
+			break;
+
+		case is_float:
+			printf("%f", val.val.float32);
+			break;
+		case is_double:
+			printf("%f", val.val.double64);
+			break;
+
+	}
+	return;
+}

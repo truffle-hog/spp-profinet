@@ -13,6 +13,7 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <sys/un.h>
+#include <signal.h>
 
 #include <pwd.h>
 #include <pthread.h> // threads
@@ -78,7 +79,7 @@ char * convert_to_homepath_name(char *socket_name_) {
 
 		homedir = getpwuid(getuid())->pw_dir;
 	}
-	char *socket_file = malloc(strlen(homedir) + strlen(socket_name) + 1);
+	char *socket_file = malloc(strlen(homedir) + strlen(socket_name) + 2);
 	check_mem(socket_file);
 
 	socket_file[0] = '\0';
@@ -118,19 +119,19 @@ void * await_request( void* args) {
 //		switch(buffer) {
 
 		if (buffer == TRUFFLEHOG_CONNECT_REQUEST) {
-			
+
 			data->client_detected = true;
 			debug("TruffleHog wants to connect...");
-			response = SNORT_CONNECT_RESPONSE;	
-			
+			response = SNORT_CONNECT_RESPONSE;
+
 		} else if (buffer == TRUFFLEHOG_DISCONNECT_REQUEST) {
-			
+
 			data->client_detected = false;
 			debug("TruffleHog wants to disconnect...");
 			response = SNORT_DISCONNECT_RESPONSE;
-			
+
 		} else {
-			
+
 			sentinel("there is no allowed default case yet");
 		}
 //		}
@@ -160,6 +161,8 @@ UnixSocketSender_new() {
 
 	struct UnixSocketSender *unixSocketSender = malloc(sizeof(struct UnixSocketSender));
   	check_mem(unixSocketSender);
+
+	check(signal(SIGPIPE, SIG_IGN) != SIG_ERR, "error setting pipe signal to ignore");
 
 	unixSocketSender->socketData.client_detected = false;
 

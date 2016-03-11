@@ -7,6 +7,7 @@
 
 #include <stdint.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 #include "dbg.h"
 
@@ -20,6 +21,7 @@ static const struct ProtocolTree_ops ProtocolTreeOverride_ops = {
 
 	ProtocolTree_free,
 	ProtocolTree_branch,
+	ProtocolTree_branchImportant,
 	ProtocolTree_setValue,
 	ProtocolTree_getValue,
 	ProtocolTree_insertImportantValue,
@@ -65,7 +67,7 @@ void ProtocolTree_free(struct ProtocolNode *proto) {
 /**
  * @see ProtocolTree_new
  */
-struct ProtocolNode *ProtocolTree_new(char *rootKey) {
+struct ProtocolNode *ProtocolTree_new(char *rootName) {
 
 	struct ProtocolNode *node = malloc(sizeof(struct ProtocolNode));
 	check_mem(node);
@@ -75,22 +77,26 @@ struct ProtocolNode *ProtocolTree_new(char *rootKey) {
 
 	treeData->size = 1;
 	treeData->root = node;
-	treeData->keys = malloc(sizeof(void*));
-	treeData->mappedNodePointers = malloc(sizeof(void*));
+	treeData->nodePointers = malloc(sizeof(void*));
+	treeData->nextID = 0;
 
-	treeData->keys[0] = rootKey;
-	treeData->mappedNodePointers[0] = node;
 
-	treeData->map = HashMap_new(10);
+	treeData->nodePointers[0] = node;
+
+	treeData->map = HashMap_new(50);
 	check_mem(treeData->map);
 
-	node->key = rootKey;
+	node->isImportant = false;
+	node->importantKey = "";
 
+	node->name = rootName;
+	node->id = treeData->nextID++;
 	node->ops = &ProtocolTreeOverride_ops;
 	node->childCount = 0;
 	node->treeData = treeData;
 	node->parent = NULL;
 	node->children = NULL;
+	node->visited = false;
 
 	return node;
 
@@ -111,24 +117,62 @@ struct ProtocolNode *ProtocolTree_branch(struct ProtocolNode *this, char *name, 
 
 	child->name = name;
 	child->value = value;
+	child->isImportant = false;
+	child->importantKey = "";
 	child->ops = this->ops;
 	child->childCount = 0;
 	child->parent = this;
 	child->children = NULL;
 	child->id = child->treeData->nextID++;
+	child->visited = false;
 
 	// TODO implement dynamic growing
 	this->children = realloc(this->children, (this->childCount + 1) * sizeof(void*));
 	check_mem(this->children);
 
-	this->treeData->keys = realloc(this->treeData->keys, (this->treeData->size + 1) * sizeof(void*));
-	check_mem(this->treeData->keys);
+	this->treeData->nodePointers = realloc(this->treeData->nodePointers, (this->treeData->size + 1) * sizeof(void*));
+	check_mem(this->treeData->nodePointers);
 
-	this->treeData->mappedNodePointers = realloc(this->treeData->mappedNodePointers, (this->treeData->size + 1) * sizeof(void*));
-	check_mem(this->treeData->mappedNodePointers);
+	this->treeData->nodePointers[this->treeData->size] = child;
 
-	this->treeData->mappedNodePointers[this->treeData->size] = child;
-	this->treeData->keys[this->treeData->size] = child->key;
+	this->children[this->childCount] = child;
+	this->childCount++;
+	this->treeData->size++;
+
+	return child;
+
+error:
+	return NULL;
+}
+
+struct ProtocolNode *ProtocolTree_branchImportant(struct ProtocolNode *this, char *name, char *importantKey, struct Value value) {
+
+	struct ProtocolNode *child = malloc(sizeof(struct ProtocolNode));
+	check_mem(child);
+
+	child->treeData = this->treeData;
+
+	child->name = name;
+	child->value = value;
+	child->isImportant = true;
+	child->importantKey = importantKey;
+	child->ops = this->ops;
+	child->childCount = 0;
+	child->parent = this;
+	child->children = NULL;
+	child->id = child->treeData->nextID++;
+	child->visited = false;
+
+	ProtocolTree_insertImportantValue(this, importantKey, value);
+
+	// TODO implement dynamic growing
+	this->children = realloc(this->children, (this->childCount + 1) * sizeof(void*));
+	check_mem(this->children);
+
+	this->treeData->nodePointers = realloc(this->treeData->nodePointers, (this->treeData->size + 1) * sizeof(void*));
+	check_mem(this->treeData->nodePointers);
+
+	this->treeData->nodePointers[this->treeData->size] = child;
 
 	this->children[this->childCount] = child;
 	this->childCount++;
@@ -197,18 +241,20 @@ struct ProtocolNode *ProtocolTree_getChild(const struct ProtocolNode *this, int 
 /**
  * @see ProtocolTree_getNode
  */
-struct ProtocolNode *ProtocolTree_getNode(const struct ProtocolNode *this, char *key) {
+struct ProtocolNode *ProtocolTree_getNode(const struct ProtocolNode *this, char *name) {
 
-	int i = 0;
-	// TODO change linear search to real hasing ;)
-	for (i = 0; i < this->treeData->size; i++) {
+	sentinel("not implemented exception");
 
-//		printf("%s\n", this->treeData->keys[i]);
-
-		if (!strcmp(this->treeData->keys[i], key)) {
-			return this->treeData->mappedNodePointers[i];
-		}
-
-	}
+error:
 	return NULL;
+}
+
+int
+ProtocolTree_forEach(struct ProtocolNode *this,
+	int (*doThis)(struct ProtocolNode node, void *args, void *ret),
+	void *args, void *ret) {
+
+
+
+
 }

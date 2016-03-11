@@ -10,7 +10,7 @@ static void
 *_reallocate(struct DArray_Entry *this, size_t newSize) {
 
     this->allocated = newSize;
-    this->values = realloc(this->values, this->allocated * sizeof(struct Entry));
+    this->values = realloc(this->values, this->allocated * sizeof(void*));
     check_mem (this->values);
 
     return this->values;
@@ -26,7 +26,7 @@ struct DArray_Entry *DArray_Entry_new(size_t initial) {
 
     dArrayEntry->allocated = initial;
     dArrayEntry->size = 0;
-    dArrayEntry->values = malloc(initial * sizeof(struct Entry));
+    dArrayEntry->values = malloc(initial * sizeof(void*));
     check_mem(dArrayEntry->values);
 
     return dArrayEntry;
@@ -40,7 +40,7 @@ int DArray_Entry_clear(struct DArray_Entry *this) {
 
     this->size = 0;
     this->allocated = 1;
-    this->values = realloc(this->values, this->allocated * sizeof(struct Entry));
+    this->values = realloc(this->values, this->allocated * sizeof(void*));
     check_mem(this->values);
 
     return 0;
@@ -53,7 +53,7 @@ size_t DArray_Entry_size(struct DArray_Entry *this) {
     return this->size;
 }
 
-int DArray_Entry_pushBack(struct DArray_Entry *this, struct Entry element) {
+int DArray_Entry_pushBack(struct DArray_Entry *this, struct Entry *element) {
 
     if (this->size == this->allocated) {
 
@@ -81,7 +81,7 @@ DArray_Entry_popBack(struct DArray_Entry *this, struct Entry *popped) {
 
 
 	if (popped) {
-		memcpy(popped, &this->values[this->size], sizeof(struct Entry));
+		memcpy(popped, this->values[this->size], sizeof(struct Entry));
 	}
 
 	return 0;
@@ -96,13 +96,13 @@ struct Entry
     check (0 <= index && index < this->size, "out of bounds: %ld, allowed: [0,%ld]",
             index, this->size - 1);
 
-    return this->values + index;
+    return this->values[index];
 
 error:
     return NULL;
 }
 
-int DArray_Entry_forEach(struct DArray_Entry *this, int (*doThis)(struct Entry entry, void *args, void *ret),
+int DArray_Entry_forEach(struct DArray_Entry *this, int (*doThis)(struct Entry *entry, void *args, void *ret),
                         void *args, void *ret) {
 
     unsigned long i = 0;

@@ -36,7 +36,9 @@ struct ProtocolTree_ops {
      *
      * @return A pointer to the newly created Node.
      */
-    struct ProtocolNode *(*ProtocolTree_branch)(struct ProtocolNode *this, char *key, struct Value value);
+    struct ProtocolNode *(*ProtocolTree_branch)(struct ProtocolNode *this, char *name, struct Value value);
+
+    struct ProtocolNode *(*ProtocolTree_branchImportant)(struct ProtocolNode *this, char *name, char *importantKey, struct Value value);
 
     /**
      * @brief Sets the given field information for this protocol item.
@@ -105,8 +107,7 @@ struct ProtocolTree_ops {
 struct TreeData {
 
     /** THE FAKE HASHMAP  ;) **/
-    char **keys;
-    struct ProtocolNode **mappedNodePointers;
+    struct ProtocolNode **nodePointers;
     /** -------------------  **/
 
     /** ANOTHER FAKE HASHMAP ;) **/
@@ -130,11 +131,18 @@ struct ProtocolNode {
 	/** The number of children from this ProtocolNode. **/
 	int childCount;
 
-	/** The unique key identifying this ProtocolNode. **/
-	char *key;
+	/** The name of this node. **/
+	char *name;
 
     /** unique ID identifying this ProtocolNode. **/
     int id;
+
+    /** if this node was visited **/
+    bool visited;
+
+    bool isImportant;
+
+    char *importantKey;
 
     /** The value this ProtocolNode has. **/
     struct Value value;

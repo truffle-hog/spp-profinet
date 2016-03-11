@@ -38,4 +38,6 @@ struct Value {
 
 const char *valueToString(uint32_t value, const value_string *vs, const char *defaultValue);
 
+void printValue(struct Value val);
+
 #endif

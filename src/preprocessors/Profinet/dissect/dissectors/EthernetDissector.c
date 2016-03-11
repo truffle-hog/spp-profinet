@@ -120,10 +120,6 @@ EthernetDissector_dissect(Dissector_t *this, Buffy_t *buf, ProtocolTree_t *node)
 
 	ProtocolItem_t *etherNode = node->ops->ProtocolTree_branch(node, "ethernet", ethernet);
 
-    // TODO create a central NONE value for every dissector to access
-    struct Value NONE;
-	NONE.val.character = '0';
-
 	struct Value dest;
 	dest.length = 48;
 	dest.val.uint64 = 0;
@@ -134,7 +130,7 @@ EthernetDissector_dissect(Dissector_t *this, Buffy_t *buf, ProtocolTree_t *node)
     memcpy(&dest.val.uint64, buf->p->eh->ether_dst, 6);
     dest.val.uint64 = (htobe64(dest.val.uint64)) >> 16;
 
-	check_mem(etherNode->ops->ProtocolTree_branch(etherNode, "ether_dest", dest));
+	check_mem(etherNode->ops->ProtocolTree_branchImportant(etherNode, "ether_dest", "ether_dest", dest));
 
 	struct Value source;
 	source.length = 48;
@@ -144,54 +140,24 @@ EthernetDissector_dissect(Dissector_t *this, Buffy_t *buf, ProtocolTree_t *node)
 	memcpy(&source.val.uint64, buf->p->eh->ether_src, 6);
 	source.val.uint64 = (htobe64(source.val.uint64)) >> 16;
 
-    check_mem(etherNode->ops->ProtocolTree_branch(etherNode, "ether_source", source));
+    check_mem(etherNode->ops->ProtocolTree_branchImportant(etherNode, "ether_source", "ether_source", source));
 
 	struct Value ethertype;
 	ethertype.length = 16;
 	ethertype.val.uint16 = htobe16(buf->p->eh->ether_type);
 	ethertype.type = is_uint16;
 
-	check_mem(etherNode->ops->ProtocolTree_branch(etherNode, "ether_type", ethertype));
+	check_mem(etherNode->ops->ProtocolTree_branchImportant(etherNode, "ether_type", "ether_type", ethertype));
 
     Dissector_t *nextDissector;
 
     nextDissector = this->ops->Dissector_getSub(this, ethertype.val.uint16);
     check(nextDissector != NULL, "there has to be a next dissector");
-  //  }
-
-    // ProtocolItem_t *child = node->ops->ProtocolTree_branch(node, "pnrt", NONE);
-    // check_mem(child);
 
 	Buffy_t *virtual = buf->ops->Buffy_createVirtual(buf, 14 * 8);
 
     return nextDissector->ops->Dissector_dissect(nextDissector, virtual, etherNode);
 
-
-    // memcpy(&truffle.eh.sourceMacAddress, p->eh->ether_src, 6);
-    // memcpy(&truffle.eh.destMacAddress, p->eh->ether_dst, 6);
-    //
-    // truffle.eh.sourceMacAddress = (htobe64(truffle.eh.sourceMacAddress)) >> 4*4;
-    // truffle.eh.destMacAddress = (htobe64(truffle.eh.destMacAddress)) >> 4*4;
-    //
-    //
-    // //		printf("get: %016llX\n", data);
-    //
-    // // TODO put this in debug wrap if at all
-    // printf("--------- %lld ---------\n", n);
-    //
-    // printf("src: %016lX\n", truffle.eh.sourceMacAddress);
-    // printf("dest: %016lX\n", truffle.eh.destMacAddress);
-    //
-    // Dissector_t *nextDissector = this->ops->Dissector_getSub(this, buf->p->eh.ether_type);
-    // ProtocolItem_t *child = tree->ops->ProtocolTree_branch(tree);
-    //
-    // return nextDissector->ops->Dissector_dissect(nextDissector, buf, child);
-
-	//printf("dissecting very bigtime\n");
-	// TODO implement
-
-    //return 0;
 error:
     return -1;
-	//return 0;
 }

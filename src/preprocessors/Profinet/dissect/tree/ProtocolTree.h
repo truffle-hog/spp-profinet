@@ -33,7 +33,9 @@ void ProtocolTree_free(struct ProtocolNode *proto);
  *
  * @return A pointer to the newly created Node.
  */
-struct ProtocolNode *ProtocolTree_branch(struct ProtocolNode *this, char *key, struct Value value);
+struct ProtocolNode *ProtocolTree_branch(struct ProtocolNode *this, char *name, struct Value value);
+
+struct ProtocolNode *ProtocolTree_branchImportant(struct ProtocolNode *this, char *name, char *importantKey, struct Value value);
 
 int ProtocolTree_insertImportantValue(struct ProtocolNode *this, char *key, struct Value value);
 
