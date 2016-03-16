@@ -27,7 +27,7 @@ Truffle_t *Truffle_new(const struct ProtocolNode *protoTree) {
 	struct Value *serviceIDName = protoTree->ops->ProtocolTree_getImportantValue(protoTree, "service_id_name");
 	struct Value *serviceTypeName = protoTree->ops->ProtocolTree_getImportantValue(protoTree, "service_type_name");
 	struct Value *xID = protoTree->ops->ProtocolTree_getImportantValue(protoTree, "dcp_xid");
-	struct Value *responseDelay = protoTree->ops->ProtocolTree_getImportantValue(protoTree, "dcp_response_delay");
+	//struct Value *responseDelay = protoTree->ops->ProtocolTree_getImportantValue(protoTree, "dcp_response_delay");
 
 
 	debug("dest: %016lX", etherDest->val.uint64);
@@ -47,13 +47,13 @@ Truffle_t *Truffle_new(const struct ProtocolNode *protoTree) {
 
 	truffle->eh.destMacAddress = etherDest->val.uint64;
 	truffle->eh.sourceMacAddress = etherSource->val.uint64;
-	
+
 	// TODO check for real dcp -- this works for now though
 	if (serviceID != NULL) {
 
 		ssize_t idNameLength = strlen(serviceIDName->val.string);
 		idNameLength = idNameLength <= MAX_STRING_LEN ? idNameLength : MAX_STRING_LEN;
-		
+
 		ssize_t typeNameLength = strlen(serviceTypeName->val.string);
 		ssize_t nameOfStationLength = strlen(nameOfStation->val.string);
 		typeNameLength = typeNameLength <= MAX_STRING_LEN ? typeNameLength : MAX_STRING_LEN;
@@ -70,8 +70,8 @@ Truffle_t *Truffle_new(const struct ProtocolNode *protoTree) {
 		truffle->frame.val.dcp.serviceTypeName[MAX_STRING_LEN - 1] = '\0';
 		truffle->frame.val.dcp.serviceType = serviceType->val.uint8;
 
-		truffle->frame.val.dcp.xID = xID->val.uint32;
-		truffle->frame.val.dcp.responseDelay = responseDelay->val.uint16;	
+		//truffle->frame.val.dcp.xID = xID->val.uint32;
+		//truffle->frame.val.dcp.responseDelay = responseDelay->val.uint16;
 
 		truffle->frame.val.dcp.blocks[0].type = IS_DEVICE;
 
