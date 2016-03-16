@@ -27,7 +27,7 @@ Truffle_t *Truffle_new(const struct ProtocolNode *protoTree) {
 	struct Value *serviceIDName = protoTree->ops->ProtocolTree_getImportantValue(protoTree, "service_id_name");
 	struct Value *serviceTypeName = protoTree->ops->ProtocolTree_getImportantValue(protoTree, "service_type_name");
 	struct Value *xID = protoTree->ops->ProtocolTree_getImportantValue(protoTree, "dcp_xid");
-	//struct Value *responseDelay = protoTree->ops->ProtocolTree_getImportantValue(protoTree, "dcp_response_delay");
+	struct Value *responseDelay = protoTree->ops->ProtocolTree_getImportantValue(protoTree, "dcp_response_delay");
 
 
 	debug("dest: %016lX", etherDest->val.uint64);
@@ -51,7 +51,7 @@ Truffle_t *Truffle_new(const struct ProtocolNode *protoTree) {
 	// TODO check for real dcp -- this works for now though
 	if (serviceType != NULL) {
 
-		if (serviceType.val.uint8 == 0x00) {
+		if (serviceType->val.uint8 == 0x00) {
 
 			ssize_t nameOfStationLength = strlen(nameOfStation->val.string);
 			nameOfStationLength = nameOfStationLength <= MAX_STRING_LEN ? nameOfStationLength : MAX_STRING_LEN;
