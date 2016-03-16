@@ -11,6 +11,8 @@ struct Entry {
 
 struct HashMap {
 
+    unsigned long collisions;
+    unsigned long seed;
     size_t size;
     size_t allocated;
     struct Entry *table;

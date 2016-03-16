@@ -32,6 +32,8 @@ typedef struct SocketData {
 	int server_sockfd;
 	int client_sockfd;
 
+	pthread_t thread;
+
 	bool client_detected;
 
 	struct sockaddr_un serv_addr;
@@ -96,7 +98,6 @@ error:
 
 void * await_request( void* args) {
 
-	(void) args;
 	SocketData_t *data = (SocketData_t*) args;
 	int n;
 	int buffer = -1;
@@ -106,10 +107,10 @@ void * await_request( void* args) {
 
 //	memset(buffer, 0, 256);
 
-
+	bool isConnected = true;
 
 	// TODO implement a valid chancel condition
-	while(true) {
+	while(isConnected) {
 
 		n = read(data->client_sockfd ,&buffer, sizeof(int));
 		check(n >= 0, "error reading from socket");
@@ -127,12 +128,17 @@ void * await_request( void* args) {
 
 			data->client_detected = false;
 			debug("TruffleHog wants to disconnect...");
+			isConnected = false;
+			//int retval = 0;
+			//pthread_exit(&retval);
 
 		} else {
 
 			sentinel("there is no allowed default case yet");
 		}
 	}
+
+	return await_request((void*) data);
 
 	return NULL;
 error:
@@ -157,7 +163,7 @@ UnixSocketSender_new() {
 	unixSocketSender->sender = *Sender_new(&UnixSocketSenderOverride_ops);
 	check_mem(&unixSocketSender->sender);
 	// declare some variabled in use
-	pthread_t thread;
+	//pthread_t thread;
 	int bind_check, len;
 
 	// open the unix socket, as sock_seqpacket
@@ -179,7 +185,10 @@ UnixSocketSender_new() {
 	// TODO check again what the 5 means and if there is anything that has to be declared differently
 	listen(unixSocketSender->socketData.server_sockfd, 5);
 	unixSocketSender->socketData.clilen = sizeof(unixSocketSender->socketData.cli_addr);
-	pthread_create (&thread, NULL, await_request, &unixSocketSender->socketData);
+
+	check(
+		pthread_create (&unixSocketSender->socketData.thread, NULL, await_request, &unixSocketSender->socketData) == 0, "error creating pthread");
+
 
 
 	return (Sender_t*) unixSocketSender;
@@ -205,10 +214,70 @@ int UnixSocketSender_free(Sender_t *sender) {
 	// TODO is there  any error handling to be done?
 }
 
+static int
+_restartSocket(Sender_t *this) {
+
+	struct UnixSocketSender* unixSocketSender = (struct UnixSocketSender*) this;
+
+	// TODO change to signalhandler signal
+	check(
+		pthread_kill(unixSocketSender->socketData.thread, SIGKILL) >= 0, "error sending signal to pthread");
+
+	check(
+		shutdown(unixSocketSender->socketData.server_sockfd, SHUT_RDWR) >= 0, "error on shuting down server socket");
+
+	check(
+		shutdown(unixSocketSender->socketData.client_sockfd, SHUT_RDWR) >= 0, "error on shutting down client socket");
+
+	check(
+		close(unixSocketSender->socketData.server_sockfd) >= 0, "error closing server socket");
+
+	check(
+		close(unixSocketSender->socketData.client_sockfd) >= 0, "error closing client socket");
+
+
+	unixSocketSender->socketData.client_detected = false;
+	// declare some variabled in use
+	//pthread_t thread;
+	int bind_check, len;
+
+	// open the unix socket, as sock_seqpacket
+	unixSocketSender->socketData.server_sockfd = socket(AF_UNIX, SOCK_SEQPACKET, 0);
+	check(unixSocketSender->socketData.server_sockfd != -1, "cannot open socket");
+
+	memset((char *) &(unixSocketSender->socketData.serv_addr), 0, sizeof(unixSocketSender->socketData.serv_addr));
+	char * socket_file = convert_to_homepath_name("socket.sock");
+	check_mem(socket_file);
+
+	unixSocketSender->socketData.serv_addr.sun_family = AF_UNIX;
+	strcpy(unixSocketSender->socketData.serv_addr.sun_path, socket_file);
+	len = strlen(unixSocketSender->socketData.serv_addr.sun_path) + sizeof(unixSocketSender->socketData.serv_addr.sun_family);
+
+	unlink(socket_file);
+	bind_check = bind(unixSocketSender->socketData.server_sockfd, (struct sockaddr *) &(unixSocketSender->socketData.serv_addr), len);
+	check(bind_check != -1, "error on binding");
+
+	// TODO check again what the 5 means and if there is anything that has to be declared differently
+	listen(unixSocketSender->socketData.server_sockfd, 5);
+	unixSocketSender->socketData.clilen = sizeof(unixSocketSender->socketData.cli_addr);
+
+	check(
+		pthread_create (&unixSocketSender->socketData.thread, NULL, await_request, &unixSocketSender->socketData) == 0, "error creating pthread");
+
+	return 0;
+
+error:
+	return -1;
+
+}
+
 /**
  * @see Sender_send
  */
 int UnixSocketSender_send(Sender_t *this, Truffle_t *truffle) {
+
+	check(this != NULL, "caller must not be null");
+	check(truffle != NULL, "truffle must not be null");
 
 	int n = 0;
 	struct UnixSocketSender* unixSocketSender = (struct UnixSocketSender*) this;
@@ -217,14 +286,21 @@ int UnixSocketSender_send(Sender_t *this, Truffle_t *truffle) {
 
 		n = write(unixSocketSender->socketData.client_sockfd, (void*) truffle, sizeof(Truffle_t));
 
-		check (n >= 0, "error writing to socket");
+		check_to (n >= 0, socket_error, "error writing to socket");
 
 		return n;
 	}
 
   return 0;
 
-error:
+socket_error:
+
+	debug("restarting socket connection, due to socket error");
+	//pthread_exit(&unixSocketSender->socketData.thread);
+	_restartSocket(this);
+	//UnixSocketSender_send(this, truffle);
 	return -1;
 
+error:
+	return -1;
 }

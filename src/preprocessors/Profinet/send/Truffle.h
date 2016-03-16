@@ -31,7 +31,6 @@ struct Frame {
   long long cycleCounter;
 };
 
-
 /**
  * @brief The datastructure for sending relevant information to another process.
  *

@@ -26,6 +26,7 @@ struct DArray *DArray_new(size_t initial) {
     dArray->allocated = initial;
     dArray->size = 0;
     dArray->ptrArray = malloc(initial * sizeof(void*));
+    check_mem(dArray->ptrArray);
 
     return dArray;
 
@@ -71,7 +72,7 @@ void *DArray_popBack(struct DArray *this) {
 
     if ( (4 * this->size) <= this->allocated && this->size > 0) {
 
-        _reallocate(this, 2 * this->size);
+        check_mem(_reallocate(this, 2 * this->size));
     }
 
 error:

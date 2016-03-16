@@ -69,6 +69,9 @@ error:
 }
 
 int appScopeFree() {
+
+    check(dArrayAppScope, "no app scope yet initialized");
+
     check(DArray_clear(dArrayAppScope) != -1, "clear failed");
 
     return 0;
@@ -78,6 +81,9 @@ error:
 }
 
 int packetScopeFree() {
+
+    check(dArrayPacketScope, "no packet scope yet initialized");
+
     check(DArray_clear(dArrayPacketScope) != -1, "clear failed");
 
     return 0;
@@ -87,6 +93,9 @@ error:
 }
 
 int clientScopeFree() {
+
+    check(dArrayClientScope, "no client scope yet initialized");
+
     check(DArray_clear(dArrayClientScope) != -1, "clear failed");
 
     return 0;

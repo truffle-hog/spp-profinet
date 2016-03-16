@@ -28,7 +28,7 @@ error:
 static void
 *_reallocate(struct HashMap *this, size_t newSize) {
 
-	debug("reallocation");
+	debug("reallocation frome size=%ld to size=%ld", this->allocated, newSize);
 
 	size_t allocated = this->allocated;
 
@@ -44,10 +44,13 @@ static void
     check_mem(this->table);
 	memset(this->table, 0, sizeof(struct Entry) * this->allocated);
 
+	debug("starting to rehash all the values and insert them into the newly created table...");
 	int i;
 	for (i = 0; i < allocated; i++) {
+
 		HashMap_insert(this, copiedTable[i].key, copiedTable[i].value, NULL);
 	}
+	debug("rehashing done");
 
     return this->table;
 
@@ -64,6 +67,8 @@ struct HashMap
 
     hashMap->size = 0;
     hashMap->allocated = initial;
+	hashMap->seed = 5381;
+	hashMap->collisions = 0;
 
     hashMap->table = malloc(sizeof(struct Entry) * hashMap->allocated);
 	check_mem(hashMap->table);
@@ -76,25 +81,37 @@ error:
 
 }
 
+// static unsigned long
+// hash_B(unsigned char *str, unsigned long a, unsigned long p, unsigned long seed) {
+//
+// 	unsigned long h = seed;
+// 	unsigned int i;
+// 	for (i = 0; i < strlen(str); ++i) {
+// 		h = ((h * a) + str[i]) % p;
+// 	}
+// 	return h;
+// }
+
+
 static unsigned long
-hash(unsigned char *str)
+hash(unsigned char *str, unsigned long seed, unsigned long p)
 {
-    unsigned long hash = 5381;
+    unsigned long hash = seed;
     int c;
 
     while ((c = *str++)) {
 
-        hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
+        hash = (((hash << 5) + hash) + c) % p; /* hash * 33 + c */
     }
     return hash;
 }
 
 static int
-_hashMe(size_t allocated, char *key) {
+_hashMe(size_t allocated, char *key, unsigned long seed) {
 
-    unsigned long myHash = hash((unsigned char*) key);
+    unsigned long myHash = hash((unsigned char*) key, seed, allocated);
 
-    return myHash % allocated;
+    return myHash;
 }
 
 int
@@ -105,9 +122,11 @@ HashMap_insert(struct HashMap *this, char *key, struct Value value, struct Value
         check_mem(_reallocate(this, 2 * this->size));
     }
 
+	debug("collisions= %d", this->collisions);
     int i;
-    for (i = _hashMe(this->allocated, key); (this->table + i)->valid; i++) {
+    for (i = _hashMe(this->allocated, key, this->seed); (this->table + i)->valid; i++) {
 
+		this->collisions++;
 		debug("index: %d", i);
 		debug("valid: %d", this->table[i].valid);
 
@@ -116,8 +135,8 @@ HashMap_insert(struct HashMap *this, char *key, struct Value value, struct Value
         if (!strcmp(this->table[i].key, key)) {
 
             if (existing != NULL) {
-
-				memcpy(existing, &this->table[i].value, sizeof(struct Value));
+				*existing = this->table[i].value;
+				//memcpy(existing, &this->table[i].value, sizeof(struct Value));
             }
             this->table[i] = (struct Entry) {.key = key, .value = value};
 			this->size++;
@@ -125,9 +144,14 @@ HashMap_insert(struct HashMap *this, char *key, struct Value value, struct Value
         }
     }
     this->table[i] = (struct Entry) {.key = key, .value = value, .valid = 1};
+
+
 	debug("table %d : (key=%s, valid=%d)", i, this->table[i].key, this->table[i].valid);
+#ifdef NDEBUG
 	printValue(this->table[i].value);
 	printf("\n");
+#endif
+
 	this->size++;
 
     return 0;
@@ -138,7 +162,7 @@ error:
 struct Value *HashMap_find(struct HashMap *this, char *key) {
 
     int i;
-    for (i = _hashMe(this->allocated, key); (this->table + i)->valid; i++) {
+    for (i = _hashMe(this->allocated, key, this->seed); (this->table + i)->valid; i++) {
 
 		debug("hash=%d, haystack=%s, needle=%s", i, this->table[i].key, key);
 
