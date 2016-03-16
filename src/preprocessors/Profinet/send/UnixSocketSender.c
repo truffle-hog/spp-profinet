@@ -286,6 +286,8 @@ int UnixSocketSender_send(Sender_t *this, Truffle_t *truffle) {
 
 		n = write(unixSocketSender->socketData.client_sockfd, (void*) truffle, sizeof(Truffle_t));
 
+		check(n == sizeof(Truffle_t), "error could not send the correct number of bytes");
+
 		check_to (n >= 0, socket_error, "error writing to socket");
 
 		return n;
