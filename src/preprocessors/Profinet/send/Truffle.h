@@ -1,6 +1,10 @@
 #ifndef __TRUFFLE_H__
 #define __TRUFFLE_H__
 
+#define MAX_STRING_LEN 32
+
+#define MAX_BLOCKS 32
+
 /**
  * @file
  * @brief The structure of a Truffle that is send via ipc.
@@ -21,13 +25,64 @@ struct EtherHeader {
   uint16_t etherType;
 };
 
+struct DeviceBlock {
+
+	char nameOfStation[MAX_STRING_LEN];
+};
+
+
+struct Block {
+	
+	enum {
+		IS_DEVICE
+	} type;
+
+	union {
+	
+		struct DeviceBlock deviceBlock;
+	
+	} val;
+
+
+};
+
+struct RTC1 {};
+
+
+
+struct DCP {
+
+	uint8_t serviceID;
+	char serviceIDName[MAX_STRING_LEN];
+	uint8_t serviceType;
+	char serviceTypeName[MAX_STRING_LEN];
+
+	uint32_t xID;
+	uint16_t responseDelay;
+
+	uint16_t dataLength;
+
+	struct Block blocks[MAX_BLOCKS];
+};
+
 /**
  * @brief Houses specific information about the frame.
  */
 struct Frame {
   uint16_t frameID;
-  char destName[30];
-  char srcName[30];
+
+  enum {
+  	IS_DCP, IS_RTC1
+  } type;
+
+  union {
+	 struct RTC1 rtc1; 
+	 struct DCP dcp;
+  
+  } val;
+
+  char destName[MAX_STRING_LEN];
+  char srcName[MAX_STRING_LEN];
   long long cycleCounter;
 };
 
