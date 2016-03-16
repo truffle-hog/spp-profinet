@@ -49,18 +49,31 @@ Truffle_t *Truffle_new(const struct ProtocolNode *protoTree) {
 	truffle->eh.sourceMacAddress = etherSource->val.uint64;
 
 	// TODO check for real dcp -- this works for now though
-	if (serviceID != NULL) {
+	if (serviceType != NULL) {
+
+		if (serviceType.val.uint8 == 0x00) {
+
+			ssize_t nameOfStationLength = strlen(nameOfStation->val.string);
+			nameOfStationLength = nameOfStationLength <= MAX_STRING_LEN ? nameOfStationLength : MAX_STRING_LEN;
+			memcpy(&truffle->frame.val.dcp.blocks[0].val.deviceBlock.nameOfStation, nameOfStation->val.string, nameOfStationLength);
+			truffle->frame.val.dcp.blocks[0].val.deviceBlock.nameOfStation[MAX_STRING_LEN - 1] = '\0';
+
+
+			truffle->frame.val.dcp.responseDelay = responseDelay->val.uint16;
+		}
 
 		ssize_t idNameLength = strlen(serviceIDName->val.string);
 		idNameLength = idNameLength <= MAX_STRING_LEN ? idNameLength : MAX_STRING_LEN;
 
 		ssize_t typeNameLength = strlen(serviceTypeName->val.string);
-		ssize_t nameOfStationLength = strlen(nameOfStation->val.string);
+
 		typeNameLength = typeNameLength <= MAX_STRING_LEN ? typeNameLength : MAX_STRING_LEN;
-		nameOfStationLength = nameOfStationLength <= MAX_STRING_LEN ? nameOfStationLength : MAX_STRING_LEN;
+
 
 
 		truffle->frame.type = IS_DCP;
+
+		truffle->frame.val.dcp.xID = xID->val.uint32;
 
 		truffle->frame.val.dcp.serviceID = serviceID->val.uint8;
 		memcpy(&truffle->frame.val.dcp.serviceIDName, serviceIDName->val.string, idNameLength);
@@ -70,13 +83,11 @@ Truffle_t *Truffle_new(const struct ProtocolNode *protoTree) {
 		truffle->frame.val.dcp.serviceTypeName[MAX_STRING_LEN - 1] = '\0';
 		truffle->frame.val.dcp.serviceType = serviceType->val.uint8;
 
-		//truffle->frame.val.dcp.xID = xID->val.uint32;
-		//truffle->frame.val.dcp.responseDelay = responseDelay->val.uint16;
+
 
 		truffle->frame.val.dcp.blocks[0].type = IS_DEVICE;
 
-		memcpy(&truffle->frame.val.dcp.blocks[0].val.deviceBlock.nameOfStation, nameOfStation->val.string, nameOfStationLength);
-		truffle->frame.val.dcp.blocks[0].val.deviceBlock.nameOfStation[MAX_STRING_LEN - 1] = '\0';
+
 
 	}
 
