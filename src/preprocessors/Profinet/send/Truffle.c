@@ -51,14 +51,14 @@ Truffle_t *Truffle_new(const struct ProtocolNode *protoTree) {
 	// TODO check for real dcp -- this works for now though
 	if (serviceType != NULL) {
 
-		if (serviceType->val.uint8 == 0x00) {
+		if (serviceType->val.uint8 == 0x00 && serviceID->val.uint8 == 0x05) {
 
-			ssize_t nameOfStationLength = strlen(nameOfStation->val.string);
-			nameOfStationLength = nameOfStationLength <= MAX_STRING_LEN ? nameOfStationLength : MAX_STRING_LEN;
-			memcpy(&truffle->frame.val.dcp.blocks[0].val.deviceBlock.nameOfStation, nameOfStation->val.string, nameOfStationLength);
-			truffle->frame.val.dcp.blocks[0].val.deviceBlock.nameOfStation[MAX_STRING_LEN - 1] = '\0';
-
-
+			if (nameOfStation != NULL) {
+				ssize_t nameOfStationLength = strlen(nameOfStation->val.string);
+				nameOfStationLength = nameOfStationLength <= MAX_STRING_LEN ? nameOfStationLength : MAX_STRING_LEN;
+				memcpy(&truffle->frame.val.dcp.blocks[0].val.deviceBlock.nameOfStation, nameOfStation->val.string, nameOfStationLength);
+				truffle->frame.val.dcp.blocks[0].val.deviceBlock.nameOfStation[MAX_STRING_LEN - 1] = '\0';
+			}
 			truffle->frame.val.dcp.responseDelay = responseDelay->val.uint16;
 		}
 
