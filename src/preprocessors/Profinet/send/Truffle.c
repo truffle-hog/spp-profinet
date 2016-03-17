@@ -40,7 +40,7 @@ Truffle_t *Truffle_new(const struct ProtocolNode *protoTree) {
 	struct Value *isResponse = protoTree->ops->ProtocolTree_getImportantValue(protoTree, "dcp_is_response");
 
 	struct Value *frameID = protoTree->ops->ProtocolTree_getImportantValue(protoTree, "pnrt_frame_id");
-
+	struct Value *ipValue = protoTree->ops->ProtocolTree_getImportantValue(protoTree, "suboption_ip_address");
 
 
 
@@ -104,9 +104,11 @@ Truffle_t *Truffle_new(const struct ProtocolNode *protoTree) {
 					truffle->frame.val.dcp.blocks[0].val.deviceBlock.nameOfStation[MAX_STRING_LEN - 1] = '\0';
 				}
 
-				struct Value *ipValue = protoTree->ops->ProtocolTree_getImportantValue(protoTree, "dcp_suboption_ip_ip");
+
 
 				if (ipValue != NULL) {
+
+					debug("IP: %08X", ipValue->val.uint32);
 
 					truffle->frame.val.dcp.blocks[1].type = 2;
 

@@ -392,7 +392,7 @@ dissect_PNDCP_Suboption_IP(Dissector_t *this, Buffy_t* buf, struct ProtocolNode 
     case PNDCP_SUBOPTION_IP_IP:
 
         suboptionStringValue.val.string = "IP/IP";
-        ProtocolItem_t *ipItem = node->ops->ProtocolTree_branchImportant(node, "ip_ip", "dcp_suboption_ip_ip", suboptionStringValue);
+        ProtocolItem_t *ipItem = node->ops->ProtocolTree_branch(node, "ip_ip", suboptionStringValue);
         check_mem(ipItem);
         /* BlockInfo? */
         if ( ((serviceID == PNDCP_SERVICE_ID_IDENTIFY) &&  isResponse) ||
@@ -438,7 +438,7 @@ dissect_PNDCP_Suboption_IP(Dissector_t *this, Buffy_t* buf, struct ProtocolNode 
         //Struct Value ipValueHeader = {.type = string, .val.string = "Gateway"};
         struct Value gatewayValue = {.type = is_uint32, .val.uint32 = buf->ops->Buffy_getBitsWalk32(buf, &bytesDissected)};
 
-        ipItem->ops->ProtocolTree_branchImportant(ipItem, "ip", "dcp_suboption_ip_ip", ipValue);
+        ipItem->ops->ProtocolTree_branchImportant(ipItem, "ip", "suboption_ip_address", ipValue);
         ipItem->ops->ProtocolTree_branchImportant(ipItem, "subnet", "dcp_suboption_ip_subnet", subnetValue);
         ipItem->ops->ProtocolTree_branchImportant(ipItem, "gateway", "dcp_suboption_ip_gateway", gatewayValue);
 
