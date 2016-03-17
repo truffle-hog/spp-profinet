@@ -96,7 +96,7 @@ Truffle_t *Truffle_new(const struct ProtocolNode *protoTree) {
 
 				if (nameOfStation != NULL) {
 
-					truffle->frame.val.dcp.blocks[0].type = IS_DEVICE;
+					truffle->frame.val.dcp.blocks[0].type = 1;
 
 					ssize_t nameOfStationLength = strlen(nameOfStation->val.string);
 					nameOfStationLength = nameOfStationLength <= MAX_STRING_LEN ? nameOfStationLength : MAX_STRING_LEN;
@@ -108,7 +108,7 @@ Truffle_t *Truffle_new(const struct ProtocolNode *protoTree) {
 
 				if (ipValue != NULL) {
 
-					truffle->frame.val.dcp.blocks[1].type = IS_IP;
+					truffle->frame.val.dcp.blocks[1].type = 2;
 
 					struct Value *subnetValue = protoTree->ops->ProtocolTree_getImportantValue(protoTree, "dcp_suboption_ip_subnet");
 					struct Value *gatewayValue = protoTree->ops->ProtocolTree_getImportantValue(protoTree, "dcp_suboption_ip_gateway");
