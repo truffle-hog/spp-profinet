@@ -395,7 +395,7 @@ _dissectPNDCP_PDU(Dissector_t *this, Buffy_t *buf, struct ProtocolNode *node) {
     check(node != NULL, "node must not be null");
 
     int offset = 0;
-	uint16_t dataLength;
+	int dataLength;
 
 	struct Value serviceID;
 	serviceID.type = is_uint8;
@@ -446,15 +446,14 @@ _dissectPNDCP_PDU(Dissector_t *this, Buffy_t *buf, struct ProtocolNode *node) {
 		offset += 2;
 	}
 
-
-
-	dataLength = buf->ops->Buffy_getBits16(buf, offset);
-    offset += 2;
-
     struct Value dataLengthValue;
     dataLengthValue.type = is_uint16;
-    dataLengthValue.val.uint16 = dataLength;
+    dataLengthValue.val.uint16 = buf->ops->Buffy_getBits16(buf, offset);
     dataLengthValue.length = 16;
+
+
+	dataLength = (int) dataLengthValue.val.uint16;
+    offset += 2;
 
     ProtocolItem_t *dataLengthItem = node->ops->ProtocolTree_branchImportant(node, "data_length", "dcp_data_length", dataLengthValue);
     check_mem(dataLengthItem);
@@ -543,7 +542,7 @@ _dissectPNDCP_PDU(Dissector_t *this, Buffy_t *buf, struct ProtocolNode *node) {
 
 	Buffy_t *loopBuffer; // = buf->ops->Buffy_createVirtual(buf, offset);
 
-	debug("%d", dataLength);
+	debug("datalength before blocks and options: %d", dataLength);
 
 	while (dataLength) {
 
@@ -578,7 +577,7 @@ _dissectPNDCP_PDU(Dissector_t *this, Buffy_t *buf, struct ProtocolNode *node) {
             bytesDissected = nextDissector->ops->Dissector_dissect(nextDissector, loopBuffer, blocksItem);
 		}
 
-		debug("%d", dataLength);
+		debug("bytes Dissected: %d", bytesDissected);
 
 		check (bytesDissected >= 0, "dissecting the block or option failed");
 
@@ -586,9 +585,17 @@ _dissectPNDCP_PDU(Dissector_t *this, Buffy_t *buf, struct ProtocolNode *node) {
 
 		loopBuffer->ops->Buffy_free(loopBuffer);
 
-		check(offset > originalOffset || dataLength >= (offset - originalOffset), "Bounds Error");
+        // check(dataLength > 0)
+        //
+		// check(offset > originalOffset || dataLength >= (offset - originalOffset), "Bounds Error");
 
 		dataLength -= bytesDissected;
+
+        debug("current datalength: %d", dataLength);
+
+        if (dataLength <= 0) {
+            break;
+        }
 	}
 
     return 0;

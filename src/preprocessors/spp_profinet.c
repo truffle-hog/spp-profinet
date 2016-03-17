@@ -334,6 +334,11 @@ static void DetectProfiNetPackets(Packet *p, void *context)
 {
 	(void) context;
 
+    debug("##################################################################\n"
+          "################### DISSECTING PACKET ############################\n"
+          "##################################################################\n"
+          "vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv");
+
 	ProtocolTree_t *protoTree = ProtocolTree_new("frame");
     check_mem(protoTree);
 

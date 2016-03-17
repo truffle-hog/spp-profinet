@@ -99,6 +99,21 @@ Truffle_t *Truffle_new(const struct ProtocolNode *protoTree) {
 					truffle->frame.val.dcp.blocks[0].val.deviceBlock.nameOfStation[MAX_STRING_LEN - 1] = '\0';
 				}
 
+				struct Value *ipValue = protoTree->ops->ProtocolTree_getImportantValue(protoTree, "dcp_suboption_ip_ip");
+
+				if (ipValue != NULL) {
+
+					truffle->frame.val.dcp.blocks[1].type = IS_IP;
+
+					struct Value *subnetValue = protoTree->ops->ProtocolTree_getImportantValue(protoTree, "dcp_suboption_ip_subnet");
+					struct Value *gatewayValue = protoTree->ops->ProtocolTree_getImportantValue(protoTree, "dcp_suboption_ip_gateway");
+
+					truffle->frame.val.dcp.blocks[1].val.ipBlock.ip = ipValue->val.uint32;
+					truffle->frame.val.dcp.blocks[1].val.ipBlock.subnet = subnetValue->val.uint32;
+					truffle->frame.val.dcp.blocks[1].val.ipBlock.gateway = gatewayValue->val.uint32;
+
+				}
+
 			} else if (serviceType->val.uint8 == PNDCP_SERVICE_TYPE_REQUEST) {
 
 				if (nameOfStation != NULL) {
