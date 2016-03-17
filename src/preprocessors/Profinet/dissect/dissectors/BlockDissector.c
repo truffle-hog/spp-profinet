@@ -355,88 +355,90 @@ static int
 dissect_PNDCP_Suboption_IP(Dissector_t *this, Buffy_t* buf, struct ProtocolNode *node)
 {
     int bytesDissected = 0;
-//     uint16_t     blockLength;
-//     uint16_t     block_info;
-//     uint16_t     block_qualifier;
-//     uint32_t     ip;
-// //    proto_item *item = NULL;
-//  //   address     addr;
-//
-// 	struct Value suboption;
-// 	suboption.type = is_uint8;
-// 	suboption.length = 8;
-//
-// 	int bytesDissected = 0;
-//
-//     /* SuboptionIPParameter */
-//
-// 	suboption.val.uint8 = buf->ops->Buffy_getBits8(buf, bytesDissected++);
-//
-// 	blockLength = buf->ops->Buffy_getBits16(buf, bytesDissected);
-// 	bytesDissected += 2;
-//
-//
-// //    offset = dissect_pn_uint8 (tvb, offset, pinfo, tree, hf_pn_dcp_suboption_ip, &suboption);
-//     /* DCPBlockLength */
-//  //   offset = dissect_pn_uint16(tvb, offset, pinfo, tree, hf_pn_dcp_block_length, &block_length);
-//
-//     switch (suboption.val.uint8) {
-//     case PNDCP_SUBOPTION_IP_MAC:
-//         /* MACAddressValue? */
-//         pn_append_info(pinfo, dcp_item, ", MAC");
-//         proto_item_append_text(block_item, "IP/MAC");
-//
-//         bytesDissected += blockLength;
-//         break;
-//     case PNDCP_SUBOPTION_IP_IP:
-//         pn_append_info(pinfo, dcp_item, ", IP");
-//         proto_item_append_text(block_item, "IP/IP");
-//
-//         /* BlockInfo? */
-//         if ( ((service_id == PNDCP_SERVICE_ID_IDENTIFY) &&  is_response) ||
-//              ((service_id == PNDCP_SERVICE_ID_HELLO)    && !is_response) ||
-//              ((service_id == PNDCP_SERVICE_ID_GET)      &&  is_response)) {
-//             block_info = tvb_get_ntohs (tvb, offset);
-//             if (tree) {
-//                 item = proto_tree_add_uint(tree, hf_pn_dcp_suboption_ip_block_info, tvb, offset, 2, block_info);
-//             }
-//             offset += 2;
-//             proto_item_append_text(block_item, ", BlockInfo: %s",
-//                                    valueToString(block_info, pn_dcp_suboption_ip_block_info, "Undecoded"));
-//             block_length -= 2;
-//             if (block_info & 0x80) {
-//                 expert_add_info(pinfo, item, &ei_pn_dcp_ip_conflict);
-//             }
-//         }
-//
-//         /* BlockQualifier? */
-//         if ( (service_id == PNDCP_SERVICE_ID_SET) && !is_response) {
-//             offset = dissect_pn_uint16(tvb, offset, pinfo, tree, hf_pn_dcp_block_qualifier, &block_qualifier);
-//             proto_item_append_text(block_item, ", BlockQualifier: %s",
-//                                    valueToString(block_qualifier, pn_dcp_block_qualifier, "Unknown"));
-//             block_length -= 2;
-//         }
-//
-//         /* IPParameterValue ... */
-//
-//         /* IPAddress */
-//         offset = dissect_pn_ipv4(tvb, offset, pinfo, tree, hf_pn_dcp_suboption_ip_ip, &ip);
-//         set_address(&addr, AT_IPv4, 4, &ip);
-//         proto_item_append_text(block_item, ", IP: %s", address_to_str(wmem_packet_scope(), &addr));
-//
-//         /* Subnetmask */
-//         offset = dissect_pn_ipv4(tvb, offset, pinfo, tree, hf_pn_dcp_suboption_ip_subnetmask, &ip);
-//         set_address(&addr, AT_IPv4, 4, &ip);
-//         proto_item_append_text(block_item, ", Subnet: %s", address_to_str(wmem_packet_scope(), &addr));
-//
-//         /* StandardGateway */
-//         offset = dissect_pn_ipv4(tvb, offset, pinfo, tree, hf_pn_dcp_suboption_ip_standard_gateway, &ip);
-//         set_address(&addr, AT_IPv4, 4, &ip);
-//         proto_item_append_text(block_item, ", Gateway: %s", address_to_str(wmem_packet_scope(), &addr));
-//         break;
-//     default:
-//         offset = dissect_pn_undecoded(tvb, offset, pinfo, tree, block_length);
-//     }
+
+    uint16_t     blockLength;
+    uint16_t     block_info;
+    uint16_t     block_qualifier;
+    uint32_t     ip;
+//    proto_item *item = NULL;
+ //   address     addr;
+
+	struct Value suboption;
+	suboption.type = is_uint8;
+	suboption.length = 8;
+
+	int bytesDissected = 0;
+
+    /* SuboptionIPParameter */
+
+	suboption.val.uint8 = buf->ops->Buffy_getBits8(buf, bytesDissected++);
+
+	blockLength = buf->ops->Buffy_getBits16(buf, bytesDissected);
+	bytesDissected += 2;
+
+
+//    offset = dissect_pn_uint8 (tvb, offset, pinfo, tree, hf_pn_dcp_suboption_ip, &suboption);
+    /* DCPBlockLength */
+ //   offset = dissect_pn_uint16(tvb, offset, pinfo, tree, hf_pn_dcp_block_length, &block_length);
+
+    switch (suboption.val.uint8) {
+    case PNDCP_SUBOPTION_IP_MAC:
+        /* MACAddressValue? */
+        pn_append_info(pinfo, dcp_item, ", MAC");
+        proto_item_append_text(block_item, "IP/MAC");
+
+        bytesDissected += blockLength;
+        break;
+        
+    case PNDCP_SUBOPTION_IP_IP:
+        pn_append_info(pinfo, dcp_item, ", IP");
+        proto_item_append_text(block_item, "IP/IP");
+
+        /* BlockInfo? */
+        if ( ((service_id == PNDCP_SERVICE_ID_IDENTIFY) &&  is_response) ||
+             ((service_id == PNDCP_SERVICE_ID_HELLO)    && !is_response) ||
+             ((service_id == PNDCP_SERVICE_ID_GET)      &&  is_response)) {
+            block_info = tvb_get_ntohs (tvb, offset);
+            if (tree) {
+                item = proto_tree_add_uint(tree, hf_pn_dcp_suboption_ip_block_info, tvb, offset, 2, block_info);
+            }
+            offset += 2;
+            proto_item_append_text(block_item, ", BlockInfo: %s",
+                                   valueToString(block_info, pn_dcp_suboption_ip_block_info, "Undecoded"));
+            block_length -= 2;
+            if (block_info & 0x80) {
+                expert_add_info(pinfo, item, &ei_pn_dcp_ip_conflict);
+            }
+        }
+
+        /* BlockQualifier? */
+        if ( (service_id == PNDCP_SERVICE_ID_SET) && !is_response) {
+            offset = dissect_pn_uint16(tvb, offset, pinfo, tree, hf_pn_dcp_block_qualifier, &block_qualifier);
+            proto_item_append_text(block_item, ", BlockQualifier: %s",
+                                   valueToString(block_qualifier, pn_dcp_block_qualifier, "Unknown"));
+            block_length -= 2;
+        }
+
+        /* IPParameterValue ... */
+
+        /* IPAddress */
+        offset = dissect_pn_ipv4(tvb, offset, pinfo, tree, hf_pn_dcp_suboption_ip_ip, &ip);
+        set_address(&addr, AT_IPv4, 4, &ip);
+        proto_item_append_text(block_item, ", IP: %s", address_to_str(wmem_packet_scope(), &addr));
+
+        /* Subnetmask */
+        offset = dissect_pn_ipv4(tvb, offset, pinfo, tree, hf_pn_dcp_suboption_ip_subnetmask, &ip);
+        set_address(&addr, AT_IPv4, 4, &ip);
+        proto_item_append_text(block_item, ", Subnet: %s", address_to_str(wmem_packet_scope(), &addr));
+
+        /* StandardGateway */
+        offset = dissect_pn_ipv4(tvb, offset, pinfo, tree, hf_pn_dcp_suboption_ip_standard_gateway, &ip);
+        set_address(&addr, AT_IPv4, 4, &ip);
+        proto_item_append_text(block_item, ", Gateway: %s", address_to_str(wmem_packet_scope(), &addr));
+        break;
+    default:
+        offset = dissect_pn_undecoded(tvb, offset, pinfo, tree, block_length);
+    }
     sentinel("not implemented exception");
     return bytesDissected;
 error:

@@ -6,6 +6,9 @@
 
 !profi_doc
 
+!selected.pcapng
+!selected_with_DCP.pcapng
+
 !LICENSE
 !README.md
 !etc
