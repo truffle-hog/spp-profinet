@@ -90,9 +90,14 @@ Truffle_t *Truffle_new(const struct ProtocolNode *protoTree) {
 
 			if (serviceType->val.uint8 == PNDCP_SERVICE_TYPE_RESPONSE_SUCCESS) {
 
+
+
 				truffle->frame.val.dcp.isResponse = 1;
 
 				if (nameOfStation != NULL) {
+
+					truffle->frame.val.dcp.blocks[0].type = IS_DEVICE;
+
 					ssize_t nameOfStationLength = strlen(nameOfStation->val.string);
 					nameOfStationLength = nameOfStationLength <= MAX_STRING_LEN ? nameOfStationLength : MAX_STRING_LEN;
 					memcpy(&truffle->frame.val.dcp.blocks[0].val.deviceBlock.nameOfStation, nameOfStation->val.string, nameOfStationLength);

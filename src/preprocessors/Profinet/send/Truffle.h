@@ -57,7 +57,8 @@ struct IPBlock {
 struct Block {
 
 	enum {
-		IS_DEVICE, IS_IP
+		IS_DEVICE = 1,
+        IS_IP = 2
 	} type;
 
 	union {
