@@ -107,7 +107,11 @@ Truffle_t *Truffle_new(const struct ProtocolNode *protoTree) {
 					memcpy(&truffle->frame.val.dcp.blocks[0].val.deviceBlock.nameOfStation, nameOfStation->val.string, nameOfStationLength);
 					truffle->frame.val.dcp.blocks[0].val.deviceBlock.nameOfStation[MAX_STRING_LEN - 1] = '\0';
 				}
-				truffle->frame.val.dcp.responseDelay = responseDelay->val.uint16;
+
+				if (responseDelay) {
+
+					truffle->frame.val.dcp.responseDelay = responseDelay->val.uint16;
+				}
 			}
 
 			truffle->frame.val.dcp.blocks[0].type = IS_DEVICE;
