@@ -456,7 +456,7 @@ dissect_PNDCP_Suboption_Device(Dissector_t *this, Buffy_t *buf, struct ProtocolN
     unsigned int offset = 0;
 
     bool isResponse = ((struct BlockDissector*) this)->isResponse;
-    bool serviceID = ((struct BlockDissector*) this)->serviceID;
+    uint8_t serviceID = ((struct BlockDissector*) this)->serviceID;
 
     //uint8_t    suboption;
     struct Value suboption = {.type = is_uint8};
@@ -553,6 +553,9 @@ dissect_PNDCP_Suboption_Device(Dissector_t *this, Buffy_t *buf, struct ProtocolN
     case PNDCP_SUBOPTION_DEVICE_NAMEOFSTATION:
 
         debug("block_length for devicename: %d", block_length + 1);
+
+        debug("dumping here");
+        buf->ops->Buffy_dump(buf);
         //debug("devicename: %s", )
         // TODO write own malloc?
         nameOfStation.val.string = packetScopeMalloc(block_length + 1);
@@ -564,8 +567,14 @@ dissect_PNDCP_Suboption_Device(Dissector_t *this, Buffy_t *buf, struct ProtocolN
         // debug("0x%02X", buf->ops->Buffy_getBitsWalk8(buf, 0));
         // debug("0x%02X", buf->ops->Buffy_getBitsWalk8(buf, 0));
 
+        // TODO return how much was copied
         buf->ops->Buffy_copyNBytes(buf, (uint8_t *) nameOfStation.val.string, block_length, offset);
         nameOfStation.val.string[block_length] = '\0';
+
+        // nameOfStation.val.string[0] = ' ';
+        // nameOfStation.val.string[1] = ' ';
+        // nameOfStation.val.string[2] = ' ';
+        // nameOfStation.val.string[3] = ' ';
 
         debug("extracted name_of_station=%s", nameOfStation.val.string);
 

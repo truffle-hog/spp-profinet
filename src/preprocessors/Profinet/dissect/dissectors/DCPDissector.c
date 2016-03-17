@@ -491,6 +491,9 @@ _dissectPNDCP_PDU(Dissector_t *this, Buffy_t *buf, struct ProtocolNode *node) {
 
 	check_mem(serviceIDStringItem);
 
+    struct Value isResponseValue;
+    isResponseValue.type = is_uint8;
+    isResponseValue.val.uint8 = 0;
 
 	struct Value serviceTypeName;
 	serviceTypeName.type = is_string;
@@ -503,11 +506,13 @@ _dissectPNDCP_PDU(Dissector_t *this, Buffy_t *buf, struct ProtocolNode *node) {
 	case PNDCP_SERVICE_TYPE_RESPONSE_SUCCESS:
 		serviceTypeName.val.string = "Resonse OK";
         isResponse = TRUE;
+        isResponseValue.val.uint8 = 1;
 		break;
 
 	case PNDCP_SERVICE_TYPE_RESPONSE_UNSUPPORTED:
 		serviceTypeName.val.string = "Response Unsupported";
         isResponse = TRUE;
+        isResponseValue.val.uint8 = 1;
 		break;
 
 	default:
@@ -515,6 +520,9 @@ _dissectPNDCP_PDU(Dissector_t *this, Buffy_t *buf, struct ProtocolNode *node) {
 		serviceTypeName.val.string = "Unknown";
 		break;
 	}
+
+    ProtocolItem_t *isResponseItem = node->ops->ProtocolTree_branchImportant(node, "is_response", "dcp_is_response", isResponseValue);
+    check_mem(isResponseItem);
 
 	ProtocolItem_t *serviceTypeNameItem = serviceTypeItem->ops->ProtocolTree_branchImportant(serviceTypeItem, "name", "service_type_name", serviceTypeName);
 	check_mem(serviceTypeNameItem);

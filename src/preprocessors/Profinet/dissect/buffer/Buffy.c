@@ -34,10 +34,83 @@ static const struct Buffy_ops BuffyOverride_ops = {
 	Buffy_dump
 };
 
+static int
+_isEmpty(Buffy_t *buf) {
+
+	return buf->head->next == buf->head;
+}
+
+static Buffy_t
+*_first(Buffy_t *buf) {
+	check(!_isEmpty(buf), "empty buffer sequence error");
+
+	return buf->head->next;
+
+error:
+	return NULL;
+}
+
+static Buffy_t *_last(Buffy_t *buf) {
+	check(!_isEmpty(buf), "empty buffer sequence error");
+
+	return buf->head->prev;
+
+error:
+	return NULL;
+}
+
+static void
+_splice(Buffy_t *a, Buffy_t *b, Buffy_t *t) {
+
+	Buffy_t *a_ = a->prev;
+	Buffy_t *b_ = b->next;
+	a_->next = b_;
+	b_->prev = a_;
+
+	Buffy_t *t_ = t->next;
+
+	b->next = t_;
+	a->prev = t;
+
+	t->next = a;
+	t_->prev = b;
+}
+
+static void
+_moveAfter(Buffy_t *b, Buffy_t *a) {
+	_splice(b, b, a);
+}
+
+static void
+_moveToFront(Buffy_t *b) {
+	_moveAfter(b, b->head);
+}
+
+static void
+_moveToBack(Buffy_t *b) {
+	_moveAfter(b, _last(b));
+}
+
+// static void
+// _insertAfter();
+// static void
+// _remove(Buffy_t b) {
+//
+// }
+
+
 /**
  * @see Buffy_new
  */
 Buffy_t *Buffy_new(Packet *p) {
+
+	Buffy_t *dummy = calloc(1, sizeof(Buffy_t));
+	check_mem(dummy);
+
+	dummy->next = dummy;
+	dummy->prev = dummy;
+	dummy->head = dummy;
+	dummy->ops = &BuffyOverride_ops;
 
 	Buffy_t *buffy = malloc(sizeof(Buffy_t));
 	check_mem(buffy);
@@ -47,10 +120,13 @@ Buffy_t *Buffy_new(Packet *p) {
 
 	buffy->data = p->pkt;
 	buffy->position = 0;
-	buffy->parent = NULL;
-	buffy->next = NULL;
+	buffy->head = dummy->head;
 
+	buffy->prev = buffy->head;
+	buffy->next = buffy->head;
 
+	buffy->head->next = buffy;
+	buffy->head->prev = buffy;
 
 	return buffy;
 error:
@@ -69,6 +145,7 @@ void Buffy_free(Buffy_t *buffy) {
 
 Buffy_t *Buffy_createVirtual(Buffy_t *this, unsigned int bitOffset) {
 
+	check(this->next == this->head, "not the last buffy in sequence cannot create virtual in between");
 	check(this != NULL, "The calling buffer must not be null");
 	check(bitOffset % 8 == 0, "a bitoffset that is not 8 bit alligned is not supported yet");
 
@@ -80,11 +157,18 @@ Buffy_t *Buffy_createVirtual(Buffy_t *this, unsigned int bitOffset) {
 	buffy->p = this->p;
 	buffy->ops = this->ops;
 	buffy->data = this->data + byteOffset;
-	buffy->parent = this;
-	buffy->raw = this->raw;
-	buffy->position = bitOffset;
+	buffy->head = this->head;
+	buffy->prev = this;
+	buffy->next = buffy->head;
+	buffy->head->prev = buffy;
 
-	this->next = buffy;
+	buffy->position = this->position + byteOffset;
+
+	//buffy->parent = this;
+	//buffy->raw = this->raw;
+	//buffy->position = bitOffset;
+
+	//this->next = buffy;
 
 	return buffy;
 
@@ -255,6 +339,8 @@ uint32_t Buffy_getNBits32(Buffy_t *this, unsigned int bitOffset,
 	check(noOfBits <= 16, "number of bits has to be smaller or equally to 16 bits.");
 	check(noOfBits > 0, "number of bits cannot be zero. needs to be positive");
 
+	sentinel("Not implemented yet");
+
 	//TODO implement
 	return 0;
 error:
@@ -272,8 +358,61 @@ uint64_t Buffy_getNBits64(Buffy_t *this, unsigned int bitOffset,
 	check(noOfBits <= 16, "number of bits has to be smaller or equally to 16 bits.");
 	check(noOfBits > 0, "number of bits cannot be zero. needs to be positive");
 
+	sentinel("Not implemented yet");
 	//TODO implement
 	return 0;
 error:
 	return -1;
+}
+
+
+
+/**
+* @see Buffy_dump
+*/
+char
+*Buffy_dump(Buffy_t *this) {
+
+	Buffy_t *last = this->head->prev;
+	uint64_t position = last->position;
+
+	Buffy_t *first = this->head->next;
+
+	uint8_t *current;
+	int i = 0;
+
+	for (i = 0; i < 60; i++) {
+		current = first->data + i;
+		if (i % 16 == 0) {
+			printf("\n");
+		}
+
+		if (i == position) {
+			printf("[");
+		}
+		printf("%02X ", *current);
+		if (i == position) {
+			printf("]");
+		}
+
+	}
+
+	// while ((current = this->data + i) != NULL) {
+	//
+	// 	if (i % 16 == 0) {
+	// 		printf("\n");
+	// 	}
+	//
+	// 	if (i == position) {
+	// 		printf("[");
+	// 	}
+	// 	printf("%02X", *current);
+	// 	if (i == position) {
+	// 		printf("]");
+	// 	}
+	// 	i++;
+	// }
+	debug("should create the sprintf version to return char in future");
+
+	return '0';
 }

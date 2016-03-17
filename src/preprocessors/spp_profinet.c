@@ -350,7 +350,10 @@ static void DetectProfiNetPackets(Packet *p, void *context)
     check_mem(truffle);
 
 	if (truffle) {
-		sender->ops->Sender_send(sender, truffle);
+
+        if (truffle->etherHeader.etherType == 0x8892) {
+            sender->ops->Sender_send(sender, truffle);
+        }
 	}
     ProtocolTree_printDot(protoTree);
 	//protoTree->ops->ProtocolTree_toString(protoTree);

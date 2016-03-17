@@ -120,7 +120,7 @@ int PNRTDissector_dissect(Dissector_t *this, Buffy_t *buf, struct ProtocolNode *
 	frameID.val.uint16 = buf->ops->Buffy_getBits16(buf, 0);
 	frameID.length = 16;
 
-	node->ops->ProtocolTree_branchImportant(pnrtItem, "frame_id", "frame_id", frameID);
+	node->ops->ProtocolTree_branchImportant(pnrtItem, "frame_id", "pnrt_frame_id", frameID);
 
 	Dissector_t *nextDissector = this->ops->Dissector_getSub(this, frameID.val.uint16);
 	check(
