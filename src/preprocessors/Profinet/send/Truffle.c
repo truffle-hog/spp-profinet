@@ -134,7 +134,7 @@ Truffle_t *Truffle_new(const struct ProtocolNode *protoTree) {
 				}
 			}
 
-			truffle->frame.val.dcp.blocks[0].type = IS_DEVICE;
+			//truffle->frame.val.dcp.blocks[0].type = IS_DEVICE;
 
 		}
 }
