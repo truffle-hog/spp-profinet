@@ -552,10 +552,22 @@ dissect_PNDCP_Suboption_Device(Dissector_t *this, Buffy_t *buf, struct ProtocolN
 
     case PNDCP_SUBOPTION_DEVICE_NAMEOFSTATION:
 
+        debug("block_length for devicename: %d", block_length + 1);
+        //debug("devicename: %s", )
         // TODO write own malloc?
         nameOfStation.val.string = packetScopeMalloc(block_length + 1);
+
+        // debug("0x%02X", buf->ops->Buffy_getBitsWalk8(buf, 0));
+        // debug("0x%02X", buf->ops->Buffy_getBitsWalk8(buf, 0));
+        // debug("0x%02X", buf->ops->Buffy_getBitsWalk8(buf, 0));
+        // debug("0x%02X", buf->ops->Buffy_getBitsWalk8(buf, 0));
+        // debug("0x%02X", buf->ops->Buffy_getBitsWalk8(buf, 0));
+        // debug("0x%02X", buf->ops->Buffy_getBitsWalk8(buf, 0));
+
         buf->ops->Buffy_copyNBytes(buf, (uint8_t *) nameOfStation.val.string, block_length, offset);
         nameOfStation.val.string[block_length] = '\0';
+
+        debug("extracted name_of_station=%s", nameOfStation.val.string);
 
         ProtocolItem_t *nameOfStationItem = node->ops->ProtocolTree_branchImportant(node, "name_of_station","name_of_station", nameOfStation);
 

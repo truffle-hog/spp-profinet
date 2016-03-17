@@ -16,6 +16,8 @@ Truffle_t *Truffle_new(const struct ProtocolNode *protoTree) {
 
 	Truffle_t *truffle = packetScopeMalloc(sizeof(Truffle_t));
 
+	memset(truffle, 0, sizeof(Truffle_t));
+
 	struct Value *etherDest = protoTree->ops->ProtocolTree_getImportantValue(protoTree, "ether_dest");
 	struct Value *etherSource = protoTree->ops->ProtocolTree_getImportantValue(protoTree, "ether_source");
 	struct Value *etherType = protoTree->ops->ProtocolTree_getImportantValue(protoTree, "ether_type");

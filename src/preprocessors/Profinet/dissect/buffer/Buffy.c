@@ -30,7 +30,8 @@ static const struct Buffy_ops BuffyOverride_ops = {
 	Buffy_getNBits8,
 	Buffy_getNBits16,
 	Buffy_getNBits32,
-	Buffy_getNBits64
+	Buffy_getNBits64,
+	Buffy_dump
 };
 
 /**

@@ -95,4 +95,11 @@ uint32_t Buffy_getNBits32(Buffy_t *this, unsigned int bitOffset,
 uint64_t Buffy_getNBits64(Buffy_t *this, unsigned int bitOffset,
     const int noOfBits, const enum Encoding encoding);
 
+    /**
+	* @brief returns a string representation of the whole package data
+	*
+	* @return string represenation of buffererd data
+	*/
+    char *Buffy_dump(Buffy_t *this);
+
 #endif

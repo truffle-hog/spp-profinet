@@ -107,6 +107,13 @@ struct Buffy_ops {
   uint64_t (*Buffy_getNBits64)(Buffy_t *this, unsigned int bitOffset,
       const int noOfBits, const enum Encoding encoding);
 
+	/**
+	* @brief returns a string representation of the whole package data
+	*
+	* @return string represenation of buffererd data
+	*/
+	char *(*Buffy_dump)(Buffy_t *this);
+
 };
 
 //enum Encoding {
@@ -120,10 +127,10 @@ struct Buffy_ops {
 struct Buffy {
 
 	/** The initial Buffer of this buffer chain. **/
-	struct Buffy *raw;
+	struct Buffy *head;
 
 	/** The Buffer this buffer was created from **/
-	struct Buffy *parent;
+	struct Buffy *prev;
 
 	/** The buffer that is next in the virutal chain. **/
 	struct Buffy *next;
