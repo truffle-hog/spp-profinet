@@ -8,6 +8,17 @@
 
 !LICENSE
 !README.md
+!etc
+!etc/snort
+!etc/snort/*
+!etc/snort/preproc_rules
+!etc/snort/preproc_rules/*
+!etc/snort/rules
+!etc/snort/rules/*
+!etc/snort/rules/iplists
+!etc/snort/rules/iplists/*
+!etc/snort/so_rules
+!etc/snort/so_rules/*
 
 # Plugin specific
 !src/preprocessors/Profinet
