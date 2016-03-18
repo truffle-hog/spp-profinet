@@ -104,6 +104,8 @@ _moveToBack(Buffy_t *b) {
  */
 Buffy_t *Buffy_new(Packet *p) {
 
+	check(p != NULL, "packet must not be null");
+
 	Buffy_t *dummy = calloc(1, sizeof(Buffy_t));
 	check_mem(dummy);
 
@@ -143,7 +145,7 @@ void Buffy_free(Buffy_t *buffy) {
 
 }
 
-Buffy_t *Buffy_createVirtual(Buffy_t *this, unsigned int bitOffset) {
+Buffy_t *Buffy_createVirtual(Buffy_t *this, int bitOffset) {
 
 	check(this->next == this->head, "not the last buffy in sequence cannot create virtual in between");
 	check(this != NULL, "The calling buffer must not be null");
@@ -176,7 +178,7 @@ error:
 	return NULL;
 }
 
-uint8_t *Buffy_copyNBytes(Buffy_t *this, uint8_t *dest, unsigned int byteCount, unsigned int byteOffset) {
+uint8_t *Buffy_copyNBytes(Buffy_t *this, uint8_t *dest, int byteCount, int byteOffset) {
 
 	check(this != NULL, "calling buffer must not be null");
 	memcpy(dest, this->data + byteOffset, byteCount);
@@ -186,7 +188,7 @@ error:
 	return NULL;
 }
 
-uint8_t Buffy_getBits8(Buffy_t *this, unsigned int byteOffset) {
+uint8_t Buffy_getBits8(Buffy_t *this, int byteOffset) {
 
 	check(this != NULL, "calling buffer must not be null");
 
@@ -195,7 +197,7 @@ error:
 	return -1;
 }
 
-uint16_t Buffy_getBits16(Buffy_t *this, unsigned int byteOffset) {
+uint16_t Buffy_getBits16(Buffy_t *this, int byteOffset) {
 
 	check(this != NULL, "calling buffer must not be null");
 
@@ -205,7 +207,7 @@ error:
 	return -1;
 }
 
-uint32_t Buffy_getBits32(Buffy_t *this, unsigned int byteOffset) {
+uint32_t Buffy_getBits32(Buffy_t *this, int byteOffset) {
 
 	check(this != NULL, "The calling buffer must not be null.");
 
@@ -215,7 +217,7 @@ error:
 	return -1;
 }
 
-uint64_t Buffy_getBits64(Buffy_t *this, unsigned int byteOffset) {
+uint64_t Buffy_getBits64(Buffy_t *this, int byteOffset) {
 
 	check(this != NULL, "The calling buffer must not be null.");
 
@@ -226,28 +228,28 @@ error:
 	return -1;
 }
 
-uint8_t Buffy_getBitsWalk8(Buffy_t *this, unsigned int *byteOffset) {
+uint8_t Buffy_getBitsWalk8(Buffy_t *this, int *byteOffset) {
 
 	uint8_t value = Buffy_getBits8(this, *byteOffset);
 	*byteOffset += 1;
 	return value;
 }
 
-uint16_t Buffy_getBitsWalk16(Buffy_t *this, unsigned int *byteOffset) {
+uint16_t Buffy_getBitsWalk16(Buffy_t *this, int *byteOffset) {
 
 	uint16_t value = this->ops->Buffy_getBits16(this, *byteOffset);
 	*byteOffset += 2;
 	return value;
 }
 
-uint32_t Buffy_getBitsWalk32(Buffy_t *this, unsigned int *byteOffset) {
+uint32_t Buffy_getBitsWalk32(Buffy_t *this, int *byteOffset) {
 
 	uint32_t value = Buffy_getBits32(this, *byteOffset);
 	*byteOffset += 4;
 	return value;
 }
 
-uint64_t Buffy_getBitsWalk64(Buffy_t *this, unsigned int *byteOffset) {
+uint64_t Buffy_getBitsWalk64(Buffy_t *this, int *byteOffset) {
 
 	uint64_t value = Buffy_getBits64(this, *byteOffset);
 	*byteOffset += 8;
@@ -257,7 +259,7 @@ uint64_t Buffy_getBitsWalk64(Buffy_t *this, unsigned int *byteOffset) {
 /**
  * @see Buffy_getBits8
  */
-uint8_t Buffy_getNBits8(Buffy_t *this, unsigned int bitOffset,
+uint8_t Buffy_getNBits8(Buffy_t *this, int bitOffset,
 	const int noOfBits) {
 
 	check(this != NULL, "The calling buffer must not be null.");
@@ -294,7 +296,7 @@ error:
 /**
  * @see Buffy_getBits16
  */
-uint16_t Buffy_getNBits16(Buffy_t *this, unsigned int bitOffset,
+uint16_t Buffy_getNBits16(Buffy_t *this, int bitOffset,
     const int noOfBits, const enum Encoding encoding) {
 
 	check(noOfBits <= 16, "number of bits has to be smaller or equally to 16 bits.");
@@ -331,7 +333,7 @@ error:
 /**
  * @see Buffy_getBits32
  */
-uint32_t Buffy_getNBits32(Buffy_t *this, unsigned int bitOffset,
+uint32_t Buffy_getNBits32(Buffy_t *this, int bitOffset,
     const int noOfBits, const enum Encoding encoding) {
 
 	check(bitOffset % 8 == 0, "a bitoffset that is not 8 bit alligned is not supported yet");
@@ -350,7 +352,7 @@ error:
 /**
  * @see Buffy_getBits64
  */
-uint64_t Buffy_getNBits64(Buffy_t *this, unsigned int bitOffset,
+uint64_t Buffy_getNBits64(Buffy_t *this, int bitOffset,
     const int noOfBits, const enum Encoding encoding) {
 
 	check(bitOffset % 8 == 0, "a bitoffset that is not 8 bit alligned is not supported yet");

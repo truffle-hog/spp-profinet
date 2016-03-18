@@ -29,25 +29,25 @@ void Buffy_free(Buffy_t *buffy);
  * @param this the calling Buffer
  * @param bitOffset the bit offset the new buffer starts at
  */
-Buffy_t *Buffy_createVirtual(Buffy_t *this, unsigned int bitOffset);
+Buffy_t *Buffy_createVirtual(Buffy_t *this, int bitOffset);
 
-uint8_t *Buffy_copyNBytes(Buffy_t *this, uint8_t *dest, unsigned int byteCount, unsigned int byteOffset);
+uint8_t *Buffy_copyNBytes(Buffy_t *this, uint8_t *dest, int byteCount, int byteOffset);
 
-uint8_t Buffy_getBits8(Buffy_t *this, unsigned int byteOffset);
+uint8_t Buffy_getBits8(Buffy_t *this, int byteOffset);
 
-uint16_t Buffy_getBits16(Buffy_t *this, unsigned int byteOffset);
+uint16_t Buffy_getBits16(Buffy_t *this, int byteOffset);
 
-uint32_t Buffy_getBits32(Buffy_t *this, unsigned int byteOffset);
+uint32_t Buffy_getBits32(Buffy_t *this, int byteOffset);
 
-uint64_t Buffy_getBits64(Buffy_t *this, unsigned int byteOffset);
+uint64_t Buffy_getBits64(Buffy_t *this, int byteOffset);
 
-uint8_t Buffy_getBitsWalk8(Buffy_t *this, unsigned int *byteOffset);
+uint8_t Buffy_getBitsWalk8(Buffy_t *this, int *byteOffset);
 
-uint16_t Buffy_getBitsWalk16(Buffy_t *this, unsigned int *byteOffset);
+uint16_t Buffy_getBitsWalk16(Buffy_t *this, int *byteOffset);
 
-uint32_t Buffy_getBitsWalk32(Buffy_t *this, unsigned int *byteOffset);
+uint32_t Buffy_getBitsWalk32(Buffy_t *this, int *byteOffset);
 
-uint64_t Buffy_getBitsWalk64(Buffy_t *this, unsigned int *byteOffset);
+uint64_t Buffy_getBitsWalk64(Buffy_t *this, int *byteOffset);
 
 /**
  * @brief Get 1 - 8 bits returned in a uint8.
@@ -58,7 +58,7 @@ uint64_t Buffy_getBitsWalk64(Buffy_t *this, unsigned int *byteOffset);
  *
  * @return unsigned 8 bit value representing the specified bit range
  */
-uint8_t Buffy_getNBits8(Buffy_t *this, unsigned int bitOffset,
+uint8_t Buffy_getNBits8(Buffy_t *this, int bitOffset,
     const int noOfBits);
 
 /**
@@ -70,7 +70,7 @@ uint8_t Buffy_getNBits8(Buffy_t *this, unsigned int bitOffset,
  *
  * @return unsigned 16 bit value representing the specified bit range
  */
-uint16_t Buffy_getNBits16(Buffy_t *this, unsigned int bitOffset,
+uint16_t Buffy_getNBits16(Buffy_t *this, int bitOffset,
     const int noOfBits, const enum Encoding encoding);
 
 /**
@@ -82,7 +82,7 @@ uint16_t Buffy_getNBits16(Buffy_t *this, unsigned int bitOffset,
  *
  * @return unsigned 32 bit value representing the specified bit range
  */
-uint32_t Buffy_getNBits32(Buffy_t *this, unsigned int bitOffset,
+uint32_t Buffy_getNBits32(Buffy_t *this, int bitOffset,
     const int noOfBits, const enum Encoding encoding);
 
 /**
@@ -94,7 +94,7 @@ uint32_t Buffy_getNBits32(Buffy_t *this, unsigned int bitOffset,
  *
  * @return unsigned 64 bit value representing the specified bit range
  */
-uint64_t Buffy_getNBits64(Buffy_t *this, unsigned int bitOffset,
+uint64_t Buffy_getNBits64(Buffy_t *this, int bitOffset,
     const int noOfBits, const enum Encoding encoding);
 
     /**

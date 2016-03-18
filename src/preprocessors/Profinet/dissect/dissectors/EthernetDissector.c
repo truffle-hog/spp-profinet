@@ -49,7 +49,9 @@ static const struct Dissector_ops EthernetDissectorOverride_ops = {
     EthernetDissector_free,
     Dissector_registerSub, // TODO can be NULL?
     Dissector_getSub, // TODO can be NULL?
-    EthernetDissector_dissect
+    EthernetDissector_dissect,
+    "Ethernet Dissector",
+    0x1
 };
 
 
@@ -118,7 +120,7 @@ EthernetDissector_dissect(Dissector_t *this, Buffy_t *buf, ProtocolTree_t *node)
 	ethernet.type = is_string;
 	ethernet.val.string = "Ethernet";
 
-	ProtocolItem_t *etherNode = node->ops->ProtocolTree_branch(node, "ethernet", ethernet);
+	ProtocolItem_t *etherNode = node->ops->ProtocolTree_branch(node, "ethernet", ethernet, this);
 
 	struct Value dest;
 	dest.length = 48;
@@ -130,7 +132,7 @@ EthernetDissector_dissect(Dissector_t *this, Buffy_t *buf, ProtocolTree_t *node)
     memcpy(&dest.val.uint64, buf->p->eh->ether_dst, 6);
     dest.val.uint64 = (htobe64(dest.val.uint64)) >> 16;
 
-	check_mem(etherNode->ops->ProtocolTree_branchImportant(etherNode, "ether_dest", "ether_dest", dest));
+	check_mem(etherNode->ops->ProtocolTree_branchImportant(etherNode, "ether_dest", "ether_dest", dest, this));
 
 	struct Value source;
 	source.length = 48;
@@ -140,14 +142,14 @@ EthernetDissector_dissect(Dissector_t *this, Buffy_t *buf, ProtocolTree_t *node)
 	memcpy(&source.val.uint64, buf->p->eh->ether_src, 6);
 	source.val.uint64 = (htobe64(source.val.uint64)) >> 16;
 
-    check_mem(etherNode->ops->ProtocolTree_branchImportant(etherNode, "ether_source", "ether_source", source));
+    check_mem(etherNode->ops->ProtocolTree_branchImportant(etherNode, "ether_source", "ether_source", source, this));
 
 	struct Value ethertype;
 	ethertype.length = 16;
 	ethertype.val.uint16 = htobe16(buf->p->eh->ether_type);
 	ethertype.type = is_uint16;
 
-	check_mem(etherNode->ops->ProtocolTree_branchImportant(etherNode, "ether_type", "ether_type", ethertype));
+	check_mem(etherNode->ops->ProtocolTree_branchImportant(etherNode, "ether_type", "ether_type", ethertype, this));
 
     Dissector_t *nextDissector;
 

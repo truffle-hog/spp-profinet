@@ -80,11 +80,15 @@ struct Dissector_ops {
   * @param buf the buffer pointing to the package data currently being processed
   * @param tree the tree strcture to save the package data in
   *
-  * @return 0 if the dissection was successful wihtout any failures,
+  * @return the number of bytes dissected if the dissection was successful wihtout any failures,
   *         -1 if it was a faulty package. The fault flag will be set in the
   *         ProtocolTree accordingly
   */
-  int (*Dissector_dissect)(Dissector_t *this, Buffy_t *buf, ProtocolTree_t *tree);
+  int (*Dissector_dissect)(Dissector_t *this, Buffy_t *buf, struct ProtocolNode *tree);
+
+  char *Dissector_name;
+
+  uint64_t Dissector_getID;
 };
 
 /**
@@ -109,6 +113,9 @@ struct Dissector {
   const struct Dissector_ops *ops;
   /** The dissector this dissector has been called from. **/
   struct Dissector *calling;
+
+  // /** then ame of this dissector **/
+  // char *name;
 };
 
 /**

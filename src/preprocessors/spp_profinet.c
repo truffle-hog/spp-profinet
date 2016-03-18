@@ -274,12 +274,14 @@ void ProtocolTree_printDot(struct ProtocolNode *tree) {
 
         current = tree->treeData->nodePointers[i];
 
-        fprintf(dotGraph, "  %d\n"
+        fprintf(dotGraph,
+        "subgraph cluster_%ld {\n"
+        "  %d\n"
         "  [\n"
         "  shape = none\n"
         "  label = <<table border=\"0\" cellspacing=\"0\">\n"
         "          <tr><td port=\"port1\" border=\"1\">%s</td></tr>\n"
-        "          <tr><td port=\"port2\" border=\"1\">", current->id, current->name);
+        "          <tr><td port=\"port2\" border=\"1\">", current->dissectedBy->ops->Dissector_getID, current->id, current->name);
         printLabel(dotGraph, current->value);
         fprintf(dotGraph, "</td></tr>\n");
 
@@ -287,7 +289,9 @@ void ProtocolTree_printDot(struct ProtocolNode *tree) {
             fprintf(dotGraph, "          <tr><td port=\"port3\" border=\"1\" bgcolor=\"red\">%s</td></tr>\n", current->importantKey);
         }
         fprintf(dotGraph, "          </table>>\n"
-        "  ]\n");
+        "  ]\n"
+		" label = \"%s\";\n"
+		"}\n", current->dissectedBy->ops->Dissector_name);
 
         // printf("\t%d [label=\"{%s|", current->id, current->name);
         // printLabel(current->value);
@@ -339,14 +343,16 @@ static void DetectProfiNetPackets(Packet *p, void *context)
           "##################################################################\n"
           "vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv");
 
-	ProtocolTree_t *protoTree = ProtocolTree_new("frame");
+	ProtocolTree_t *protoTree = ProtocolTree_new("frame", packetDissector);
     check_mem(protoTree);
 
 	Buffy_t *buffy = Buffy_new(p);
     check_mem(buffy);
 
-	packetDissector->ops->Dissector_dissect(packetDissector, buffy, protoTree);
+	int dissected = packetDissector->ops->Dissector_dissect(packetDissector, buffy, protoTree);
 
+    ProtocolTree_printDot(protoTree);
+    check (!(dissected < 0), "error in dissection");
 
 
     //TODO implement to check if the protoTree built a Profinet package or not here if not just discard everything
@@ -360,7 +366,7 @@ static void DetectProfiNetPackets(Packet *p, void *context)
             sender->ops->Sender_send(sender, truffle);
         }
 	}
-    ProtocolTree_printDot(protoTree);
+
 	//protoTree->ops->ProtocolTree_toString(protoTree);
 
     protoTree->ops->ProtocolTree_free(protoTree);

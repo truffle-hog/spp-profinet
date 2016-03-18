@@ -49,7 +49,9 @@ static const struct Dissector_ops PacketDissectorOverride_ops = {
     PacketDissector_free,
     Dissector_registerSub, // TODO can be NULL?
     Dissector_getSub, // TODO can be NULL?
-    PacketDissector_dissect
+    PacketDissector_dissect,
+	"Packet Dissector",
+	0x0
 };
 
 void PacketDissector_initializeSubDissectors(Dissector_t *this) {
@@ -118,7 +120,7 @@ PacketDissector_dissect(Dissector_t *this, Buffy_t *buf, struct ProtocolNode *no
 	frameLength.length = 32;
 	frameLength.type = is_int32;
 
-	check_mem(node->ops->ProtocolTree_branchImportant(node, "length", "frame_length", frameLength));
+	check_mem(node->ops->ProtocolTree_branchImportant(node, "length", "frame_length", frameLength, this));
 
 //	sprintf("%ld.%06ld\n", buf->p->pkth->ts.tv_sec, buf->p->pkth->ts.tv_usec);
 
@@ -127,14 +129,14 @@ PacketDissector_dissect(Dissector_t *this, Buffy_t *buf, struct ProtocolNode *no
 	timeSec.length = 64;
 	timeSec.type = is_int64;
 
-	check_mem(node->ops->ProtocolTree_branchImportant(node, "timestamp_sec", "frame_timestamp_sec", timeSec));
+	check_mem(node->ops->ProtocolTree_branchImportant(node, "timestamp_sec", "frame_timestamp_sec", timeSec, this));
 
 	struct Value timeUSec;
 	timeUSec.val.int64 = (long) buf->p->pkth->ts.tv_usec;
 	timeUSec.length = 64;
 	timeUSec.type = is_int64;
 
-	check_mem(node->ops->ProtocolTree_branchImportant(node, "timestamp_usec", "frame_timestamp_usec", timeUSec));
+	check_mem(node->ops->ProtocolTree_branchImportant(node, "timestamp_usec", "frame_timestamp_usec", timeUSec, this));
 
 	struct Value deltaSecVal;
 	deltaSecVal.val.int64 = timeSec.val.int64 - thisAsPacketDissector->lastTimeSec;
@@ -147,9 +149,9 @@ PacketDissector_dissect(Dissector_t *this, Buffy_t *buf, struct ProtocolNode *no
 	thisAsPacketDissector->lastTimeSec = timeSec.val.int64;
 	thisAsPacketDissector->lastTimeUSec = timeUSec.val.int64;
 
-	check_mem(node->ops->ProtocolTree_branchImportant(node, "delta_last_sec", "frame_delta_last_sec", deltaSecVal));
-	check_mem(node->ops->ProtocolTree_branchImportant(node, "delta_last_usec", "frame_delta_last_usec", deltaUSecVal));
-	
+	check_mem(node->ops->ProtocolTree_branchImportant(node, "delta_last_sec", "frame_delta_last_sec", deltaSecVal, this));
+	check_mem(node->ops->ProtocolTree_branchImportant(node, "delta_last_usec", "frame_delta_last_usec", deltaUSecVal, this));
+
     Dissector_t *nextDissector;
 
 	// TODO check for the next package to be used

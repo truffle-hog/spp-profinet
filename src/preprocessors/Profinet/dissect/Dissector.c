@@ -37,7 +37,6 @@ Dissector_t * Dissector_new(const struct Dissector_ops *ops) {
 	check_mem(dissector->dissectorRegister);
 
 	dissector->ops = ops;
-
 	return dissector;
 
 error:

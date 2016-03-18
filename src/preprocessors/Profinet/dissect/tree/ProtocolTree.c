@@ -67,7 +67,7 @@ void ProtocolTree_free(struct ProtocolNode *proto) {
 /**
  * @see ProtocolTree_new
  */
-struct ProtocolNode *ProtocolTree_new(char *rootName) {
+struct ProtocolNode *ProtocolTree_new(char *rootName, Dissector_t *dissectedBy) {
 
 	struct ProtocolNode *node = malloc(sizeof(struct ProtocolNode));
 	check_mem(node);
@@ -83,7 +83,7 @@ struct ProtocolNode *ProtocolTree_new(char *rootName) {
 
 	treeData->nodePointers[0] = node;
 
-	treeData->map = HashMap_new(50);
+	treeData->map = HashMap_new(1000);
 	check_mem(treeData->map);
 
 	node->isImportant = false;
@@ -98,6 +98,8 @@ struct ProtocolNode *ProtocolTree_new(char *rootName) {
 	node->children = NULL;
 	node->visited = false;
 
+	node->dissectedBy = dissectedBy;
+
 	return node;
 
 error:
@@ -108,12 +110,14 @@ error:
 /**
  * @see ProtocolNode_branch
  */
-struct ProtocolNode *ProtocolTree_branch(struct ProtocolNode *this, char *name, struct Value value) {
+struct ProtocolNode *ProtocolTree_branch(struct ProtocolNode *this, char *name, struct Value value, Dissector_t *dissectedBy) {
 
 	struct ProtocolNode *child = malloc(sizeof(struct ProtocolNode));
 	check_mem(child);
 
 	child->treeData = this->treeData;
+
+	child->dissectedBy = dissectedBy;
 
 	child->name = name;
 	child->value = value;
@@ -145,12 +149,14 @@ error:
 	return NULL;
 }
 
-struct ProtocolNode *ProtocolTree_branchImportant(struct ProtocolNode *this, char *name, char *importantKey, struct Value value) {
+struct ProtocolNode *ProtocolTree_branchImportant(struct ProtocolNode *this, char *name, char *importantKey, struct Value value, Dissector_t *dissectedBy) {
 
 	struct ProtocolNode *child = malloc(sizeof(struct ProtocolNode));
 	check_mem(child);
 
 	child->treeData = this->treeData;
+
+	child->dissectedBy = dissectedBy;
 
 	child->name = name;
 	child->value = value;

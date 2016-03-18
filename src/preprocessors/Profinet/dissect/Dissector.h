@@ -82,6 +82,6 @@ Dissector_t * Dissector_getSub(Dissector_t *this, uint64_t data);
  *         -1 if it was a faulty package. The fault flag will be set in the
  *         ProtocolTree accordingly
  */
-int Dissector_dissect(Dissector_t *this, Buffy_t *buf, ProtocolTree_t *tree);
+int Dissector_dissect(Dissector_t *this, Buffy_t *buf, struct ProtocolNode *tree);
 
 #endif

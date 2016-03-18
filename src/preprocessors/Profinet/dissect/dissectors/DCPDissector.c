@@ -316,7 +316,9 @@ static const struct Dissector_ops DCPDissectorOverride_ops = {
   DCPDissector_free,
   Dissector_registerSub,
   Dissector_getSub,
-  DCPDissector_dissect
+  DCPDissector_dissect,
+  "DCP Dissector",
+  0x4
 };
 
 int DCPDissector_initializeSubDissectors(Dissector_t *this) {
@@ -424,13 +426,13 @@ _dissectPNDCP_PDU(Dissector_t *this, Buffy_t *buf, struct ProtocolNode *node) {
 	xid.val.uint32 = buf->ops->Buffy_getBits32(buf, offset);
 	offset += 4;
 
-    ProtocolItem_t *serviceIDItem = node->ops->ProtocolTree_branchImportant(node, "service_id", "dcp_service_id", serviceID);
+    ProtocolItem_t *serviceIDItem = node->ops->ProtocolTree_branchImportant(node, "service_id", "dcp_service_id", serviceID, this);
 	check_mem(serviceIDItem);
 
-    ProtocolItem_t *serviceTypeItem = node->ops->ProtocolTree_branchImportant(node, "service_type", "dcp_service_type", serviceType);
+    ProtocolItem_t *serviceTypeItem = node->ops->ProtocolTree_branchImportant(node, "service_type", "dcp_service_type", serviceType, this);
 	check_mem(serviceTypeItem);
 
-    ProtocolItem_t *xidItem = node->ops->ProtocolTree_branchImportant(node, "xid", "dcp_xid", xid);
+    ProtocolItem_t *xidItem = node->ops->ProtocolTree_branchImportant(node, "xid", "dcp_xid", xid, this);
 	check_mem(xidItem);
 
 	if (serviceID.val.uint8 == PNDCP_SERVICE_ID_IDENTIFY && serviceType.val.uint8 == PNDCP_SERVICE_TYPE_REQUEST) {
@@ -438,7 +440,7 @@ _dissectPNDCP_PDU(Dissector_t *this, Buffy_t *buf, struct ProtocolNode *node) {
 		/* multicast header */
 		responseDelay.val.uint16 = buf->ops->Buffy_getBits16(buf, offset);
 
-        ProtocolItem_t *responseDelayItem = node->ops->ProtocolTree_branchImportant(node, "response_delay", "dcp_response_delay", responseDelay);
+        ProtocolItem_t *responseDelayItem = node->ops->ProtocolTree_branchImportant(node, "response_delay", "dcp_response_delay", responseDelay, this);
     	check_mem(responseDelayItem);
 		offset += 2;
 	} else {
@@ -455,7 +457,7 @@ _dissectPNDCP_PDU(Dissector_t *this, Buffy_t *buf, struct ProtocolNode *node) {
 	dataLength = (int) dataLengthValue.val.uint16;
     offset += 2;
 
-    ProtocolItem_t *dataLengthItem = node->ops->ProtocolTree_branchImportant(node, "data_length", "dcp_data_length", dataLengthValue);
+    ProtocolItem_t *dataLengthItem = node->ops->ProtocolTree_branchImportant(node, "data_length", "dcp_data_length", dataLengthValue, this);
     check_mem(dataLengthItem);
 
 
@@ -486,7 +488,7 @@ _dissectPNDCP_PDU(Dissector_t *this, Buffy_t *buf, struct ProtocolNode *node) {
 		break;
 	}
 
-	ProtocolItem_t *serviceIDStringItem = serviceIDItem->ops->ProtocolTree_branchImportant(serviceIDItem, "name", "service_id_name", serviceIDName);
+	ProtocolItem_t *serviceIDStringItem = serviceIDItem->ops->ProtocolTree_branchImportant(serviceIDItem, "name", "service_id_name", serviceIDName, this);
 
 	check_mem(serviceIDStringItem);
 
@@ -520,10 +522,10 @@ _dissectPNDCP_PDU(Dissector_t *this, Buffy_t *buf, struct ProtocolNode *node) {
 		break;
 	}
 
-    ProtocolItem_t *isResponseItem = node->ops->ProtocolTree_branchImportant(node, "is_response", "dcp_is_response", isResponseValue);
+    ProtocolItem_t *isResponseItem = node->ops->ProtocolTree_branchImportant(node, "is_response", "dcp_is_response", isResponseValue, this);
     check_mem(isResponseItem);
 
-	ProtocolItem_t *serviceTypeNameItem = serviceTypeItem->ops->ProtocolTree_branchImportant(serviceTypeItem, "name", "service_type_name", serviceTypeName);
+	ProtocolItem_t *serviceTypeNameItem = serviceTypeItem->ops->ProtocolTree_branchImportant(serviceTypeItem, "name", "service_type_name", serviceTypeName, this);
 	check_mem(serviceTypeNameItem);
 
 	struct Value options;
@@ -534,10 +536,10 @@ _dissectPNDCP_PDU(Dissector_t *this, Buffy_t *buf, struct ProtocolNode *node) {
 	blocks.type = is_string;
 	blocks.val.string = "Blocks";
 
-	ProtocolItem_t *optionsItem = node->ops->ProtocolTree_branch(node, "options", options);
+	ProtocolItem_t *optionsItem = node->ops->ProtocolTree_branch(node, "options", options, this);
 	check_mem(optionsItem);
 
-	ProtocolItem_t *blocksItem = node->ops->ProtocolTree_branch(node, "blocks", blocks);
+	ProtocolItem_t *blocksItem = node->ops->ProtocolTree_branch(node, "blocks", blocks, this);
 	check_mem(blocksItem);
 
 	Buffy_t *loopBuffer; // = buf->ops->Buffy_createVirtual(buf, offset);
@@ -598,7 +600,7 @@ _dissectPNDCP_PDU(Dissector_t *this, Buffy_t *buf, struct ProtocolNode *node) {
         }
 	}
 
-    return 0;
+    return offset;
 
 	//struct Value xidName;
 	//xidName.type = is_string;
@@ -633,9 +635,14 @@ int DCPDissector_dissect(Dissector_t *this, Buffy_t *buf, struct ProtocolNode *n
 	dcp.type = is_string;
 	dcp.val.string = "DCP";
 
-    ProtocolItem_t *dcpItem = node->ops->ProtocolTree_branch(node, "dcp", dcp);
+    ProtocolItem_t *dcpItem = node->ops->ProtocolTree_branch(node, "dcp", dcp, this);
 
-    return _dissectPNDCP_PDU(this, buf->ops->Buffy_createVirtual(buf, 16), dcpItem);
+    int dissected;
+
+    check(
+        !((dissected = _dissectPNDCP_PDU(this, buf->ops->Buffy_createVirtual(buf, 16), dcpItem)) < 0), "error on dissection in DCP");
+
+    return dissected + 2;
 
 error:
 	return -1;

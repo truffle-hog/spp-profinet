@@ -117,6 +117,8 @@ _hashMe(size_t allocated, char *key, unsigned long seed) {
 int
 HashMap_insert(struct HashMap *this, char *key, struct Value value, struct Value *existing) {
 
+	debug("HashMap current size=%d", this->size);
+
     if (this->size == this->allocated) {
 
         check_mem(_reallocate(this, 2 * this->size));
@@ -144,7 +146,6 @@ HashMap_insert(struct HashMap *this, char *key, struct Value value, struct Value
         }
     }
     this->table[i] = (struct Entry) {.key = key, .value = value, .valid = 1};
-
 
 	debug("table %d : (key=%s, valid=%d)", i, this->table[i].key, this->table[i].valid);
 #ifdef NDEBUG
@@ -200,7 +201,7 @@ error:
 void HashMap_free(struct HashMap *hashMap) {
 
     hashMap->size = 0;
-    hashMap->allocated = 10;
+    hashMap->allocated = 0;
     free(hashMap->table);
     free(hashMap);
 

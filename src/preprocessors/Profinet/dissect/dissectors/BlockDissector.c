@@ -309,7 +309,9 @@ static const struct Dissector_ops BlockDissectorOverride_ops = {
   BlockDissector_free,
   Dissector_registerSub,
   Dissector_getSub,
-  BlockDissector_dissect
+  BlockDissector_dissect,
+  "Block Dissector",
+  0x6
 };
 
 /**
@@ -320,7 +322,7 @@ BlockDissector_new() {
 
 
     struct BlockDissector *blockDissector;
-    blockDissector = Dissector_new(&BlockDissectorOverride_ops);
+    blockDissector = (struct BlockDissector *) Dissector_new(&BlockDissectorOverride_ops);
     blockDissector = realloc(blockDissector, sizeof(struct BlockDissector));
     check_mem(blockDissector);
 
@@ -385,14 +387,14 @@ dissect_PNDCP_Suboption_IP(Dissector_t *this, Buffy_t* buf, struct ProtocolNode 
     case PNDCP_SUBOPTION_IP_MAC:
         /* MACAddressValue? */
         suboptionStringValue.val.string = "IP/MAC";
-        node->ops->ProtocolTree_branchImportant(node, "ip_mac", "dcp_suboption_ip_mac", suboptionStringValue);
+        node->ops->ProtocolTree_branchImportant(node, "ip_mac", "dcp_suboption_ip_mac", suboptionStringValue, this);
         bytesDissected += blockLength;
         break;
 
     case PNDCP_SUBOPTION_IP_IP:
 
         suboptionStringValue.val.string = "IP/IP";
-        ProtocolItem_t *ipItem = node->ops->ProtocolTree_branch(node, "ip_ip", suboptionStringValue);
+        ProtocolItem_t *ipItem = node->ops->ProtocolTree_branch(node, "ip_ip", suboptionStringValue, this);
         check_mem(ipItem);
         /* BlockInfo? */
         if ( ((serviceID == PNDCP_SERVICE_ID_IDENTIFY) &&  isResponse) ||
@@ -406,7 +408,7 @@ dissect_PNDCP_Suboption_IP(Dissector_t *this, Buffy_t* buf, struct ProtocolNode 
             //offset += 2;
             struct Value blockInfoString = {.type = is_string, .val.string = (char*) valueToString(blockInfo, pn_dcp_suboption_ip_block_info, "Undecoded")};
 
-            ipItem->ops->ProtocolTree_branchImportant(ipItem, "block_info", "dcp_suboption_ip_block_info", blockInfoString);
+            ipItem->ops->ProtocolTree_branchImportant(ipItem, "block_info", "dcp_suboption_ip_block_info", blockInfoString, this);
             blockLength -= 2;
             if (blockInfo & 0x80) {
                 debug("ERROER EROEROEOREOREOREROEOREOREOREOROERO");
@@ -421,7 +423,7 @@ dissect_PNDCP_Suboption_IP(Dissector_t *this, Buffy_t* buf, struct ProtocolNode 
 
             struct Value blockQualifierValue = {.type = is_string, .val.string = (char*)valueToString(blockInfo, pn_dcp_block_qualifier, "Unknown")};
 
-            ipItem->ops->ProtocolTree_branchImportant(ipItem, "block_info", "dcp_suboption_ip_block_info", blockQualifierValue);
+            ipItem->ops->ProtocolTree_branchImportant(ipItem, "block_info", "dcp_suboption_ip_block_info", blockQualifierValue, this);
             blockLength -= 2;
         }
 
@@ -438,9 +440,9 @@ dissect_PNDCP_Suboption_IP(Dissector_t *this, Buffy_t* buf, struct ProtocolNode 
         //Struct Value ipValueHeader = {.type = string, .val.string = "Gateway"};
         struct Value gatewayValue = {.type = is_uint32, .val.uint32 = buf->ops->Buffy_getBitsWalk32(buf, &bytesDissected)};
 
-        ipItem->ops->ProtocolTree_branchImportant(ipItem, "ip", "suboption_ip_address", ipValue);
-        ipItem->ops->ProtocolTree_branchImportant(ipItem, "subnet", "dcp_suboption_ip_subnet", subnetValue);
-        ipItem->ops->ProtocolTree_branchImportant(ipItem, "gateway", "dcp_suboption_ip_gateway", gatewayValue);
+        ipItem->ops->ProtocolTree_branchImportant(ipItem, "ip", "suboption_ip_address", ipValue, this);
+        ipItem->ops->ProtocolTree_branchImportant(ipItem, "subnet", "dcp_suboption_ip_subnet", subnetValue, this);
+        ipItem->ops->ProtocolTree_branchImportant(ipItem, "gateway", "dcp_suboption_ip_gateway", gatewayValue, this);
 
         // /* IPAddress */
         // offset = dissect_pn_ipv4(tvb, offset, pinfo, tree, hf_pn_dcp_suboption_ip_ip, &ip);
@@ -460,7 +462,7 @@ dissect_PNDCP_Suboption_IP(Dissector_t *this, Buffy_t* buf, struct ProtocolNode 
     default:
         bytesDissected += blockLength;
     }
-    sentinel("not implemented exception");
+    //sentinel("not implemented exception");
     return bytesDissected;
 error:
 
@@ -476,7 +478,7 @@ dissect_PNDCP_Suboption_Device(Dissector_t *this, Buffy_t *buf, struct ProtocolN
     assert(buf != NULL);
     assert(node != NULL);
 
-    unsigned int offset = 0;
+    int offset = 0;
 
     bool isResponse = ((struct BlockDissector*) this)->isResponse;
     uint8_t serviceID = ((struct BlockDissector*) this)->serviceID;
@@ -485,23 +487,23 @@ dissect_PNDCP_Suboption_Device(Dissector_t *this, Buffy_t *buf, struct ProtocolN
     struct Value suboption = {.type = is_uint8};
     uint16_t   block_length;
     struct Value blockLength = {.type = is_uint16};
-    char    *info_str;
+/*    char    *info_str;
     uint8_t    device_role;
     uint16_t   vendor_id;
     uint16_t   device_id;
 
-    struct Value typeOfStation = {.type = is_string};
+    struct Value typeOfStation = {.type = is_string};*/
     struct Value nameOfStation = {.type = is_string};
-    struct Value aliasName = {.type = is_string};
+/*    struct Value aliasName = {.type = is_string};
 
     char     *typeofstation;
     char     *nameofstation;
-    char     *aliasname;
+    char     *aliasname;*/
     struct Value   blockInfo = {.type = is_uint16 };
     struct Value blockQualifier = {.type = is_uint16};
     bool  have_block_info      = FALSE;
     bool  have_block_qualifier = FALSE;
-    uint8_t    device_instance_high;
+/*    uint8_t    device_instance_high;
     uint8_t    device_instance_low;
 
     struct Value oemVendorID = {.type = is_uint16};
@@ -509,12 +511,12 @@ dissect_PNDCP_Suboption_Device(Dissector_t *this, Buffy_t *buf, struct ProtocolN
 
     uint16_t   oem_vendor_id;
     uint16_t   oem_device_id;
-
+*/
     /* SuboptionDevice... */
 
 
     suboption.val.uint8 = buf->ops->Buffy_getBitsWalk8(buf, &offset);
-    ProtocolItem_t *suboptionItem = node->ops->ProtocolTree_branch(node, "suboption", suboption);
+    ProtocolItem_t *suboptionItem = node->ops->ProtocolTree_branch(node, "suboption", suboption, this);
     check_mem(suboptionItem);
     /* DCPBlockLength */
 
@@ -523,7 +525,7 @@ dissect_PNDCP_Suboption_Device(Dissector_t *this, Buffy_t *buf, struct ProtocolN
 
     block_length = buf->ops->Buffy_getBitsWalk16(buf, &offset);
     blockLength.val.uint16 = block_length;
-    ProtocolItem_t *blockLengthItem = node->ops->ProtocolTree_branchImportant(node, "length","suboption_device_length", blockLength);
+    ProtocolItem_t *blockLengthItem = node->ops->ProtocolTree_branchImportant(node, "length","suboption_device_length", blockLength, this);
     check_mem(blockLengthItem);
 
     /* BlockInfo? */
@@ -534,7 +536,7 @@ dissect_PNDCP_Suboption_Device(Dissector_t *this, Buffy_t *buf, struct ProtocolN
         blockInfo.val.uint16 = buf->ops->Buffy_getBitsWalk16(buf, &offset);
         have_block_info = TRUE;
         block_length -= 2;
-        ProtocolItem_t *blockInfoItem = node->ops->ProtocolTree_branchImportant(node, "info", "suboption_device_info", blockInfo);
+        ProtocolItem_t *blockInfoItem = node->ops->ProtocolTree_branchImportant(node, "info", "suboption_device_info", blockInfo, this);
 
         check_mem (blockInfoItem);
     }
@@ -603,8 +605,10 @@ dissect_PNDCP_Suboption_Device(Dissector_t *this, Buffy_t *buf, struct ProtocolN
 
         debug("extracted name_of_station=%s", nameOfStation.val.string);
 
-        ProtocolItem_t *nameOfStationItem = node->ops->ProtocolTree_branchImportant(node, "name_of_station","name_of_station", nameOfStation);
-
+        ProtocolItem_t *nameOfStationItem = node->ops->ProtocolTree_branchImportant(node, "name_of_station","name_of_station", nameOfStation, this);
+		check_mem(nameOfStationItem);
+		// TODO maybe use this item
+		(void) nameOfStationItem;
         // nameofstation = (char *)wmem_alloc(wmem_packet_scope(), block_length + 1);
         // tvb_memcpy(tvb, (uint8_t *) nameofstation, offset, block_length);
         // nameofstation[block_length] = '\0';
@@ -748,7 +752,7 @@ dissect_PNDCP_Suboption_Device(Dissector_t *this, Buffy_t *buf, struct ProtocolN
 
 error:
 
-    return 0;
+    return -1;
 }
 
 
@@ -756,6 +760,9 @@ error:
 static int
 dissect_PNDCP_Suboption_DHCP(Dissector_t *this, Buffy_t *buf, struct ProtocolNode *node)
 {
+	(void) this;
+	(void) buf;
+	(void) node;
     int bytesDissected = 0;
 
     // uint8_t   suboption;
@@ -815,6 +822,9 @@ error:
 static int
 dissect_PNDCP_Suboption_Control(Dissector_t *this, Buffy_t *buf, struct ProtocolNode *node)
 {
+	(void) this;
+	(void) buf;
+	(void) node;
     int bytesDissected = 0;
     // uint8_t      suboption;
     // uint16_t     block_length;
@@ -902,6 +912,11 @@ error:
 static int
 dissect_PNDCP_Suboption_DeviceInitiative(Dissector_t *this, Buffy_t *buf, struct ProtocolNode *node)
 {
+
+	(void) this;
+	(void) buf;
+	(void) node;
+
     int bytesDissected = 0;
     // uint8_t  suboption;
     // uint16_t block_length;
@@ -963,12 +978,16 @@ dissect_PNDCP_Suboption_All(Dissector_t *this, Buffy_t *buf, struct ProtocolNode
         case 255:    /* All */
             allValue.type = is_string;
             allValue.val.string = "All";
-            ProtocolItem_t *subItem = node->ops->ProtocolTree_branch(node, "all", allValue);
+            // TODO maybe use this subItem in future
+			ProtocolItem_t *subItem = node->ops->ProtocolTree_branch(node, "all", allValue, this);
+			check_mem(subItem);
             break;
         default:
             bytesDissected += blockLength;
     }
     return bytesDissected;
+error:
+	return -1;
 }
 
 
@@ -976,11 +995,14 @@ dissect_PNDCP_Suboption_All(Dissector_t *this, Buffy_t *buf, struct ProtocolNode
 static int
 dissect_PNDCP_Suboption_Manuf(Dissector_t *this, Buffy_t *buf, struct ProtocolNode *node)
 {
+	(void) node;
+	(void) this;
     uint8_t  suboption;
     uint16_t blockLength;
 
     int bytesDissected = 0;
 
+	// FIXME Change the whole offset thing to signed integers for ERROR tracking!"!!!! IMPORTANT
     suboption = buf->ops->Buffy_getBitsWalk8(buf, &bytesDissected);
     blockLength = buf->ops->Buffy_getBitsWalk16(buf, &bytesDissected);
 
@@ -999,6 +1021,7 @@ dissect_PNDCP_Suboption_Manuf(Dissector_t *this, Buffy_t *buf, struct ProtocolNo
  */
 int BlockDissector_dissect(Dissector_t *this, Buffy_t *buf, struct ProtocolNode *node) {
 
+	// FIXME signed AGAIN AND -1 as error!!!
 	int bytesDissected = 0;
 
 //    uint8_t      option;
@@ -1014,11 +1037,12 @@ int BlockDissector_dissect(Dissector_t *this, Buffy_t *buf, struct ProtocolNode 
         tvb, offset, 0, "Block: ");
     block_tree = proto_item_add_subtree(block_item, ett_pn_dcp_block);
 */
+	// FIXME change to signed
 	option.val.uint8 = buf->ops->Buffy_getBitsWalk8(buf, &bytesDissected);
 
 	ProtocolItem_t *blockItem;
 
-	const char *blockName;
+	char *blockName;
 	int offset = 0;
 
 	Buffy_t *optBuffer = buf->ops->Buffy_createVirtual(buf, 8);
@@ -1030,7 +1054,7 @@ int BlockDissector_dissect(Dissector_t *this, Buffy_t *buf, struct ProtocolNode 
 
         debug("dissecting :%s", blockName);
 
-		blockItem = node->ops->ProtocolTree_branch(node, blockName, option);
+		blockItem = node->ops->ProtocolTree_branch(node, blockName, option, this);
         check_mem(blockItem);
 
 		offset = dissect_PNDCP_Suboption_IP(this, optBuffer, blockItem);
@@ -1041,7 +1065,7 @@ int BlockDissector_dissect(Dissector_t *this, Buffy_t *buf, struct ProtocolNode 
 
         debug("dissecting :%s", blockName);
 
-	   	blockItem = node->ops->ProtocolTree_branch(node, blockName, option);
+	   	blockItem = node->ops->ProtocolTree_branch(node, blockName, option, this);
 		check_mem(blockItem);
 
 		offset = dissect_PNDCP_Suboption_Device(this, optBuffer, blockItem);
@@ -1053,7 +1077,7 @@ int BlockDissector_dissect(Dissector_t *this, Buffy_t *buf, struct ProtocolNode 
 
         debug("dissecting :%s", blockName);
 
-		blockItem = node->ops->ProtocolTree_branch(node, blockName, option);
+		blockItem = node->ops->ProtocolTree_branch(node, blockName, option, this);
 		check_mem(blockItem);
 
 		offset = dissect_PNDCP_Suboption_DHCP(this, optBuffer, blockItem);
@@ -1064,7 +1088,7 @@ int BlockDissector_dissect(Dissector_t *this, Buffy_t *buf, struct ProtocolNode 
 
         debug("dissecting :%s", blockName);
 
-	 	blockItem = node->ops->ProtocolTree_branch(node, blockName, option);
+	 	blockItem = node->ops->ProtocolTree_branch(node, blockName, option, this);
 		check_mem(blockItem);
 
 		offset = dissect_PNDCP_Suboption_Control(this, optBuffer, blockItem);
@@ -1075,7 +1099,7 @@ int BlockDissector_dissect(Dissector_t *this, Buffy_t *buf, struct ProtocolNode 
 
         debug("dissecting :%s", blockName);
 
-		blockItem = node->ops->ProtocolTree_branch(node, blockName, option);
+		blockItem = node->ops->ProtocolTree_branch(node, blockName, option, this);
 		check_mem(blockItem);
 
         offset = dissect_PNDCP_Suboption_DeviceInitiative(this, optBuffer, blockItem);
@@ -1086,7 +1110,7 @@ int BlockDissector_dissect(Dissector_t *this, Buffy_t *buf, struct ProtocolNode 
 
         debug("dissecting :%s", blockName);
 
-		blockItem = node->ops->ProtocolTree_branch(node, blockName, option);
+		blockItem = node->ops->ProtocolTree_branch(node, blockName, option, this);
 		check_mem(blockItem);
 
 		offset = dissect_PNDCP_Suboption_All(this, optBuffer, blockItem);
@@ -1099,7 +1123,7 @@ int BlockDissector_dissect(Dissector_t *this, Buffy_t *buf, struct ProtocolNode 
 
         debug("dissecting :%s", blockName);
 
-		blockItem = node->ops->ProtocolTree_branch(node, blockName, option);
+		blockItem = node->ops->ProtocolTree_branch(node, blockName, option, this);
 		check_mem(blockItem);
 
 		offset = dissect_PNDCP_Suboption_Manuf(this, optBuffer, blockItem);

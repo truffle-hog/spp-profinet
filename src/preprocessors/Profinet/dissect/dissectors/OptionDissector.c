@@ -314,7 +314,9 @@ static const struct Dissector_ops OptionDissectorOverride_ops = {
   OptionDissector_free,
   Dissector_registerSub,
   Dissector_getSub,
-  OptionDissector_dissect
+  OptionDissector_dissect,
+  "Option Dissector",
+  0x5
 };
 
 /**
@@ -366,12 +368,12 @@ int OptionDissector_dissect(Dissector_t *this, Buffy_t *buf, struct ProtocolNode
 
 	struct Value option;
 	option.type = is_uint8;
-	option.val.uint8 = buf->ops->Buffy_getBits8(buf, bytesDissected++);
+	option.val.uint8 = buf->ops->Buffy_getBitsWalk8(buf, &bytesDissected);
 	option.length = 8;
 
 	struct Value suboption;
 	suboption.type = is_uint8;
-	suboption.val.uint8 = buf->ops->Buffy_getBits8(buf, bytesDissected++);
+	suboption.val.uint8 = buf->ops->Buffy_getBitsWalk8(buf, &bytesDissected);
 	suboption.length = 8;
 
 	ProtocolItem_t *optionItem;
@@ -379,35 +381,35 @@ int OptionDissector_dissect(Dissector_t *this, Buffy_t *buf, struct ProtocolNode
     switch (option.val.uint8) {
     case PNDCP_OPTION_IP:
 
-		optionItem = node->ops->ProtocolTree_branch(node, "options.ip_option", option);
+		optionItem = node->ops->ProtocolTree_branch(node, "options.ip_option", option, this);
 		val_str = pn_dcp_suboption_ip;
         break;
     case PNDCP_OPTION_DEVICE:
 
-		optionItem = node->ops->ProtocolTree_branch(node, "options.device_option", option);
+		optionItem = node->ops->ProtocolTree_branch(node, "options.device_option", option, this);
         val_str = pn_dcp_suboption_device;
         break;
     case PNDCP_OPTION_DHCP:
 
-		optionItem = node->ops->ProtocolTree_branch(node, "options.dhcp_option", option);
+		optionItem = node->ops->ProtocolTree_branch(node, "options.dhcp_option", option, this);
         val_str = pn_dcp_suboption_dhcp;
         break;
     case PNDCP_OPTION_CONTROL:
-        optionItem = node->ops->ProtocolTree_branch(node, "options.control_option", option);
+        optionItem = node->ops->ProtocolTree_branch(node, "options.control_option", option, this);
         val_str = pn_dcp_suboption_control;
         break;
     case PNDCP_OPTION_DEVICEINITIATIVE:
 
-		optionItem = node->ops->ProtocolTree_branch(node, "options.deviceinitiative_option", option);
+		optionItem = node->ops->ProtocolTree_branch(node, "options.deviceinitiative_option", option, this);
         val_str = pn_dcp_suboption_deviceinitiative;
         break;
     case PNDCP_OPTION_ALLSELECTOR:
 
-		optionItem = node->ops->ProtocolTree_branch(node, "options.allselector_option", option);
+		optionItem = node->ops->ProtocolTree_branch(node, "options.allselector_option", option, this);
         val_str = pn_dcp_suboption_all;
         break;
     default:
-		optionItem = node->ops->ProtocolTree_branch(node, "options.manufacturer_option", option);
+		optionItem = node->ops->ProtocolTree_branch(node, "options.manufacturer_option", option, this);
         val_str = pn_dcp_suboption_manuf;
     }
 
@@ -418,7 +420,7 @@ int OptionDissector_dissect(Dissector_t *this, Buffy_t *buf, struct ProtocolNode
 
 	suboptionValue.val.string = valueToString(suboption.val.uint8, val_str, "Unknown");
 
-	ProtocolItem_t *suboptionItem = optionItem->ops->ProtocolTree_branch(optionItem, "suboption", suboptionValue);
+	ProtocolItem_t *suboptionItem = optionItem->ops->ProtocolTree_branch(optionItem, "suboption", suboptionValue, this);
 	check_mem(suboptionItem);
 
 	return bytesDissected;

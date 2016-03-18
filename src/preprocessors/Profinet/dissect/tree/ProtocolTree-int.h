@@ -11,6 +11,8 @@
 #include "dissect/tree/ProtocolTree.h"
 #include "util/HashMap.h"
 #include "dissect/DissectionUtils.h"
+//#include "dissect/Dissector.h"
+//#include "dissect/Dissector-int.h"
 
 /**
  * @brief The operations that can be called by a ProtocolTree.
@@ -36,9 +38,9 @@ struct ProtocolTree_ops {
      *
      * @return A pointer to the newly created Node.
      */
-    struct ProtocolNode *(*ProtocolTree_branch)(struct ProtocolNode *this, char *name, struct Value value);
+    struct ProtocolNode *(*ProtocolTree_branch)(struct ProtocolNode *this, char *name, struct Value value, Dissector_t *dissectedBy);
 
-    struct ProtocolNode *(*ProtocolTree_branchImportant)(struct ProtocolNode *this, char *name, char *importantKey, struct Value value);
+    struct ProtocolNode *(*ProtocolTree_branchImportant)(struct ProtocolNode *this, char *name, char *importantKey, struct Value value, Dissector_t *dissectedBy);
 
     /**
      * @brief Sets the given field information for this protocol item.
@@ -137,6 +139,10 @@ struct ProtocolNode {
     /** unique ID identifying this ProtocolNode. **/
     int id;
 
+    /** the name of the dissector dissecting this node info **/
+    //TODO change to the actual dissector
+    Dissector_t *dissectedBy;
+
     /** if this node was visited **/
     bool visited;
 
@@ -170,7 +176,7 @@ struct ProtocolNode {
  *
  * @return the instantiated Node
  */
-struct ProtocolNode *ProtocolTree_new(char *rootKey);
+struct ProtocolNode *ProtocolTree_new(char *rootKey, Dissector_t *dissectedBy);
 
 
 #endif

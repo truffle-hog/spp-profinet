@@ -51,7 +51,9 @@ static const struct Dissector_ops PNRTADissectorOverride_ops = {
   PNRTADissector_free,
   Dissector_registerSub,
   Dissector_getSub,
-  PNRTADissector_dissect
+  PNRTADissector_dissect,
+  "Profinet Realtime Acyclic Dissector",
+  0x3
 };
 
 void PNRTADissector_initializeSubDissectors(Dissector_t *this) {
@@ -107,7 +109,7 @@ int PNRTADissector_dissect(Dissector_t *this, Buffy_t *buf, struct ProtocolNode 
 	pnrta.val.string = "Acyclic Realtime";
 	pnrta.length = strlen(pnrta.val.string);
 
-    ProtocolItem_t *pnrtaItem = node->ops->ProtocolTree_branch(node, "frame", pnrta);
+    ProtocolItem_t *pnrtaItem = node->ops->ProtocolTree_branch(node, "frame", pnrta, this);
     check_mem(pnrtaItem);
 
     uint16_t u16FrameID = buf->ops->Buffy_getBits16(buf, 0);

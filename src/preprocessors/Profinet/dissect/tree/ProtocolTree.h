@@ -7,6 +7,8 @@
 #define __PROTOCOL_TREE_H__
 
 #include <stdint.h>
+#include "dissect/Dissector.h"
+#include "dissect/Dissector-int.h"
 
 /** The value to be inserted for a ProtocolNode. **/
 struct Value;
@@ -33,9 +35,9 @@ void ProtocolTree_free(struct ProtocolNode *proto);
  *
  * @return A pointer to the newly created Node.
  */
-struct ProtocolNode *ProtocolTree_branch(struct ProtocolNode *this, char *name, struct Value value);
+struct ProtocolNode *ProtocolTree_branch(struct ProtocolNode *this, char *name, struct Value value, struct Dissector *dissectedBy);
 
-struct ProtocolNode *ProtocolTree_branchImportant(struct ProtocolNode *this, char *name, char *importantKey, struct Value value);
+struct ProtocolNode *ProtocolTree_branchImportant(struct ProtocolNode *this, char *name, char *importantKey, struct Value value, struct Dissector *dissectedBy);
 
 int ProtocolTree_insertImportantValue(struct ProtocolNode *this, char *key, struct Value value);
 
