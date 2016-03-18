@@ -98,6 +98,7 @@ long long n = 1;
 long last_time_sec = 0;
 long last_time_usec = 0;
 
+char *colors[] = {"lightblue", "#74d5a8", "#a8514e", "#916da8", "#dfd991", "#d7a774", "lightgrey"};
 /*
  * function prototypes go here
  */
@@ -276,12 +277,13 @@ void ProtocolTree_printDot(struct ProtocolNode *tree) {
 
         fprintf(dotGraph,
         "subgraph cluster_%ld {\n"
+        " style = filled\n"
         "  %d\n"
         "  [\n"
         "  shape = none\n"
         "  label = <<table border=\"0\" cellspacing=\"0\">\n"
-        "          <tr><td port=\"port1\" border=\"1\">%s</td></tr>\n"
-        "          <tr><td port=\"port2\" border=\"1\">", current->dissectedBy->ops->Dissector_getID, current->id, current->name);
+        "          <tr><td port=\"port1\" border=\"1\" bgcolor=\"white\">%s</td></tr>\n"
+        "          <tr><td port=\"port2\" border=\"1\" bgcolor=\"white\">", current->dissectedBy->ops->Dissector_getID, current->id, current->name);
         printLabel(dotGraph, current->value);
         fprintf(dotGraph, "</td></tr>\n");
 
@@ -291,7 +293,8 @@ void ProtocolTree_printDot(struct ProtocolNode *tree) {
         fprintf(dotGraph, "          </table>>\n"
         "  ]\n"
 		" label = \"%s\";\n"
-		"}\n", current->dissectedBy->ops->Dissector_name);
+        " color = \"%s\";\n"
+		"}\n", current->dissectedBy->ops->Dissector_name, colors[current->dissectedBy->ops->Dissector_getID % 7]);
 
         // printf("\t%d [label=\"{%s|", current->id, current->name);
         // printLabel(current->value);
