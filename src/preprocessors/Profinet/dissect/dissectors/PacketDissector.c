@@ -120,7 +120,7 @@ PacketDissector_dissect(Dissector_t *this, Buffy_t *buf, struct ProtocolNode *no
 
 	check_mem(node->ops->ProtocolTree_branch(node, "frame_length", frameLength));
 
-		
+
 
 //	sprintf("%ld.%06ld\n", buf->p->pkth->ts.tv_sec, buf->p->pkth->ts.tv_usec);
 
@@ -141,7 +141,7 @@ PacketDissector_dissect(Dissector_t *this, Buffy_t *buf, struct ProtocolNode *no
 	struct Value deltaSecVal;
 	deltaSecVal.val.int64 = timeSec.val.int64 - thisAsPacketDissector->lastTimeSec;
 	deltaSecVal.type = is_int64;
-	
+
 	struct Value deltaUSecVal;
 	deltaUSecVal.val.int64 = timeUSec.val.int64 - thisAsPacketDissector->lastTimeUSec;
 	deltaUSecVal.type = is_int64;
@@ -161,11 +161,11 @@ PacketDissector_dissect(Dissector_t *this, Buffy_t *buf, struct ProtocolNode *no
   //  }
 
 
-    nextDissector->ops->Dissector_dissect(nextDissector, buf, node);
+    return nextDissector->ops->Dissector_dissect(nextDissector, buf, node);
 
 	// TODO implement
 
-	return 0;
+	//return 0;
 error:
     return -1;
 }

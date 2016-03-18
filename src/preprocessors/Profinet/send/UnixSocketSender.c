@@ -113,7 +113,7 @@ void * await_request( void* args) {
 
 		n = read(data->client_sockfd ,&buffer, sizeof(int));
 		check(n >= 0, "error reading from socket");
-		int response = -1;
+//		int response = -1;
 
 //		switch(buffer) {
 
@@ -121,21 +121,21 @@ void * await_request( void* args) {
 			
 			data->client_detected = true;
 			debug("TruffleHog wants to connect...");
-			response = SNORT_CONNECT_RESPONSE;	
+//			response = SNORT_CONNECT_RESPONSE;	
 			
 		} else if (buffer == TRUFFLEHOG_DISCONNECT_REQUEST) {
 			
 			data->client_detected = false;
 			debug("TruffleHog wants to disconnect...");
-			response = SNORT_DISCONNECT_RESPONSE;
+//			response = SNORT_DISCONNECT_RESPONSE;
 			
 		} else {
 			
 			sentinel("there is no allowed default case yet");
 		}
 //		}
-		n = write(data->client_sockfd, (void*) &response, sizeof(int));
-		check (n >= 0, "error writing to socket");
+//		n = write(data->client_sockfd, (void*) &response, sizeof(int));
+//		check (n >= 0, "error writing to socket");
 
 	//	DEBUG_WRAP(DebugMessage(DEBUG_PLUGIN, "Received message: %s\n",buffer));
 
@@ -163,6 +163,7 @@ UnixSocketSender_new() {
 
 	unixSocketSender->socketData.client_detected = false;
 
+	// TODO check if there will be a memory leak if I dereference the pointer for the value
 	unixSocketSender->sender = *Sender_new(&UnixSocketSenderOverride_ops);
 	check_mem(&unixSocketSender->sender);
 	// declare some variabled in use

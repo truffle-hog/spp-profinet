@@ -11,7 +11,7 @@
 
 #include "dissect/Dissector-int.h"
 #include "dissect/Dissector.h"
-#include "dissect/dissectors/PNRTADissector.h"
+#include "dissect/dissectors/DCPDissector.h"
 
 #include "dissect/tree/ProtocolTree.h"
 #include "dissect/tree/ProtocolTree-int.h"
@@ -29,35 +29,35 @@
  * @brief The Dissector for Profi Real Time IO 0x8892.
  *
  */
-struct PNRTADissector {
+struct DCPDissector {
   /** @brief Houses a Dissector internally for safe type casting. **/
   struct Dissector dissector;
 
 };
 
-void PNRTADissector_free(Dissector_t *dissector);
+void DCPDissector_free(Dissector_t *dissector);
 
-int PNRTADissector_dissect(Dissector_t *this, Buffy_t *buf, ProtocolTree_t *tree);
+int DCPDissector_dissect(Dissector_t *this, Buffy_t *buf, ProtocolTree_t *tree);
 
 /**
  * @see Dissector_ops
  */
-static const struct Dissector_ops PNRTADissectorOverride_ops = {
+static const struct Dissector_ops DCPDissectorOverride_ops = {
 
-  sizeof(struct PNRTADissector), /* size */
-  (uint64_t) 0xFE00,
+  sizeof(struct DCPDissector), /* size */
+  (uint64_t) 0xFEFC,
   (uint64_t) 0xFEFF,
-  PNRTADissector_free,
+  DCPDissector_free,
   Dissector_registerSub,
   Dissector_getSub,
-  PNRTADissector_dissect
+  DCPDissector_dissect
 };
 
 /**
  * @see Dissector_new
  */
 Dissector_t *
-PNRTADissector_new() {
+DCPDissector_new() {
 
 
     struct PNRTADissector *PNRTADissector;
@@ -80,9 +80,10 @@ error:
 /**
  * @see Dissector_free
  */
-void PNRTADissector_free(Dissector_t *dissector) {
+void
+DCPDissector_free(Dissector_t *dissector) {
 
-	struct PNRTADissector *this = (struct PNRTADissector*) dissector;
+	struct DCPDissector *this = (struct DCPDissector*) dissector;
 
 	free(this);
 //	this->dissector.ops->Dissector_free(&this->dissector);
@@ -94,7 +95,7 @@ void PNRTADissector_free(Dissector_t *dissector) {
 /**
  * @see Dissector_dissect
  */
-int PNRTADissector_dissect(Dissector_t *this, Buffy_t *buf, struct ProtocolNode *node) {
+int DCPDissector_dissect(Dissector_t *this, Buffy_t *buf, struct ProtocolNode *node) {
 
 	(void) this;
 	(void) buf;

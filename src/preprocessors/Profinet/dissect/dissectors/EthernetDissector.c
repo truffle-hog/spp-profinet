@@ -164,7 +164,7 @@ EthernetDissector_dissect(Dissector_t *this, Buffy_t *buf, ProtocolTree_t *node)
 
 	Buffy_t *virtual = buf->ops->Buffy_createVirtual(buf, 14 * 8);
 
-    nextDissector->ops->Dissector_dissect(nextDissector, virtual, etherNode);
+    return nextDissector->ops->Dissector_dissect(nextDissector, virtual, etherNode);
 
 
     // memcpy(&truffle.eh.sourceMacAddress, p->eh->ether_src, 6);
@@ -190,7 +190,7 @@ EthernetDissector_dissect(Dissector_t *this, Buffy_t *buf, ProtocolTree_t *node)
 	//printf("dissecting very bigtime\n");
 	// TODO implement
 
-    return 0;
+    //return 0;
 error:
     return -1;
 	//return 0;

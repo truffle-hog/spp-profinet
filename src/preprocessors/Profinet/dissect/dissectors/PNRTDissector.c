@@ -12,7 +12,8 @@
 #include "dissect/Dissector-int.h"
 #include "dissect/Dissector.h"
 #include "dissect/dissectors/PNRTDissector.h"
-//#include "PNRTADissector.h"
+
+#include "dissect/dissectors/PNRTADissector.h"
 
 #include "dissect/tree/ProtocolTree.h"
 #include "dissect/tree/ProtocolTree-int.h"
@@ -52,9 +53,9 @@ static const struct Dissector_ops PNRTDissectorOverride_ops = {
 
 void PNRTDissector_initializeSubDissectors(Dissector_t *this) {
 
-    //Dissector_t *pnrtaDissector = PNRTADissector_new();
+    Dissector_t *pnrtaDissector = PNRTADissector_new();
 
-    //this->ops->Dissector_registerSub(this, pnrtaDissector);
+    this->ops->Dissector_registerSub(this, pnrtaDissector);
 
 }
 
@@ -121,50 +122,12 @@ int PNRTDissector_dissect(Dissector_t *this, Buffy_t *buf, struct ProtocolNode *
 
 	node->ops->ProtocolTree_branch(pnrtItem, "frame_id", frameID);
 
+	Dissector_t *nextDissector = this->ops->Dissector_getSub(this, frameID.val.uint16);
+	check(
+			nextDissector != NULL, "there is no dissector registered for frameID: 0x%04X",
+			frameID.val.uint16);
 
-
-    //uint16_t frameID = buf->ops->Buffy_getBits16(buf, 0, 16, 0);
-
- //   uint32_t offset;
-
-	// debug("caplen: %d", buf->p->pkth->caplen);
-
-    // printf("%02X", buf->ops->Buffy_getBits8(buf, 0, 8));
-    // printf("%02X", buf->ops->Buffy_getBits8(buf, 8, 8));
-    // printf("%02X", buf->ops->Buffy_getBits8(buf, 16, 8));
-    // printf("%02X", buf->ops->Buffy_getBits8(buf, 24, 8));
-    // printf("%02X", buf->ops->Buffy_getBits8(buf, 32, 8));
-    // printf("%02X", buf->ops->Buffy_getBits8(buf, 40, 8));
-    // printf("%02X", buf->ops->Buffy_getBits8(buf, 48, 8));
-    // printf("%02X", buf->ops->Buffy_getBits8(buf, 56, 8));
-    // printf("%02X", buf->ops->Buffy_getBits8(buf, 64, 8));
-
-/*    for (offset = 0; offset < buf->p->pkth->caplen; offset ++) {
-        if (offset % 16 == 0) printf("\n");
-    	printf("%02X", buf->ops->Buffy_getBits8(buf, offset));
-    }
-    printf("\n");*/
-    //
-	// for (offset = 0; offset < buf->p->pkth->caplen; offset++) {
-	// 	if (offset % 16 == 0) printf("\n");
-	// 	printf("%02X", buf->ops->Buffy_getBits8(buf, offset));
-	// }
-    //
-	//Buffy_t *virt = buf->ops->Buffy_createVirtual(buf, 14 * 8);
-    //
-	// for (offset = 0; offset < buf->p->pkth->caplen; offset ++) {
-	// 	if (offset % 16 == 0) printf("\n");
-	// 	printf("%02X", virt->ops->Buffy_getBits8(virt, offset));
-	// }
-/*
-    debug("frameID: %02X", buf->ops->Buffy_getBits16(buf, 0));
-    debug("%02X", buf->ops->Buffy_getNBits8(buf, 6, 2));
-*/
-    //debug("%02X", buf->getBits8(buf, 0, 8));
-    //debug("type: %016X", (uint16_t) etherType->value.val.uint16);
-	// TODO implement
-
-	return 0;
+	return nextDissector->ops->Dissector_dissect(nextDissector, buf, pnrtItem);
 
 error:
     return -1;
