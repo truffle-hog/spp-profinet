@@ -577,12 +577,12 @@ dissect_PNDCP_Suboption_Device(Dissector_t *this, Buffy_t *buf, struct ProtocolN
 
     case PNDCP_SUBOPTION_DEVICE_NAMEOFSTATION:
 
-        debug("block_length for devicename: %d", block_length + 1);
+        //debug("block_length for devicename: %d", block_length + 1);
 
-        debug("dumping here");
-        buf->ops->Buffy_dump(buf);
+        //debug("dumping here");
+        //buf->ops->Buffy_dump(buf);
         //debug("devicename: %s", )
-        // TODO write own malloc?
+        // TODO write own malloc? --- check
         nameOfStation.val.string = packetScopeMalloc(block_length + 1);
 
         // debug("0x%02X", buf->ops->Buffy_getBitsWalk8(buf, 0));
@@ -1058,6 +1058,7 @@ int BlockDissector_dissect(Dissector_t *this, Buffy_t *buf, struct ProtocolNode 
         check_mem(blockItem);
 
 		offset = dissect_PNDCP_Suboption_IP(this, optBuffer, blockItem);
+        //check(offset != -1, "error dissecting suboption ip");
 		break;
 
     case PNDCP_OPTION_DEVICE:
@@ -1069,7 +1070,8 @@ int BlockDissector_dissect(Dissector_t *this, Buffy_t *buf, struct ProtocolNode 
 		check_mem(blockItem);
 
 		offset = dissect_PNDCP_Suboption_Device(this, optBuffer, blockItem);
-        debug("dissected: %d bytes", offset);
+        check(offset != -1, "error dissecting suboption device");
+        //debug("dissected: %d bytes", offset);
         break;
 
     case PNDCP_OPTION_DHCP:
@@ -1081,6 +1083,7 @@ int BlockDissector_dissect(Dissector_t *this, Buffy_t *buf, struct ProtocolNode 
 		check_mem(blockItem);
 
 		offset = dissect_PNDCP_Suboption_DHCP(this, optBuffer, blockItem);
+        //check(offset != -1, "error dissecting suboption dhcp");
         break;
 
     case PNDCP_OPTION_CONTROL:
@@ -1092,6 +1095,7 @@ int BlockDissector_dissect(Dissector_t *this, Buffy_t *buf, struct ProtocolNode 
 		check_mem(blockItem);
 
 		offset = dissect_PNDCP_Suboption_Control(this, optBuffer, blockItem);
+        //check(offset != -1, "error dissecting suboption control");
         break;
 
     case PNDCP_OPTION_DEVICEINITIATIVE:
@@ -1103,6 +1107,7 @@ int BlockDissector_dissect(Dissector_t *this, Buffy_t *buf, struct ProtocolNode 
 		check_mem(blockItem);
 
         offset = dissect_PNDCP_Suboption_DeviceInitiative(this, optBuffer, blockItem);
+        //check(offset != -1, "error dissecting suboption device initiative");
         break;
 
     case PNDCP_OPTION_ALLSELECTOR:
@@ -1114,6 +1119,7 @@ int BlockDissector_dissect(Dissector_t *this, Buffy_t *buf, struct ProtocolNode 
 		check_mem(blockItem);
 
 		offset = dissect_PNDCP_Suboption_All(this, optBuffer, blockItem);
+        //check(offset != -1, "error dissecting suboption all");
         break;
 
     case PNDCP_OPTION_MANUF_X80:
@@ -1127,8 +1133,10 @@ int BlockDissector_dissect(Dissector_t *this, Buffy_t *buf, struct ProtocolNode 
 		check_mem(blockItem);
 
 		offset = dissect_PNDCP_Suboption_Manuf(this, optBuffer, blockItem);
+        //check(offset != -1, "error dissecting suboption manufacturer");
     }
-    check(offset >= 0, "dissecting failed");
+    check(offset >= 0, "dissection of pndcp suboption \"%s\" failed", blockName);
+    //check(offset >= 0, "dissecting failed");
 
 	bytesDissected += offset;
 

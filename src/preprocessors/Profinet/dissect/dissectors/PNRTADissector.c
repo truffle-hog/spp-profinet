@@ -104,6 +104,8 @@ int PNRTADissector_dissect(Dissector_t *this, Buffy_t *buf, struct ProtocolNode 
 	(void) buf;
 	(void) node;
 
+    int bytesDissected = 0;
+
     struct Value pnrta;
 	pnrta.type = is_string;
 	pnrta.val.string = "Acyclic Realtime";
@@ -117,11 +119,14 @@ int PNRTADissector_dissect(Dissector_t *this, Buffy_t *buf, struct ProtocolNode 
 
 
     Dissector_t *nextDissector = this->ops->Dissector_getSub(this, u16FrameID);
-    check(
+    check_warn(
 			nextDissector != NULL, "there is no acyclic dissector registered for frameID: 0x%04X",
 			u16FrameID);
 
     return nextDissector->ops->Dissector_dissect(nextDissector, buf, pnrtaItem);
+
+warn:
+    return bytesDissected;
 
 error:
 	return -1;

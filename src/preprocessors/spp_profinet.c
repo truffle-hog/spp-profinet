@@ -355,7 +355,7 @@ static void DetectProfiNetPackets(Packet *p, void *context)
 	int dissected = packetDissector->ops->Dissector_dissect(packetDissector, buffy, protoTree);
 
     ProtocolTree_printDot(protoTree);
-    check (!(dissected < 0), "error in dissection");
+    check_to (!(dissected < 0), dissection_error, "error in dissection");
 
 
     //TODO implement to check if the protoTree built a Profinet package or not here if not just discard everything
@@ -370,6 +370,8 @@ static void DetectProfiNetPackets(Packet *p, void *context)
         }
 	}
 
+
+
 	//protoTree->ops->ProtocolTree_toString(protoTree);
 
     protoTree->ops->ProtocolTree_free(protoTree);
@@ -377,8 +379,19 @@ static void DetectProfiNetPackets(Packet *p, void *context)
     free(truffle);
 
     packetScopeFree();
+    return;
+
+dissection_error:
+    // TODO mark as error packet
+    sender->ops->Sender_send(sender, truffle);
 
 error:
+// TODO free everything on error ...--- !!!
+    //protoTree->ops->ProtocolTree_free(protoTree);
+    //buffy->ops->Buffy_freeChain(buffy); //TODO implement this function in Buffy
+    //free(truffle);
+
+    //packetScopeFree();
     return;
 
 }

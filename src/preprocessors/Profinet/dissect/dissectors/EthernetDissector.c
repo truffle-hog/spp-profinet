@@ -121,9 +121,9 @@ EthernetDissector_dissect(Dissector_t *this, Buffy_t *buf, ProtocolTree_t *node)
 	ethernet.val.string = "Ethernet";
 
 	ProtocolItem_t *etherNode = node->ops->ProtocolTree_branch(node, "ethernet", ethernet, this);
+    check_mem(etherNode);
 
 	struct Value dest;
-	dest.length = 48;
 	dest.val.uint64 = 0;
 	dest.type = is_uint64;
 
@@ -135,7 +135,6 @@ EthernetDissector_dissect(Dissector_t *this, Buffy_t *buf, ProtocolTree_t *node)
 	check_mem(etherNode->ops->ProtocolTree_branchImportant(etherNode, "ether_dest", "ether_dest", dest, this));
 
 	struct Value source;
-	source.length = 48;
 	source.val.uint64 = 0;
 	source.type = is_uint64;
 
@@ -145,7 +144,6 @@ EthernetDissector_dissect(Dissector_t *this, Buffy_t *buf, ProtocolTree_t *node)
     check_mem(etherNode->ops->ProtocolTree_branchImportant(etherNode, "ether_source", "ether_source", source, this));
 
 	struct Value ethertype;
-	ethertype.length = 16;
 	ethertype.val.uint16 = htobe16(buf->p->eh->ether_type);
 	ethertype.type = is_uint16;
 
@@ -154,11 +152,14 @@ EthernetDissector_dissect(Dissector_t *this, Buffy_t *buf, ProtocolTree_t *node)
     Dissector_t *nextDissector;
 
     nextDissector = this->ops->Dissector_getSub(this, ethertype.val.uint16);
-    check(nextDissector != NULL, "there has to be a next dissector");
+    check_warn(nextDissector != NULL, "No dissector registered for ethertype 0x%04X", ethertype.val.uint16);
 
 	Buffy_t *virtual = buf->ops->Buffy_createVirtual(buf, 14 * 8);
 
     return nextDissector->ops->Dissector_dissect(nextDissector, virtual, etherNode);
+
+warn:
+    return 14;
 
 error:
     return -1;

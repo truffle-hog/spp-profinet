@@ -31,6 +31,8 @@
 
 #define goto_error(L) goto L
 
+#define check_warn(A, M, ...) if(!(A)) { log_warn(M, ##__VA_ARGS__); goto warn; }
+
 #define check_to(A, L, M, ...) if(!(A)) { log_err(M, ##__VA_ARGS__); errno=0; goto_error(L); }
 
 #define check(A, M, ...) check_to((A), error, M, ##__VA_ARGS__)

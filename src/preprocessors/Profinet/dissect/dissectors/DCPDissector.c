@@ -628,7 +628,9 @@ int DCPDissector_dissect(Dissector_t *this, Buffy_t *buf, struct ProtocolNode *n
 	(void) buf;
 	(void) node;
 
-    uint16_t u16FrameID = buf->ops->Buffy_getBits16(buf, 0);
+    int bytesDissected = 0;
+
+    uint16_t u16FrameID = buf->ops->Buffy_getBitsWalk16(buf, &bytesDissected);
     check (u16FrameID >= FRAME_ID_DCP_HELLO || u16FrameID <= FRAME_ID_DCP_IDENT_RES, "no valid frame id for dcp");
 
     struct Value dcp;
@@ -636,13 +638,14 @@ int DCPDissector_dissect(Dissector_t *this, Buffy_t *buf, struct ProtocolNode *n
 	dcp.val.string = "DCP";
 
     ProtocolItem_t *dcpItem = node->ops->ProtocolTree_branch(node, "dcp", dcp, this);
+    check_mem(dcpItem);
 
     int dissected;
 
     check(
         !((dissected = _dissectPNDCP_PDU(this, buf->ops->Buffy_createVirtual(buf, 16), dcpItem)) < 0), "error on dissection in DCP");
 
-    return dissected + 2;
+    return dissected + bytesDissected;
 
 error:
 	return -1;

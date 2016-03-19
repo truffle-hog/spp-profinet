@@ -110,6 +110,9 @@ int PNRTDissector_dissect(Dissector_t *this, Buffy_t *buf, struct ProtocolNode *
     check(buf != NULL, "The buffer must not be null");
     check(node != NULL, "The tree must not be null");
 
+    int bytesDissected = 0;
+    int dissectedBytesInFrame = 0;
+
 	struct Value pnrtMain;
 	pnrtMain.type = is_string;
 	pnrtMain.val.string = "Profinet Realtime";
@@ -119,17 +122,21 @@ int PNRTDissector_dissect(Dissector_t *this, Buffy_t *buf, struct ProtocolNode *
 
 	struct Value frameID;
 	frameID.type = is_uint16;
-	frameID.val.uint16 = buf->ops->Buffy_getBits16(buf, 0);
-	frameID.length = 16;
+	frameID.val.uint16 = buf->ops->Buffy_getBitsWalk16(buf, &bytesDissected);
 
-	node->ops->ProtocolTree_branchImportant(pnrtItem, "frame_id", "pnrt_frame_id", frameID, this);
+	check_mem(
+        node->ops->ProtocolTree_branchImportant(pnrtItem, "frame_id", "pnrt_frame_id", frameID, this));
 
 	Dissector_t *nextDissector = this->ops->Dissector_getSub(this, frameID.val.uint16);
-	check(
+	check_warn(
 			nextDissector != NULL, "there is no dissector registered for frameID: 0x%04X",
 			frameID.val.uint16);
 
-	return nextDissector->ops->Dissector_dissect(nextDissector, buf, pnrtItem);
+	check(!((dissectedBytesInFrame = nextDissector->ops->Dissector_dissect(nextDissector, buf, pnrtItem)) < 0), "error dissecting frameID: 0x%04X", frameID.val.uint16);
+    return dissectedBytesInFrame + bytesDissected;
+
+warn:
+    return bytesDissected + dissectedBytesInFrame;
 
 error:
     return -1;
