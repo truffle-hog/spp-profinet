@@ -83,7 +83,7 @@ struct ProtocolNode *ProtocolTree_new(char *rootName, Dissector_t *dissectedBy) 
 
 	treeData->nodePointers[0] = node;
 
-	treeData->map = HashMap_new(1000);
+	treeData->map = HashMap_new(64);
 	check_mem(treeData->map);
 
 	node->isImportant = false;

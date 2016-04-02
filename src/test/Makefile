@@ -51,5 +51,5 @@ valgrind:
 	VALGRIND="valgrind --log-file=/tmp/valgrind-$p.log" $(MAKE)
 
 clean:
-	rm -f tests.log
+	rm -f *.log
 	sh ./runclean.sh

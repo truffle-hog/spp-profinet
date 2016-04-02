@@ -17,7 +17,7 @@ char *afterEachTest() {
 
 char *test_template() {
 
-    mu_assert(0 == 0, "No tests implemented yet!");
+    //mu_assert(0 == 0, "No tests implemented yet!");
 
     log_warn("not implemented");
 

@@ -1,6 +1,8 @@
 #!/bin/bash
 echo "Running unit tests:";
 
+VALGRIND="valgrind --log-file=valgrind"
+
 ARRAY=();
 
 COUNTER=0;
@@ -12,7 +14,8 @@ for i in $(find . -name '*_test')
 do
     if test -f $i
     then
-        if $VALGRIND ./$i 2>> tests.log
+        filename="${i##*/}"
+        if $VALGRIND"-"$filename".log" ./$i 2>> tests.log
         then
             ARRAY_SUCCESS[$SUCCESS_COUNTER]=$i
             SUCCESS_COUNTER=$((SUCCESS_COUNTER+1))

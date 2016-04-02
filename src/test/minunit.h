@@ -5,13 +5,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "../preprocessors/Profinet/dbg.h"
+#include "dbg.h"
 
 #define mu_suite_start() char *message = NULL
 
 #define mu_assert(test, message) if (!(test)) { log_err(message); return message; }
 #define mu_run_test(test) debug("\n-----%s", " " #test); \
     message = test(); tests_run++; if (message) return message;
+#define mu_run_test_set(before, after, test) debug("\n-----%s", " " #test); \
+    before(); message = test(); after(); tests_run++; if (message) return message;
+
+#define mu_assert_int_equals(expected, actual, message) if (expected != actual) { log_err("%s - expected: %d but got %d", message, expected, actual); return message; }
 
 #define RUN_TESTS(before, after, name) int main(int argc, char *argv[]) {\
     (void)argc; \

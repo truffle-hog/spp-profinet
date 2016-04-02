@@ -41,14 +41,18 @@ static void
     free(this->table);
     this->table = malloc(this->allocated * sizeof(struct Entry));
 
+	this->size = 0;
+
     check_mem(this->table);
 	memset(this->table, 0, sizeof(struct Entry) * this->allocated);
 
-	debug("starting to rehash all the values and insert them into the newly created table...");
+	debug("starting to rehash all the %d values and insert them into the newly created table...", allocated);
 	int i;
 	for (i = 0; i < allocated; i++) {
-
-		HashMap_insert(this, copiedTable[i].key, copiedTable[i].value, NULL);
+		if (copiedTable[i].valid) {
+			debug("inserting %d key: %s", i, copiedTable[i].key);
+			HashMap_insert(this, copiedTable[i].key, copiedTable[i].value, NULL);
+		}
 	}
 	debug("rehashing done");
 
@@ -70,10 +74,8 @@ struct HashMap
 	hashMap->seed = 5381;
 	hashMap->collisions = 0;
 
-    hashMap->table = malloc(sizeof(struct Entry) * hashMap->allocated);
+    hashMap->table = calloc(hashMap->allocated, sizeof(struct Entry));
 	check_mem(hashMap->table);
-	memset(hashMap->table, 0, sizeof(struct Entry) * hashMap->allocated);
-
 	return hashMap;
 
 error:
@@ -124,9 +126,11 @@ HashMap_insert(struct HashMap *this, char *key, struct Value value, struct Value
         check_mem(_reallocate(this, 2 * this->size));
     }
 
+	char *localKey = malloc(sizeof(char) * (strlen(key) + 1));
+	strcpy(localKey, key);
 	debug("collisions= %d", this->collisions);
-    int i;
-    for (i = _hashMe(this->allocated, key, this->seed); (this->table + i)->valid; i++) {
+    unsigned long i;
+    for (i = hash(key, this->seed, this->allocated); (this->table + i)->valid; i= (i+1) % this->allocated) {
 
 		this->collisions++;
 		debug("index: %d", i);
@@ -146,7 +150,6 @@ HashMap_insert(struct HashMap *this, char *key, struct Value value, struct Value
         }
     }
     this->table[i] = (struct Entry) {.key = key, .value = value, .valid = 1};
-
 	debug("table %d : (key=%s, valid=%d)", i, this->table[i].key, this->table[i].valid);
 #ifdef NDEBUG
 	printValue(this->table[i].value);
@@ -163,7 +166,7 @@ error:
 struct Value *HashMap_find(struct HashMap *this, char *key) {
 
     int i;
-    for (i = _hashMe(this->allocated, key, this->seed); (this->table + i)->valid; i++) {
+    for (i = _hashMe(this->allocated, key, this->seed); (this->table + i)->valid; i= (i+1) % this->allocated) {
 
 		debug("hash=%d, haystack=%s, needle=%s", i, this->table[i].key, key);
 
@@ -179,7 +182,7 @@ struct Value *HashMap_remove(struct HashMap *this, char *key) {
 	(void) this;
 	(void) key;
 
-	sentinel("Not implemented exception");
+	sentinel("Not implemented exception: before implementation need to care about the correct wrap around!!!");
 
 error:
     return NULL;
@@ -200,6 +203,7 @@ error:
 
 void HashMap_free(struct HashMap *hashMap) {
 
+	int i;
     hashMap->size = 0;
     hashMap->allocated = 0;
     free(hashMap->table);
