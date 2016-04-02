@@ -390,8 +390,6 @@ DCPDissector_free(Dissector_t *dissector) {
 static int
 _dissectPNDCP_PDU(Dissector_t *this, Buffy_t *buf, struct ProtocolNode *node) {
 
-
-
     check(this != NULL, "dissector must not be null");
     check(buf != NULL, "buffer must not be null");
     check(node != NULL, "node must not be null");
@@ -415,16 +413,12 @@ _dissectPNDCP_PDU(Dissector_t *this, Buffy_t *buf, struct ProtocolNode *node) {
 	responseDelay.type = is_uint16;
 	responseDelay.length = 16;
 
-
-
-
 //    char *xidStr;
     bool isResponse = FALSE;
 
-    serviceID.val.uint8 = buf->ops->Buffy_getBits8(buf, offset++);
-    serviceType.val.uint8 = buf->ops->Buffy_getBits8(buf, offset++);
-	xid.val.uint32 = buf->ops->Buffy_getBits32(buf, offset);
-	offset += 4;
+    serviceID.val.uint8 = buf->ops->Buffy_getBitsWalk8(buf, &offset);
+    serviceType.val.uint8 = buf->ops->Buffy_getBitsWalk8(buf, &offset);
+	xid.val.uint32 = buf->ops->Buffy_getBitsWalk32(buf, &offset);
 
     ProtocolItem_t *serviceIDItem = node->ops->ProtocolTree_branchImportant(node, "service_id", "dcp_service_id", serviceID, this);
 	check_mem(serviceIDItem);
@@ -438,11 +432,10 @@ _dissectPNDCP_PDU(Dissector_t *this, Buffy_t *buf, struct ProtocolNode *node) {
 	if (serviceID.val.uint8 == PNDCP_SERVICE_ID_IDENTIFY && serviceType.val.uint8 == PNDCP_SERVICE_TYPE_REQUEST) {
 
 		/* multicast header */
-		responseDelay.val.uint16 = buf->ops->Buffy_getBits16(buf, offset);
+		responseDelay.val.uint16 = buf->ops->Buffy_getBitsWalk16(buf, &offset);
 
         ProtocolItem_t *responseDelayItem = node->ops->ProtocolTree_branchImportant(node, "response_delay", "dcp_response_delay", responseDelay, this);
     	check_mem(responseDelayItem);
-		offset += 2;
 	} else {
 		/* unicast header -- just 16 reserved bits*/
 		offset += 2;
@@ -450,17 +443,12 @@ _dissectPNDCP_PDU(Dissector_t *this, Buffy_t *buf, struct ProtocolNode *node) {
 
     struct Value dataLengthValue;
     dataLengthValue.type = is_uint16;
-    dataLengthValue.val.uint16 = buf->ops->Buffy_getBits16(buf, offset);
-    dataLengthValue.length = 16;
-
+    dataLengthValue.val.uint16 = buf->ops->Buffy_getBitsWalk16(buf, &offset);
 
 	dataLength = (int) dataLengthValue.val.uint16;
-    offset += 2;
 
     ProtocolItem_t *dataLengthItem = node->ops->ProtocolTree_branchImportant(node, "data_length", "dcp_data_length", dataLengthValue, this);
     check_mem(dataLengthItem);
-
-
 
 	struct Value serviceIDName;
 	serviceIDName.type = is_string;
@@ -631,7 +619,7 @@ int DCPDissector_dissect(Dissector_t *this, Buffy_t *buf, struct ProtocolNode *n
     int bytesDissected = 0;
 
     uint16_t u16FrameID = buf->ops->Buffy_getBitsWalk16(buf, &bytesDissected);
-    check (u16FrameID >= FRAME_ID_DCP_HELLO || u16FrameID <= FRAME_ID_DCP_IDENT_RES, "no valid frame id for dcp");
+    check (u16FrameID >= FRAME_ID_DCP_HELLO && u16FrameID <= FRAME_ID_DCP_IDENT_RES, "no valid frame id for dcp");
 
     struct Value dcp;
 	dcp.type = is_string;

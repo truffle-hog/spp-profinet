@@ -1,6 +1,8 @@
 #ifndef __DISSECTION_UTILS_H__
 #define __DISSECTION_UTILS_H__
 
+#include <stdint.h>
+
 typedef struct _value_string {
     uint32_t      value;
     const char *strptr;

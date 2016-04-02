@@ -341,7 +341,7 @@ static void DetectProfiNetPackets(Packet *p, void *context)
 {
 	(void) context;
 
-    debug("##################################################################\n"
+    debug("Displaying header\n##################################################################\n"
           "################### DISSECTING PACKET ############################\n"
           "##################################################################\n"
           "vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv");
@@ -352,6 +352,8 @@ static void DetectProfiNetPackets(Packet *p, void *context)
 	Buffy_t *buffy = Buffy_new(p);
     check_mem(buffy);
 
+	Truffle_t *truffle;
+
 	int dissected = packetDissector->ops->Dissector_dissect(packetDissector, buffy, protoTree);
 
     ProtocolTree_printDot(protoTree);
@@ -360,7 +362,7 @@ static void DetectProfiNetPackets(Packet *p, void *context)
 
     //TODO implement to check if the protoTree built a Profinet package or not here if not just discard everything
 
-	Truffle_t *truffle = Truffle_new(protoTree);
+	truffle = Truffle_new(protoTree);
     check_mem(truffle);
 
 	if (truffle) {
@@ -370,10 +372,6 @@ static void DetectProfiNetPackets(Packet *p, void *context)
         }
 	}
 
-
-
-	//protoTree->ops->ProtocolTree_toString(protoTree);
-
     protoTree->ops->ProtocolTree_free(protoTree);
     //buffy->ops->Buffy_freeChain(buffy); //TODO implement this function in Buffy
     free(truffle);
@@ -382,7 +380,11 @@ static void DetectProfiNetPackets(Packet *p, void *context)
     return;
 
 dissection_error:
-    // TODO mark as error packet
+
+   	truffle = Truffle_new(protoTree);
+    check_mem(truffle);
+	// TODO mark as error packet !!!!!!!!!!!! Now trufflehog doesnt know that
+	// dissection was error
     sender->ops->Sender_send(sender, truffle);
 
 error:

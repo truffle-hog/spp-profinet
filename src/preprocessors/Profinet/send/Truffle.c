@@ -43,8 +43,6 @@ Truffle_t *Truffle_new(const struct ProtocolNode *protoTree) {
 	struct Value *ipValue = protoTree->ops->ProtocolTree_getImportantValue(protoTree, "suboption_ip_address");
 
 
-
-
 	//debug("dest: %016lX", etherDest->val.uint64);
 	//debug("src: %016lX", etherSource->val.uint64);
 	//debug("type: %016X", etherType->val.uint16);
@@ -137,10 +135,9 @@ Truffle_t *Truffle_new(const struct ProtocolNode *protoTree) {
 			//truffle->frame.val.dcp.blocks[0].type = IS_DEVICE;
 
 		}
-}
+	}
 
 	// TODO check for real dcp -- this works for now though
-
-
+	
 	return truffle;
 }

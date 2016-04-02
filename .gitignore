@@ -4,6 +4,8 @@
 ######## But not these files... #########
 !.gitignore
 
+!src/test/.gitignore
+
 !profi_doc
 
 !selected.pcapng
