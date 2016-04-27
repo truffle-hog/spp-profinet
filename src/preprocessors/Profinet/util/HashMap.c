@@ -108,14 +108,6 @@ hash(unsigned char *str, unsigned long seed, unsigned long p)
     return hash;
 }
 
-static int
-_hashMe(size_t allocated, char *key, unsigned long seed) {
-
-    unsigned long myHash = hash((unsigned char*) key, seed, allocated);
-
-    return myHash;
-}
-
 int
 HashMap_insert(struct HashMap *this, char *key, struct Value value, struct Value *existing) {
 
