@@ -3,25 +3,71 @@
 #include "dissect/tree/ProtocolTree.h"
 #include "dissect/tree/ProtocolTree-int.h"
 
+struct ProtocolNode *proto = NULL;
+
+char *beforeTestSuite() {
+
+    return NULL;
+}
+
+char *afterTestSuite() {
+
+    return NULL;
+}
+
 char *beforeEachTest() {
 
-    log_warn("not implemented");
+    proto = ProtocolTree_new("root_test", (Dissector_t *) "mockedDissector");
     return NULL;
 }
 
 char *afterEachTest() {
 
-    log_warn("not implemented");
+    ProtocolTree_free(proto);
+    proto = NULL;
     return NULL;
 }
 
+char *test_ProtocolTree_new() {
+
+    Dissector_t *mockedDissector = (Dissector_t *) calloc(1, sizeof(Dissector_t));
+
+    struct ProtocolNode *protoTree = ProtocolTree_new("root_test", mockedDissector);
+
+    mu_assert(protoTree->treeData->nodePointers[0] == protoTree, "the first nodepointer must point to the initial node");
+
+    mu_assert(!protoTree->isImportant, "the initial node must never be important");
+    mu_assert_string_equals("", protoTree->importantKey, "key tag wrong");
+
+    mu_assert_string_equals("root_test", protoTree->name, "name wrong");
+    mu_assert_int_equals(0, protoTree->id, "id wrong");
+    mu_assert_int_equals(0, protoTree->childCount, "childCount wrong");
+
+    mu_assert(NULL == protoTree->parent, "the parent of the root must be null");
+    mu_assert(NULL == protoTree->children, "initially the children of the root must be null");
+
+    mu_assert(mockedDissector == protoTree->dissectedBy, "the dissector is not correct");
+
+    mu_assert_int_equals(1, protoTree->treeData->size, "treedata size wrong");
+
+    return NULL;
+}
+
+char *test_ProtocolTree_branch() {
+
+    struct Value *v = calloc(1, sizeof(struct Value));
+    Dissector_t *mockedDissector = (Dissector_t *) calloc(1, sizeof(Dissector_t));
+
+    proto->ops->ProtocolTree_branch(proto, "testBranch", *v, mockedDissector);
+
+    return NULL;
+}
 
 char *test_template() {
 
     //mu_assert(0 == 1, "No tests implemented yet!");
 
     log_warn("not implemented");
-
     return NULL;
 }
 
@@ -29,9 +75,11 @@ char *all_tests() {
 
     mu_suite_start();
 
-    mu_run_test(test_template);
+    mu_run_test(test_ProtocolTree_new);
+
+    mu_run_test_set(beforeEachTest, afterEachTest, test_template);
 
     return NULL;
 }
 
-RUN_TESTS(beforeEachTest, afterEachTest, all_tests);
+RUN_TESTS(beforeTestSuite, afterTestSuite, all_tests);

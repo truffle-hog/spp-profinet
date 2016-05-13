@@ -16,6 +16,7 @@
     before(); message = test(); after(); tests_run++; if (message) return message;
 
 #define mu_assert_int_equals(expected, actual, message) if (expected != actual) { log_err("%s - expected: %d but got %d", message, expected, actual); return message; }
+#define mu_assert_string_equals(expected, actual, message) if (strcmp(expected, actual) != 0) { log_err("%s - expected: %s but got %s", message, expected, actual); return message; }
 
 #define RUN_TESTS(before, after, name) int main(int argc, char *argv[]) {\
     (void)argc; \

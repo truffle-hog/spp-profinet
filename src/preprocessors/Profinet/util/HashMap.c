@@ -158,7 +158,7 @@ error:
 struct Value *HashMap_find(struct HashMap *this, char *key) {
 
     int i;
-    for (i = _hashMe(this->allocated, key, this->seed); (this->table + i)->valid; i= (i+1) % this->allocated) {
+    for (i = hash(key, this->seed, this->allocated); (this->table + i)->valid; i= (i+1) % this->allocated) {
 
 		debug("hash=%d, haystack=%s, needle=%s", i, this->table[i].key, key);
 
@@ -200,8 +200,6 @@ void HashMap_free(struct HashMap *hashMap) {
     hashMap->allocated = 0;
     free(hashMap->table);
     free(hashMap);
-
-    hashMap = NULL;
 }
 
 

@@ -78,6 +78,8 @@ struct ProtocolNode *ProtocolTree_new(char *rootName, Dissector_t *dissectedBy) 
 	treeData->size = 1;
 	treeData->root = node;
 	treeData->nodePointers = malloc(sizeof(void*));
+	check_mem(treeData->nodePointers);
+
 	treeData->nextID = 0;
 
 
