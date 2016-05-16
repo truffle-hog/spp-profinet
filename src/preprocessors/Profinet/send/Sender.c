@@ -24,6 +24,7 @@ Sender_t * Sender_new(const struct Sender_ops *ops) {
 	check_mem(sender);
 
 	sender->ops = ops;
+	sender->initialized = true;
 
 	return sender;
 
@@ -32,6 +33,8 @@ error:
 }
 
 int Sender_free(Sender_t *sender) {
+
+	debug("freeing sender base");
 
 	free(sender);
 

@@ -18,7 +18,7 @@ char *afterTestSuite() {
 
 char *beforeEachTest() {
 
-	sender = UnixSocketSender_new();
+    sender = UnixSocketSender_new();
     return NULL;
 }
 
@@ -29,28 +29,30 @@ char *afterEachTest() {
 
 char *unixSocketSenderInitializedCorrectly() {
 
-	struct UnixSocketSender *usender = (struct UnixSocketSender *) UnixSocketSender_new();
+	//struct UnixSocketSender *usender = (struct UnixSocketSender *) UnixSocketSender_new();
 
-	mu_assert_true(usender->sender.initialized, "initialized variable not set correctly");
+  struct Sender *s = UnixSocketSender_new();
 
-	mu_assert_false(usender->socketData.client_detected, "There should not be any client detected");
+  struct UnixSocketSender *us = (struct UnixSocketSender *) s;
+
+	mu_assert_true(s->initialized, "initialized variable not set correctly");
+
+	mu_assert_false(us->socketData.client_detected, "There should not be any client detected");
+
+	s->ops->Sender_free(s);
+
+  //UnixSocketSender_free(s);
 
 	return NULL;
-}
-
-char *test_template() {
-
-    //mu_assert(0 == 1, "No tests implemented yet!");
-
-    log_warn("not implemented");
-    return NULL;
 }
 
 char *all_tests() {
 
     mu_suite_start();
 
-    mu_run_test_set(beforeEachTest, afterEachTest, test_template);
+    mu_run_test(unixSocketSenderInitializedCorrectly);
+
+    //mu_run_test_set(beforeEachTest, afterEachTest, test_template);
 
     return NULL;
 }

@@ -14,6 +14,7 @@
 #include <sys/socket.h>
 #include <sys/un.h>
 #include <signal.h>
+#include <sys/stat.h>
 
 #include <pwd.h>
 #include <pthread.h> // threads
@@ -66,7 +67,7 @@ char * convert_to_homepath_name(char *socket_name_) {
 	strcat(socket_file, "/");
 	strcat(socket_file, socket_name);
 
-	printf("created socket file: %s\n", socket_file);
+	debug("created socket file: %s", socket_file);
 
 	return socket_file;
 
@@ -82,6 +83,8 @@ void * await_request( void* args) {
 
 	data->client_sockfd = accept (data->server_sockfd, (struct sockaddr *) &(data->cli_addr), &(data->clilen));
 	check(data->client_sockfd >= 0, "error on accept");
+
+  //check(unlink(data->serv_addr.sun_path) >= 0, "error on unlinking: %s", data->serv_addr.sun_path);
 
 //	memset(buffer, 0, 256);
 
@@ -148,7 +151,7 @@ UnixSocketSender_new() {
 	check(unixSocketSender->socketData.server_sockfd != -1, "cannot open socket");
 
 	memset((char *) &(unixSocketSender->socketData.serv_addr), 0, sizeof(unixSocketSender->socketData.serv_addr));
-	char * socket_file = convert_to_homepath_name("socket.sock");
+	char *socket_file = convert_to_homepath_name("socket.sock");
 	check_mem(socket_file);
 
 	unixSocketSender->socketData.serv_addr.sun_family = AF_UNIX;
@@ -158,6 +161,22 @@ UnixSocketSender_new() {
 	unlink(socket_file);
 	bind_check = bind(unixSocketSender->socketData.server_sockfd, (struct sockaddr *) &(unixSocketSender->socketData.serv_addr), len);
 	check(bind_check != -1, "error on binding");
+  free(socket_file);
+  //check(
+  //  chmod(socket_file, S_IROTH | S_IWOTH | S_IXOTH) >= 0, "error on setting protection on %s", socket_file);
+
+  struct stat socketStat;
+  stat(socket_file, &socketStat);
+// check(
+//   chmod(unixSocketSender->socketData.server_sockfd, socketStat.st_mode | S_IWOTH | S_IWGRP)  >= 0, "error on setting protection on %s", socket_file);
+
+check(
+  chmod(unixSocketSender->socketData.serv_addr.sun_path, 00777  & ~S_ISVTX)  >= 0, "error on setting protection on %s", unixSocketSender->socketData.serv_addr.sun_path);
+
+    // check(
+    //   chmod(socket_file, 0777) >= 0, "error on setting protection on %s", socket_file);
+
+
 
 	// TODO check again what the 5 means and if there is anything that has to be declared differently
 	listen(unixSocketSender->socketData.server_sockfd, 5);
@@ -165,8 +184,6 @@ UnixSocketSender_new() {
 
 	check(
 		pthread_create (&unixSocketSender->socketData.thread, NULL, await_request, &unixSocketSender->socketData) == 0, "error creating pthread");
-
-
 
 	return (Sender_t*) unixSocketSender;
 
@@ -180,13 +197,69 @@ error:
  */
 int UnixSocketSender_free(Sender_t *sender) {
 
+  debug("Freeing the unix socket sender");
+
 	struct UnixSocketSender* unixSocketSender = (struct UnixSocketSender*) sender;
 
-	Sender_free(&unixSocketSender->sender);
+	struct stat status;
+
+	stat(unixSocketSender->socketData.serv_addr.sun_path, &status);
+
+
+	debug("executing user id: %08o", getuid());
+	debug("user id of socket file owner: %08o", status.st_uid);
+
+	debug("executing group id: %08o", getgid());
+	debug("group id of socket file owner: %08o", status.st_gid);
+
+  debug("socket file protection: %08o", status.st_mode);
+
+  //
+	// check(
+	// 	unlink(unixSocketSender->socketData.serv_addr.sun_path) >= 0, "error on unlinking: %s", unixSocketSender->socketData.serv_addr.sun_path);
+
+	// check(
+	// 	pthread_kill(unixSocketSender->socketData.thread, SIGKILL) >= 0, "error sending signal to pthread");
+
+  debug("shutting down server sockfd");
+	check(
+		shutdown(unixSocketSender->socketData.server_sockfd, SHUT_RDWR) >= 0, "error on shuting down server socket");
+
+
+    check(
+      pthread_kill(unixSocketSender->socketData.thread, SIGKILL) >= 0, "error sending signal to pthread");
+
+    if(unixSocketSender->socketData.client_detected) {
+
+      debug("shutting down client sockfd");
+	check(
+		shutdown(unixSocketSender->socketData.client_sockfd, SHUT_RDWR) >= 0, "error on shutting down client socket");
+  }
+  debug("closing server socket");
+	check(
+		close(unixSocketSender->socketData.server_sockfd) >= 0, "error closing server socket");
+
+
+    if(unixSocketSender->socketData.client_detected) {
+
+      debug("closing client socket");
+  check(
+		close(unixSocketSender->socketData.client_sockfd) >= 0, "error closing client socket");
+  }
+
+  //check(
+  //  unlink(unixSocketSender->socketData.serv_addr.sun_path) >= 0, "error on unlinking: %s", unixSocketSender->socketData.serv_addr.sun_path);
+
+
 
 	free(unixSocketSender);
 
+
+
 	return 0;
+
+error:
+	return -1;
 
 	// TODO is there  any error handling to be done?
 }
@@ -195,6 +268,8 @@ static int
 _restartSocket(Sender_t *this) {
 
 	struct UnixSocketSender* unixSocketSender = (struct UnixSocketSender*) this;
+
+
 
 	// TODO change to signalhandler signal
 	check(

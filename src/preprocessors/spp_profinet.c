@@ -178,7 +178,7 @@ static void ProfiNetInit(struct _SnortConfig * sc, char *args)
  	DEBUG_WRAP(DebugMessage(DEBUG_PLUGIN, "Preprocessor: ProfiNet Initialized\n"));
 
     AddFuncToPreprocList(sc, DetectProfiNetPackets, PRIORITY_NETWORK, PP_PROFINET, PROTO_BIT__ALL );
-//    AddFuncToPreprocCleanExitList(ProfiNetCleanExit, NULL, PRIORITY_LAST, PP_ENABLE_ALL);
+    AddFuncToPreprocCleanExitList(ProfiNetCleanExit, NULL, PRIORITY_LAST, PP_ENABLE_ALL);
 
 
 error:
@@ -414,7 +414,8 @@ error:
  */
 static void ProfiNetCleanExit(int signal, void *datas)
 {
-   // sender->ops->Sender_free(sender);
+	debug("exiting...");
+  sender->ops->Sender_free(sender);
    // packetDissector->ops->Dissector_free(packetDissector);
 	(void) signal;
 	(void) datas;
