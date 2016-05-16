@@ -17,7 +17,9 @@
 
 #define mu_assert_null(actual, message) if (actual != NULL) { log_err("%s - value should be NULL", message); return message; }
 
-#define mu_assert_true(actual, message) if (actual != 1) { log_err("%s - should be true", message); return message; }
+#define mu_assert_true(actual, message) if (actual == 0) { log_err("%s - should be true", message); return message; }
+
+#define mu_assert_false(actual, message) if (actual != 0) { log_err("%s - should be true", message); return message; }
 
 #define mu_assert_int_equals(expected, actual, message) if (expected != actual) { log_err("%s - expected: %d but got %d", message, expected, actual); return message; }
 

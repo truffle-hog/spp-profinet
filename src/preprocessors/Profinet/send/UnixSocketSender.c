@@ -28,29 +28,7 @@ static const int TRUFFLEHOG_CONNECT_REQUEST = 0x0;
 static const int TRUFFLEHOG_DISCONNECT_REQUEST = 0x1;
 static const int SNORT_CONNECT_RESPONSE = 0x2;
 
-typedef struct SocketData {
-	int server_sockfd;
-	int client_sockfd;
 
-	pthread_t thread;
-
-	bool client_detected;
-
-	struct sockaddr_un serv_addr;
-	struct sockaddr_un cli_addr;
-	socklen_t clilen;
-} SocketData_t;
-
-/**
- * @brief Sends Truffles to a unix socket a client is reading from.
- *
- */
-struct UnixSocketSender {
-   /** The encapsulated sender type for save casting. */
-	struct Sender sender;
-	// TODO implement specific fields / functionality
-	SocketData_t socketData;
-};
 
 int UnixSocketSender_free(Sender_t *sender);
 int UnixSocketSender_send(Sender_t *this, Truffle_t *truffle);
@@ -153,15 +131,14 @@ error:
 Sender_t *
 UnixSocketSender_new() {
 
-	struct UnixSocketSender *unixSocketSender = malloc(sizeof(struct UnixSocketSender));
-  check_mem(unixSocketSender);
+	struct UnixSocketSender *unixSocketSender = (struct UnixSocketSender *) Sender_new(&UnixSocketSenderOverride_ops);
+	check_mem(unixSocketSender);
+	unixSocketSender = realloc(unixSocketSender, sizeof(struct UnixSocketSender));
+	check_mem(unixSocketSender);
 
 	check(signal(SIGPIPE, SIG_IGN) != SIG_ERR, "error setting pipe signal to ignore");
 
 	unixSocketSender->socketData.client_detected = false;
-
-	unixSocketSender->sender = *Sender_new(&UnixSocketSenderOverride_ops);
-	check_mem(&unixSocketSender->sender);
 	// declare some variabled in use
 	//pthread_t thread;
 	int bind_check, len;

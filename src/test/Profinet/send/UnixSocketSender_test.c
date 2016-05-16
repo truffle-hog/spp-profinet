@@ -8,7 +8,6 @@ Sender_t *sender = NULL;
 
 char *beforeTestSuite() {
 
-    sender = UnixSocketSender_new();
     return NULL;
 }
 
@@ -19,16 +18,25 @@ char *afterTestSuite() {
 
 char *beforeEachTest() {
 
-
+	sender = UnixSocketSender_new();
     return NULL;
 }
 
 char *afterEachTest() {
 
-    log_warn("not implemented");
     return NULL;
 }
 
+char *unixSocketSenderInitializedCorrectly() {
+
+	struct UnixSocketSender *usender = (struct UnixSocketSender *) UnixSocketSender_new();
+
+	mu_assert_true(usender->sender.initialized, "initialized variable not set correctly");
+
+	mu_assert_false(usender->socketData.client_detected, "There should not be any client detected");
+
+	return NULL;
+}
 
 char *test_template() {
 

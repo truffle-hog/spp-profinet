@@ -323,6 +323,7 @@ BlockDissector_new() {
 
     struct BlockDissector *blockDissector;
     blockDissector = (struct BlockDissector *) Dissector_new(&BlockDissectorOverride_ops);
+    check_mem(blockDissector);
     blockDissector = realloc(blockDissector, sizeof(struct BlockDissector));
     check_mem(blockDissector);
 
