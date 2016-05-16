@@ -103,3 +103,12 @@ int clientScopeFree() {
 error:
     return -1;
 }
+
+void cleanUpScopes() {
+
+	DArray_free(dArrayAppScope);
+	DArray_free(dArrayClientScope);
+	DArray_free(dArrayPacketScope);
+
+}
+

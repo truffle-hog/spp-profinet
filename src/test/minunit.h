@@ -41,7 +41,14 @@
             printf("ALL TESTS PASSED\n");\
         }\
     printf("Tests run: %d\n", tests_run);\
-        exit(result != 0);\
+        int ret = 0;\
+        if (result != 0) {\
+            ret = 0;\
+        }\
+        else {\
+            ret = tests_run;\
+        }\
+        exit(ret);\
 }
 
 

@@ -6,7 +6,7 @@ BASH=/bin/bash
 INCLUDES=-I../preprocessors/Profinet -I. -I.. -I../sfutil -I../detection-plugins
 
 CFLAGS=-g -O2 -Wall -Wextra -Isrc -rdynamic -DNDEBUG $(OPTFLAGS) $(LDFLAGS)
-LIBS=-ldl $(OPTLIBS)
+LIBS=-lpthread -ldl $(OPTLIBS)
 PREFIX?=/usr/local
 
 TEST_SRC=$(shell find . -name '*_test.c')

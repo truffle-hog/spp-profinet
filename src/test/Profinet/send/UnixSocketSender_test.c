@@ -8,7 +8,7 @@ Sender_t *sender = NULL;
 
 char *beforeTestSuite() {
 
-    //sender = UnixSocketSender_new();
+    sender = UnixSocketSender_new();
     return NULL;
 }
 

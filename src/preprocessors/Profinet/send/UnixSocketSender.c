@@ -154,7 +154,7 @@ Sender_t *
 UnixSocketSender_new() {
 
 	struct UnixSocketSender *unixSocketSender = malloc(sizeof(struct UnixSocketSender));
-  	check_mem(unixSocketSender);
+  check_mem(unixSocketSender);
 
 	check(signal(SIGPIPE, SIG_IGN) != SIG_ERR, "error setting pipe signal to ignore");
 

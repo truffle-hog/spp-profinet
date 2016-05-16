@@ -2,6 +2,16 @@
 
 #include "util/ScopeAlloc.h"
 
+char *beforeTestSuite() {
+
+	return NULL;
+}
+
+char *afterTestSuite() {
+
+	return NULL;
+}
+
 char *beforeEachTest() {
 
     log_warn("not implemented");
@@ -14,23 +24,22 @@ char *afterEachTest() {
     return NULL;
 }
 
+char *freeingUninitializedScopeReturnsCorrectErrorCode() {
 
-char *test_template() {
+	mu_assert_int_equals(-1, appScopeFree(), "Freeing uninitialized scope should fail");
+	mu_assert_int_equals(-1, packetScopeFree(), "Freeing uninitialized scope should fail");
+	mu_assert_int_equals(-1, clientScopeFree(), "Freeing uninitialized scope should fail");
 
-    //mu_assert(0 == 0, "No tests implemented yet!");
-
-    log_warn("not implemented");
-
-    return NULL;
+	return NULL;
 }
 
 char *all_tests() {
 
     mu_suite_start();
 
-    mu_run_test(test_template);
+    mu_run_test(freeingUninitializedScopeReturnsCorrectErrorCode);
 
     return NULL;
 }
 
-RUN_TESTS(beforeEachTest, afterEachTest, all_tests);
+RUN_TESTS(beforeTestSuite, afterTestSuite, all_tests);
