@@ -26,8 +26,10 @@ DissectorRegister_t * DissectorRegister_new() {
 
 	// TODO delete debuing messges
 
-	DissectorRegister_t *dRegister = malloc(sizeof(DissectorRegister_t));
+	DissectorRegister_t *dRegister = calloc(1, sizeof(DissectorRegister_t));
 	check_mem(dRegister);
+
+	dRegister->initialized = true;
 
 	dRegister->ops = &DissectorRegisterOverride_ops;
 
@@ -49,8 +51,11 @@ void DissectorRegister_free(DissectorRegister_t *this) {
 
 	unsigned long i = 0;
 
+	debug("size of the register: %ld", this->size);
+
 	for (i = 0; i < this->size; i++) {
 
+		debug("freeing: %s", this->dissectorList[i]->ops->Dissector_name);
 		this->dissectorList[i]->ops->Dissector_free(this->dissectorList[i]);
 	}
 

@@ -30,7 +30,7 @@
 
 Dissector_t * Dissector_new(const struct Dissector_ops *ops) {
 
-	Dissector_t *dissector = malloc(sizeof(Dissector_t));
+	Dissector_t *dissector = calloc(1, sizeof(Dissector_t));
 	check_mem(dissector);
 
 	dissector->dissectorRegister = DissectorRegister_new();
@@ -61,7 +61,7 @@ error:
 
 void Dissector_free(Dissector_t *dissector) {
 
-	dissector->dissectorRegister->ops->DissectorRegister_free(dissector->dissectorRegister);
+	DissectorRegister_free(dissector->dissectorRegister);
 
 	free(dissector);
 }

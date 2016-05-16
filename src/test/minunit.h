@@ -15,7 +15,14 @@
 #define mu_run_test_set(before, after, test) debug("\n-----%s", " " #test); \
     before(); message = test(); after(); tests_run++; if (message) return message;
 
+#define mu_assert_null(actual, message) if (actual != NULL) { log_err("%s - value should be NULL", message); return message; }
+
+#define mu_assert_true(actual, message) if (actual != 1) { log_err("%s - should be true", message); return message; }
+
 #define mu_assert_int_equals(expected, actual, message) if (expected != actual) { log_err("%s - expected: %d but got %d", message, expected, actual); return message; }
+
+#define mu_assert_long_equals(expected, actual, message) if (expected != actual) { log_err("%s - expected: %ld but got %ld", message, expected, actual); return message; }
+
 #define mu_assert_string_equals(expected, actual, message) if (strcmp(expected, actual) != 0) { log_err("%s - expected: %s but got %s", message, expected, actual); return message; }
 
 #define RUN_TESTS(before, after, name) int main(int argc, char *argv[]) {\

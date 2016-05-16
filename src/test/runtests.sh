@@ -20,6 +20,7 @@ do
             ARRAY_SUCCESS[$SUCCESS_COUNTER]=$i
             SUCCESS_COUNTER=$((SUCCESS_COUNTER+1))
             echo $i PASS
+            tail tests.log
         else
             ARRAY[$COUNTER]=$i
             COUNTER=$((COUNTER+1))

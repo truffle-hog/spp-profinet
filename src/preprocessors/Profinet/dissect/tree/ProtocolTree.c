@@ -100,6 +100,10 @@ struct ProtocolNode *ProtocolTree_new(char *rootName, Dissector_t *dissectedBy) 
 	node->children = NULL;
 	node->visited = false;
 
+	node->value.type = is_int64;
+	node->value.length = 0;
+	node->value.val.int16 = 0;
+
 	node->dissectedBy = dissectedBy;
 
 	return node;
