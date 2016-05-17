@@ -6,6 +6,8 @@
 2. Extract the [zipped version of spp_profinet](https://github.com/TruffleHog/spp_profinet/archive/master.zip) into your _Snort root_ __overwriting existing files__.
 3. Execute the following in your _Snort root_:
 ```
+sudo apt-get install automake
+sudo apt-get install autoconf
 sudo apt-get install libtool
 make clean
 make distclean
