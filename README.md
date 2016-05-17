@@ -11,6 +11,7 @@ sudo apt-get install autoconf
 sudo apt-get install libtool
 make clean
 make distclean
+## Be careful!! MAKE SURE YOU ARE IN YOUR SNORT MAIN SOURCE FOLDER
 find . -name "Makefile.in" -type f -delete
 aclocal
 autoconf
