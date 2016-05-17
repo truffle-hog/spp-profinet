@@ -4,6 +4,8 @@
 
 Build your Snort software from source using this guide: https://s3.amazonaws.com/snort-org-site/production/document_files/files/000/000/090/original/Snort_2.9.8.x_on_Ubuntu_12-14-15.pdf
 
+Relevant chapters are only Chapter 9 and 10.
+
 Copy the files from this repository into your snort source folder overwriting existing files.
 
 Go into the snort source main folder an execute:
