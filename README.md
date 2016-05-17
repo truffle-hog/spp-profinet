@@ -7,25 +7,15 @@
 3. Execute the following in your _Snort root_:
 ```
 sudo apt-get install libtool
-
 make clean
-
 make distclean
-
 find . -name "Makefile.in" -type f -delete
-
 aclocal
-
 autoconf
-
 automake --add-missing
-
 autoreconf --force --install
-
 ./configure.sh
-
 make
-
 sudo make install
 ```
 
