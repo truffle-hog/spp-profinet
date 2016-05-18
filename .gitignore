@@ -1,75 +1,8 @@
-# Ignore everything
-*
 
-######## But not these files... #########
-!.gitignore
-
-!src/test/.gitignore
-
-!profi_doc
-
-!selected.pcapng
-!selected_with_DCP.pcapng
-!4_packet_test.pcapng
-
-!LICENSE
-!README.md
-!etc
-!etc/snort
-!etc/snort/*
-!etc/snort/preproc_rules
-!etc/snort/preproc_rules/*
-!etc/snort/rules
-!etc/snort/rules/*
-!etc/snort/rules/iplists
-!etc/snort/rules/iplists/*
-!etc/snort/so_rules
-!etc/snort/so_rules/*
-
-# Plugin specific
-!src/preprocessors/Profinet
-!src/preprocessors/Profinet/*
-!src/preprocessors/Profinet/dissect
-!src/preprocessors/Profinet/dissect/*
-!src/preprocessors/Profinet/dissect/buffer
-!src/preprocessors/Profinet/dissect/buffer/*
-!src/preprocessors/Profinet/dissect/tree
-!src/preprocessors/Profinet/dissect/tree/*
-!src/preprocessors/Profinet/dissect/dissectors
-!src/preprocessors/Profinet/dissect/dissectors/*
-!src/preprocessors/Profinet/send
-!src/preprocessors/Profinet/send/*
-!src/preprocessors/Profinet/util
-!src/preprocessors/Profinet/util/*
-!src/preprocessors/spp_profinet.c
-!src/preprocessors/spp_profinet.h
-!src/preprocessors/dbg.h
 # not take the preprocessors generated make files
-src/preprocessors/Profinet/Makefile.in
-src/preprocessors/Profinet/Makefile
 Makefile
 Makefile.in
-
-# the snort base configure and automake genrators that had to be edited
-!src/Makefile.am
-!configure.in
-!src/preprocessors/Makefile.am
-
-
-# edited this from the main snort src files
-!src/plugbase.c
-!src/preprocids.h
-!src/detect.c
-
-
-# the ycmconf file for vim autocompletion
-!src/.ycm_extra_conf.py
-!configure.sh # my custom configure script
-!create_eth10.sh
-!destroy_eth10.sh
 
 *.a
 *.o
 
-# ...even if they are in subdirectories
-!*/
